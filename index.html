@@ -1,179 +1,256 @@
-<!doctype html>
-<html lang="sv">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mindmap – Ryskt fastighetsägande & rysk organiserad brottslighet</title>
-  <style>
-    html, body { height: 100%; margin: 0; }
-    .markmap { width: 100%; height: 100vh; }
-    .hint {
-      position: fixed; right: 12px; bottom: 10px;
-      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      opacity: .85; background: #fff; padding: 10px 12px; border-radius: 12px;
-      box-shadow: 0 2px 14px rgba(0,0,0,.12);
-    }
-    .hint kbd { font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      padding: 2px 6px; border: 1px solid rgba(0,0,0,.15); border-bottom-width: 2px; border-radius: 6px; background: #fafafa; }
-    /* öppna länkar snyggt */
-    a { pointer-events: auto; }
-  </style>
-</head>
-<body>
+from pathlib import Path
+import re, html as _html
+from collections import defaultdict
 
-<div class="markmap">
----
-title: Mindmap – Ryskt fastighetsägande & rysk organiserad brottslighet
+# Load user's base HTML (uploaded) to avoid losing content
+base_path = Path("/mnt/data/mindmap_fix_render_links_fold_tb.html")
+base_html = base_path.read_text(encoding="utf-8", errors="ignore")
+
+# Try to extract the embedded markdown from the first .markmap container.
+# Previous pattern: <div class="markmap"...> ESCAPED_MD </div>
+m = re.search(r'<div[^>]*class="markmap"[^>]*>(.*?)</div>', base_html, re.DOTALL | re.IGNORECASE)
+if not m:
+    # fallback: any div with class markmap
+    m = re.search(r'<div[^>]*class=[\'"]markmap[\'"][^>]*>(.*?)</div>', base_html, re.DOTALL | re.IGNORECASE)
+
+embedded = m.group(1).strip() if m else ""
+# remove surrounding whitespace/newlines
+embedded = embedded.strip()
+
+# embedded markdown is HTML-escaped. Unescape it.
+base_md = _html.unescape(embedded)
+
+# If base_md looks empty or not markdown, use a minimal header as fallback
+if len(base_md.strip()) < 20 or "# " not in base_md:
+    base_md = """---
+title: Mindmap
 markmap:
   colorFreezeLevel: 2
-  maxWidth: 340
-  initialExpandLevel: 2
-  duration: 200
   direction: TB
 ---
 
-# Ryskt fastighetsägande (Sverige & Norden) + rysk organiserad brottslighet (Sverige & internationellt)
+# Mindmap
+"""
 
-> Klicka på en nod för att **fälla in/ut** (collapse/expand). Länkar i noderna är **klickbara**.
+# Ensure FOI rows_data exists from earlier work in this kernel
+try:
+    rows_data  # type: ignore
+except NameError:
+    raise RuntimeError("rows_data saknas (FOI-listan). Jag kan inte bygga full FOI-flik utan den.")
 
-## 1) Fastigheter/mark: ryskt ägande, exponering och riskmönster (Norden) <!-- markmap: fold -->
+SNI_FULL = {
+    "B": "Utvinning av mineral",
+    "C": "Tillverkning",
+    "E": "Vattenförsörjning, avloppsrening, avfallshantering och sanering",
+    "F": "Byggverksamhet",
+    "G": "Handel; reparation av motorfordon och motorcyklar",
+    "H": "Transport och magasinering",
+    "I": "Hotell- och restaurangverksamhet",
+    "J": "Informations- och kommunikationsverksamhet",
+    "K": "Finans- och försäkringsverksamhet",
+    "L": "Fastighetsverksamhet",
+    "M": "Verksamhet inom juridik, ekonomi, vetenskap och teknik",
+    "N": "Uthyrning, fastighetsservice, resetjänster och andra stödtjänster",
+    "P": "Utbildning",
+    "R": "Kultur, nöje och fritid",
+}
 
-### Sverige <!-- markmap: fold -->
+def esc_md(s: str) -> str:
+    return (s or "").replace("\n", " ").replace("`", "'").strip()
 
-- **FOI: kartläggning av ryska ekonomiska intressen** (inkl. fastigheter/tillgångar, upphandling, handel)
-  - [FOI nyhetssida](https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html)
-  - [FOI rapportsammanfattning (FOI-R--5377--SE)](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
-  - [FOI PDF (FOI-2022-481_7)](https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf)
+# Build FOI section (ALL, no truncation) in mindmap + full searchable FOI tab with anchors
+grp = defaultdict(list)
+for nr, co, seat, sni, other in rows_data:
+    grp[sni].append((nr, co, seat, other))
 
-- **Säpo/medieuppgifter om omfattning**: 157 ryska medborgare – 247 fastigheter (citerat i svensk press)
-  - [SvD](https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop)
-  - [Tidningen Syre](https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/)
+foi_lines = []
+foi_lines.append("## FOI: Ryskt ägande i svenska företag (Tabell 2.1) – samtliga bolag (från din lista) <!-- markmap: fold -->")
+foi_lines.append("- https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE")
+foi_lines.append("")
+for sni in sorted(grp.keys(), key=lambda x: (x not in SNI_FULL, x)):
+    items = sorted(grp[sni], key=lambda x: x[0])
+    sni_name = SNI_FULL.get(sni, f"SNI {sni}")
+    foi_lines.append(f"### {sni_name} (SNI {sni}) – {len(items)} företag <!-- markmap: fold -->")
+    for nr, co, seat, other in items:
+        foi_lines.append(f"- [{esc_md(co)}](#c{nr}) <!-- markmap: fold -->")
+        foi_lines.append(f"  - Nr: {nr}")
+        foi_lines.append(f"  - Säte: {esc_md(seat)}")
+        foi_lines.append(f"  - SNI: {sni} ({sni_name})")
+        foi_lines.append(f"  - Övrigt (FOI-rad): {esc_md(other)}")
+    foi_lines.append("")
+foi_section_md = "\n".join(foi_lines)
 
-- **Case: Muskö / fastighet nära marinbas** (Stanislav Aleshchenko – mediebevakning)
-  - [Expressen (2025-11-11)](https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/)
-  - [Fokus (2025-11-05)](https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/)
-  - [Skippo (bakgrund 2023)](https://www.skippo.se/nyheter/ryss-har-sjotomt-vid-hemlig-svensk-militarbas)
-  - [SVT: bakgrund Muskö örlogsbas](https://www.svt.se/nyheter/lokalt/stockholm/torpedbat-och-cibil-foretagsby-musko-orlogbas-2005)
+mosk_section_md = """## Moskvapatriarkatet & FOI-listan (från din text) <!-- markmap: fold -->
+### Moskvapatriarkatet (Rysk-ortodoxa kyrkan) <!-- markmap: fold -->
+- Sverige: modern etablering från början av 1990-talet
+- Församling: Helige Sergij av Radonezh (Stockholm, 1992)
+- Medieuppgifter: plattform för påverkan/inhämtning
+  - https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/
+  - https://www.sverigesradio.se/artikel/efter-sapovarning-ryska-statskyrkan-utan-stod
+- FOI: religion används i militära syften
+  - https://www.foi.se/nyheter-och-press/nyheter/2024-06-05-sa-anvander-ryssland-religion-i-militara-syften.html
 
-- **Case: ”ryskt nätverk köper tomter i skärgården”** (Aftonbladet) – kopplingar som diskuteras i rapportering
-  - [Aftonbladet (2025-03-09)](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
-  - [Aftonbladet TV (video)](https://tv.aftonbladet.se/video/381620/ryska-naetverk-koeper-tomter-i-sverige)
-  - [Aftonbladet (2025-03-12): L vill stoppa ryska markköp](https://www.aftonbladet.se/nyheter/a/8qopM2/l-vill-stoppa-ryska-markkop-i-sverige)
+### Rosatom (statligt bolag) <!-- markmap: fold -->
+- Uppgift: Rosatom kopplas till finansiering av Västeråskyrkan
+  - https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras
+- Soft power via sociala fonder (enligt din text/källor)
 
-- **Case: ”Vidja/rymdanläggning”** – fastighets-/adresskontroll i penningtvättsupplägg (medier + EBM)
-  - [Dagens industri (2025-08-24)](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
-  - [Hem & Hyra (2025-08-22)](https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/)
-  - [Ekobrottsmyndigheten: åtal (2025-08-11)](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
-  - [Ekobrottsmyndigheten: tillslag (2024-09-25)](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
+### Västerås: kyrka nära flygplats/skyppsobjekt (case) <!-- markmap: fold -->
+- Medier: byggkostnad ~35 MSEK (enligt din text)
+- Placering: nära Västerås flygplats (skyddsobjekt) (enligt din text)
 
-- **Case: rysk-ortodoxa kyrkan i Västerås**
-  - [Aftonbladet (2025-09-24)](https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna)
+### Bolagsnoder kopplade till kyrkoflöden (som du nämner) <!-- markmap: fold -->
+- [NC Nordic Control AB](#c49) (finns i FOI-listan)
+  - Dagen (2021): grovt bokföringsbrott
+    - https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/
+- [InstrumentElectronics i Stockholm AB](#c30) (finns i FOI-listan)
+  - The Moscow Times (2023): GRU-misstankar i rapportering
+    - https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894
+"""
 
-### Finland <!-- markmap: fold -->
+# Combine: keep user's base mindmap markdown (unchanged) + append the new sections (so nothing is reduced)
+combined_md = base_md.rstrip() + "\n\n" + mosk_section_md + "\n\n" + foi_section_md + "\n"
 
-- **Tillståndskrav för icke‑EU/EEA‑köpare** (försvarsministeriet)
-  - [DefMin: authorisation to buy real estate](https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate)
+# Build FOI table with anchors for tab view
+table_rows = "\n".join(
+    f"<tr id='c{nr}'><td class='num'>{nr}</td><td>{_html.escape(co)}</td><td>{_html.escape(seat)}</td><td class='sni'>{_html.escape(sni)}</td><td>{_html.escape(other)}</td></tr>"
+    for nr, co, seat, sni, other in sorted(rows_data, key=lambda x: x[0])
+)
 
-- **Case: Airiston Helmi** – razzia 2018; dom mot Pavel Melnikov (rapporterat 2025)
-  - [Yle (2025-02-24)](https://yle.fi/a/7-10073103)
-  - [HBL (2025-02-24)](https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/)
-  - [ÅU (2025-03-02)](https://www.abounderrattelser.fi/artikel/airiston-helmi-satte-pargas-pa-varldskartan-sa-har-borjade-allting/)
+# Create final HTML with two tabs and link handling (external in new tab, internal #cNN -> FOI tab)
+html_doc = f"""<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mindmap (ALLT) – Moskvapatriarkatet + FOI</title>
+<style>
+  html,body{{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}}
+  header{{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(0,0,0,.12);background:#fff}}
+  button{{padding:8px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.15);background:#f7f7f7;cursor:pointer}}
+  button.active{{background:#111;color:#fff;border-color:#111}}
+  .spacer{{flex:1}}
+  .hint{{font-size:13px;color:rgba(0,0,0,.65)}}
+  main{{height:calc(100vh - 56px)}}
+  .tab{{display:none;height:100%}}
+  .tab.active{{display:block}}
+  .markmap{{width:100%;height:100%}}
+  .markmap svg{{width:100%;height:100%}}
+  .panel{{height:100%;display:flex;flex-direction:column;gap:10px;padding:12px;box-sizing:border-box}}
+  .controls{{display:flex;gap:10px;flex-wrap:wrap;align-items:center}}
+  .controls input{{flex:1;min-width:240px;padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.15)}}
+  .meta{{font-size:13px;color:rgba(0,0,0,.65)}}
+  .tablewrap{{flex:1;overflow:auto;border:1px solid rgba(0,0,0,.12);border-radius:14px}}
+  table{{border-collapse:collapse;width:100%;font-size:13px}}
+  th,td{{padding:7px 10px;border-bottom:1px solid rgba(0,0,0,.06);text-align:left;vertical-align:top}}
+  th{{position:sticky;top:0;background:#fff;border-bottom:1px solid rgba(0,0,0,.12)}}
+  tr:target{{outline:3px solid rgba(0,0,0,.35); outline-offset:-3px; background:rgba(0,0,0,.03)}}
+  td.num{{width:60px;white-space:nowrap}}
+  td.sni{{width:60px;white-space:nowrap}}
+</style>
+</head>
+<body>
 
-- **Ryska statliga tillgångar frysta/beslag** (Naftogaz-målet)
-  - [Naftogaz (2024-10-28)](https://www.naftogaz.com/en/news/seizure-of-russian-assets-in-finland)
-  - [Reuters (2024-10-30)](https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/)
-  - [Euronews (2024-10-30)](https://www.euronews.com/2024/10/30/finland-orders-seizure-of-russian-assets-at-request-of-ukrainian-oil-and-gas-company)
+<header>
+  <button id="btn-map" class="active">Mindmap</button>
+  <button id="btn-foi">FOI-register</button>
+  <div class="spacer"></div>
+  <div class="hint">Klicka nod = fäll in/ut. Externa länkar öppnas i ny flik. Företagslänkar hoppar till FOI-rad.</div>
+</header>
 
-### Norge <!-- markmap: fold -->
+<main>
+  <section id="tab-map" class="tab active">
+    <div class="markmap" id="mm">
+{_html.escape(combined_md)}
+    </div>
+  </section>
 
-- **Case: ”russerhytter” nära Bardufoss**
-  - [Forsvarets forum (2024-04-10)](https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880)
-  - [Bygg.no (2024-04-06)](https://www.bygg.no/tv-2-russere-eier-hytter-like-ved-forsvarsanlegg-i-bardufoss/465968)
-
-- **Planerad förhandsprövning/”pre-approval”** (rapportering)
-  - [Euronews (2024-07-09)](https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked)
-
-### Danmark <!-- markmap: fold -->
-
-- **Grundregel**: hemvist/bosättning eller tillstånd
-  - [UM.dk](https://um.dk/en/travel-and-residence/family-abd-legal-issues/foreign-citizens-acquisition-of-property-in-denmark)
-  - [Civilstyrelsen FAQ](https://www.civilstyrelsen.dk/sagsomraader/erhvervelse-af-fast-ejendom/ofte-stillede-spoergsmaal/kan-jeg-koebe-fast-ejendom-i-danmark)
-  - [Life in Denmark (borger.dk)](https://lifeindenmark.borger.dk/housing-and-moving/buying/purchasing-real-property)
-
-## 2) Domar, upplägg och nätverk kopplade till rysk organiserad brottslighet (Sverige + internationellt) <!-- markmap: fold -->
-
-### Sverige <!-- markmap: fold -->
-
-- **Grov näringspenningtvätt (byggsektorn)** – EBM (tillslag + åtal)
-  - [EBM tillslag (2024-09-25)](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
-  - [EBM åtal (2025-08-11)](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
-
-- **Medier**: skärgårdstomter + Vidja/rymdanläggning (rapportering)
-  - [Aftonbladet (2025-03-09)](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
-  - [DI (2025-08-24)](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
-  - [Hem & Hyra (2025-08-22)](https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/)
-
-### EU/Europa <!-- markmap: fold -->
-
-- **Europol: EU‑SOCTA 2025**
-  - [PDF](https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf)
-  - [Rapportsida](https://www.europol.europa.eu/publication-events/main-reports/changing-dna-of-serious-and-organised-crime)
-
-- **Sekundärkällor om SOCTA-fynd**
-  - [The Guardian (2025-03-18)](https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol)
-  - [Financial Times (2025-03-18)](https://www.ft.com/content/755593c8-8614-4953-a4b2-09a0d2794684)
-
-### USA: sanktioner (OFAC) <!-- markmap: fold -->
-
-- **U.S. Treasury / OFAC**
-  - [TG1811 (2012)](https://home.treasury.gov/news/press-releases/tg1811)
-  - [JL2196 (2013)](https://home.treasury.gov/news/press-releases/jl2196)
-
-### Spanien/Ryssland: större rättsfall (urval) <!-- markmap: fold -->
-
-- **Operation Troika (Spanien)** – frikännande 2018 (rapportering)
-  - [Bolsamania (2018-10-18)](https://www.bolsamania.com/noticias/justicia/la-audiencia-nacional-absuelve-a-los-17-acusados-de-la-operacion-troika-al-no-acreditar-su-relacion-con-la-mafia-rusa--3546938.html)
-  - [TBC Archives](https://tbcarchives.org/spanish-russian-mafia-troika-case-press-release-of-the-court-on-uneconomic-transcations-of-the-defendants/)
-  - [Jamestown (2018)](https://jamestown.org/trial-decade-spain-declares-war-russian-organized-crime/)
-
-- **Operation Oligarch (Spanien 2017)** – bakgrund
-  - [The Insider (2019-04-02)](https://theins.ru/en/corruption/149860)
-  - [Byline Times (2019-04-26)](https://bylinetimes.com/2019/04/26/alleged-russian-mafia-boss-found-dead-after-football-corruption-arrest/)
-
-- **Tambovskaya – Vladimir Barsukov/Kumarin** (domar/rapportering)
-  - [Moscow Times (2009): 14 år](https://www.themoscowtimes.com/archive/barsukov-handed-14-years-for-fraud)
-  - [Moscow Times (2012): 15 år](https://www.themoscowtimes.com/archive/tambov-gang-boss-jailed-for-15-years)
-  - [TASS archive (2012)](https://tass.com/archive/671255)
-  - [RFE/RL (2016): 23 år](https://www.rferl.org/a/russian-mobster-kumarin-23-years-jail/27931897.html)
-
-## 3) Löpande påfyllnad (”to‑do”) <!-- markmap: fold -->
-
-- **Baslinje**: FOI‑listor + komplettera med fastighets-/adressspårning nära riskobjekt
-  - [FOI rapportsammanfattning](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
-
-- **Sverige**: följ EBM pressrum + domstolsprocesser
-  - [EBM pressrum](https://www.ekobrottsmyndigheten.se/press/)
-
-- **Nordisk jämförelse**: DK/FI/NO
-  - [DK Civilstyrelsen](https://www.civilstyrelsen.dk/sagsomraader/erhvervelse-af-fast-ejendom)
-  - [FI DefMin permit](https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate)
-  - [NO Euronews (policy)](https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked)
-
-</div>
-
-<div class="hint">Klicka nod = fäll in/ut. Länkar är klickbara. <kbd>Ctrl</kbd>+<kbd>+</kbd>/<kbd>-</kbd> zoom i webbläsaren.</div>
+  <section id="tab-foi" class="tab">
+    <div class="panel">
+      <div class="controls">
+        <input id="filter" type="search" placeholder="Sök i FOI-tabellen (bolag, säte, SNI, ägare, kommentar)…"/>
+        <span class="meta" id="count"></span>
+      </div>
+      <div class="meta">FOI Tabell 2.1 (din lista). Ankare: c1–c128.</div>
+      <div class="tablewrap">
+        <table id="t">
+          <thead><tr><th>Nr</th><th>Företag</th><th>Säte</th><th>SNI</th><th>Övrigt</th></tr></thead>
+          <tbody>
+            {table_rows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.18.0"></script>
 <script>
-  // Gör att länkar öppnas i ny flik (och inte triggar node-toggle av misstag)
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest && e.target.closest("a");
-    if (a && a.href) {
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      e.stopPropagation();
-    }
-  }, true);
+  const btnMap = document.getElementById('btn-map');
+  const btnFoi = document.getElementById('btn-foi');
+  const tabMap = document.getElementById('tab-map');
+  const tabFoi = document.getElementById('tab-foi');
+
+  function show(which){{
+    if(which==='map') {{
+      btnMap.classList.add('active'); btnFoi.classList.remove('active');
+      tabMap.classList.add('active'); tabFoi.classList.remove('active');
+      window.dispatchEvent(new Event('resize'));
+    }} else {{
+      btnFoi.classList.add('active'); btnMap.classList.remove('active');
+      tabFoi.classList.add('active'); tabMap.classList.remove('active');
+    }}
+  }}
+  btnMap.addEventListener('click', ()=>show('map'));
+  btnFoi.addEventListener('click', ()=>show('foi'));
+
+  // Link handling
+  document.addEventListener('click', (e) => {{
+    const a = e.target.closest && e.target.closest('a');
+    if(!a) return;
+    const href = a.getAttribute('href') || '';
+    if(href.startsWith('http')) {{
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      return;
+    }}
+    if(href.startsWith('#c')) {{
+      e.preventDefault();
+      show('foi');
+      const id = href.slice(1);
+      const el = document.getElementById(id);
+      if(el) {{
+        history.replaceState(null,'',href);
+        el.scrollIntoView({{block:'center'}});
+      }}
+    }}
+  }}, true);
+
+  // Search filter
+  const input = document.getElementById('filter');
+  const tbody = document.querySelector('#t tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const count = document.getElementById('count');
+
+  function updateCount(){{
+    const vis = rows.filter(r => r.style.display !== 'none').length;
+    count.textContent = vis + ' / ' + rows.length;
+  }}
+  function applyFilter(q){{
+    q = (q || '').trim().toLowerCase();
+    for(const r of rows){{
+      if(!q) {{ r.style.display=''; continue; }}
+      r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
+    }}
+    updateCount();
+  }}
+  input.addEventListener('input', ()=>applyFilter(input.value));
+  updateCount();
 </script>
 </body>
 </html>
+"""
+
+out_path = Path("/mnt/data/mindmap_ALLT_basfil_plus_mosk_foi_register.html")
+out_path.write_text(html_doc, encoding="utf-8")
+str(out_path)

@@ -53,7 +53,7 @@
         position: relative; 
         transition: all 0.2s; 
         min-width: 180px;
-        max-width: 320px; /* Lite bredare för att rymma långa titlar */
+        max-width: 320px; 
         z-index: 2;
     }
     .content:hover { border-color: #999; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
@@ -238,8 +238,35 @@ const treeData = {
             }
           ]
         },
+        // --- NY GREN: Baltikum & Europa ---
         {
-          title: "Finland",
+          title: "Baltikum & Europa (Säkerhet)",
+          children: [
+            {
+              title: "Lettland: Förbud (2025)",
+              info: "Lag som förbjuder ryska/belarusiska medborgare att köpa fastigheter.",
+              links: [
+                { text: "Saeima", url: "https://www.saeima.lv/en/news/saeima-news/18719-/34874-russian-and-belarusian-citizens-banned-from-buying-real-estate-in-latvia" }
+              ]
+            },
+            {
+              title: "Estland: Strategiska objekt (2024)",
+              info: "Stopp för tredjelandsmedborgare att köpa mark nära kritisk infrastruktur.",
+              links: [
+                { text: "ERR News", url: "https://news.err.ee/1609364830/estonia-to-stop-third-country-nationals-from-buying-land-near-strategic-facilities" }
+              ]
+            },
+            {
+              title: "Finland: Blockerade köp (2024)",
+              info: "Försvarsministeriet blockerar ryska affärer pga nationell säkerhet.",
+              links: [
+                { text: "Yle", url: "https://yle.fi/a/74-20130918" }
+              ]
+            }
+          ]
+        },
+        {
+          title: "Finland (Övrigt)",
           children: [
             { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES (Försvarsministeriet).", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
             { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar mot Pavel Melnikov 2025.", links: [{ text: "Yle", url: "https://yle.fi/a/7-10073103" }, { text: "HBL", url: "https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/" }] },
@@ -250,6 +277,12 @@ const treeData = {
           title: "Norge",
           children: [
             { title: "CASE: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] },
+            // --- NY NOD: Haakonsvern ---
+            { 
+              title: "CASE: Ryska Kyrkan (Haakonsvern)", 
+              info: "Fastigheter med insyn mot marinbasen Haakonsvern (Bergen).", 
+              links: [{ text: "Euromaidan Press", url: "https://euromaidanpress.com/2022/10/19/russian-church-owns-property-near-norways-main-naval-base-dagbladet/" }] 
+            },
             { title: "Förhandsprövning", info: "Planerar nya regler.", links: [{ text: "Euronews", url: "https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked" }] }
           ]
         },
@@ -269,7 +302,7 @@ const treeData = {
           title: "Sverige: Byggsektorn",
           children: [
             { 
-              title: "Grov Näringspenningtvätt (Bygg) & Södertörns tingsrätt (B 16726-24)", 
+              title: "Grov Näringspenningtvätt (Bygg) Södertörns tingsrätt (B 16726-24)", 
               info: "EBM-tillslag och åtal gällande halv miljard kr. Omfattande härva med ryska kopplingar.",
               highlight: true, 
               links: [
@@ -278,7 +311,7 @@ const treeData = {
               ],
               children: [
                 {
-                  title: "DJUPANALYS (Struktur & Kopplingar)",
+                  title: "Struktur & Kopplingar",
                   info: "Klicka för att se detaljerad analys av målet.",
                   children: [
                     {
@@ -323,7 +356,6 @@ const treeData = {
             }
           ]
         },
-        // --- HÄR ÄR DEN NYA GRENEN FÖR DET ANDRA MÅLET ---
         {
           title: "Lånade Identiteter (B 16538-22)",
           info: "Södertörns tingsrätt. Modus: 'Importera – etablera – avveckla'.",
@@ -429,6 +461,26 @@ const treeData = {
             { title: "Formellt namn", info: "Fonden för stöd och skydd av rättigheterna för landsmän som bor utomlands." },
             { title: "Huvudman", info: "Ryska federationen / Ryska UD." },
             { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter." }
+          ]
+        },
+        {
+          title: "Granskningar 2025 (OCCRP/LRT)",
+          children: [
+            { 
+              title: "Sanktionsflykt (OCCRP)", 
+              info: "Fortsatta utbetalningar trots EU-sanktioner. Använder mellanhänder/kontanter.", 
+              links: [
+                { text: "OCCRP - Spies & Criminals", url: "https://www.occrp.org/en/project/dear-compatriots/russian-foundation-aimed-at-helping-compatriots-abroad-supports-spies-criminals-and-propagandists" },
+                { text: "OCCRP - EU Payments", url: "https://www.occrp.org/en/project/dear-compatriots/russian-state-fund-paid-allies-in-the-eu-despite-sanctions" }
+              ] 
+            },
+            { 
+              title: "Litauen (LRT)", 
+              info: "Läckta filer visar finansiering av jurister och politiska aktörer.", 
+              links: [
+                { text: "LRT", url: "https://www.lrt.lt/en/news-in-english/19/2570212/leaked-files-reveal-lawyers-politicians-in-lithuania-on-kremlin-s-payroll-investigation" }
+              ] 
+            }
           ]
         },
         {

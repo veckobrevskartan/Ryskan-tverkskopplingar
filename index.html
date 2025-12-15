@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rysk Intressesfär & FOI-register</title>
+  <title>Ryska Intressen & Nätverk</title>
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   
@@ -40,14 +40,8 @@
     /* --- HORISONTELL TRÄD-STRUKTUR (CSS FLEXBOX) --- */
     .tree { display: flex; flex-direction: column; }
 
-    /* Varje Nod (Innehåll + Barn-grupp) */
-    .node { 
-        display: flex; 
-        align-items: center; /* Centrera vertikalt */
-        margin: 5px 0;
-    }
+    .node { display: flex; align-items: center; margin: 5px 0; }
 
-    /* Själva kortet (Rutan med text) */
     .content { 
         display: flex; 
         flex-direction: column;
@@ -59,35 +53,25 @@
         position: relative; 
         transition: all 0.2s; 
         min-width: 180px;
-        max-width: 250px;
+        max-width: 300px; /* Lite bredare för att rymma länkar */
         z-index: 2;
     }
     .content:hover { border-color: #999; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
 
-    /* Linjer */
-    .content::after { /* Linje högerut från kortet */
-        content: ''; position: absolute; right: -20px; top: 50%; width: 20px; height: 2px; background: #ccc; z-index: 1;
-    }
-    .node.leaf .content::after { display: none; } /* Inga linjer från löv */
+    .content::after { content: ''; position: absolute; right: -20px; top: 50%; width: 20px; height: 2px; background: #ccc; z-index: 1; }
+    .node.leaf .content::after { display: none; }
 
-    /* Container för barnen (Ligger till höger om föräldern) */
     .children { 
         display: flex; 
         flex-direction: column; 
-        margin-left: 20px; /* Avstånd för linjen */
+        margin-left: 20px; 
         position: relative;
-        border-left: 2px solid #ccc; /* Den vertikala ryggraden */
+        border-left: 2px solid #ccc; 
     }
     .children.hidden { display: none; }
 
-    /* Justering av barn-noder för att träffa linjen */
-    .children .node {
-        position: relative;
-        padding-left: 20px; /* Plats för horisontell linje in till barnet */
-    }
-    .children .node::before { /* Linje från ryggraden in till barnet */
-        content: ''; position: absolute; left: 0; top: 50%; width: 20px; height: 2px; background: #ccc;
-    }
+    .children .node { position: relative; padding-left: 20px; }
+    .children .node::before { content: ''; position: absolute; left: 0; top: 50%; width: 20px; height: 2px; background: #ccc; }
 
     /* RÖTTER & SPECIAL */
     .node.root > .content { background: #2c3e50; color: #fff; border: none; min-width: 200px; }
@@ -99,14 +83,16 @@
 
     .title { font-weight: 600; font-size: 13px; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
     .info { display: block; font-size: 11px; color: #666; margin-top: 4px; line-height: 1.3; }
-    .link { color: #0066cc; text-decoration: none; font-size: 10px; font-weight: bold; background: #eef6fc; padding: 2px 4px; border-radius: 3px; display: inline-block; margin-top: 4px;}
-    .link:hover { text-decoration: underline; background: #dceefb; }
+    
+    /* Länk-container */
+    .links { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .link { color: #0066cc; text-decoration: none; font-size: 10px; font-weight: bold; background: #eef6fc; padding: 2px 5px; border-radius: 3px; border: 1px solid #dceefb; }
+    .link:hover { text-decoration: none; background: #d0e8fa; border-color: #0066cc; }
 
-    /* Toggle +/- knapp (Ligger nu till höger i kortet) */
     .toggle-icon { font-size: 14px; font-weight: bold; color: #777; margin-left: 8px; width: 16px; text-align: center; }
     .node.leaf .toggle-icon { visibility: hidden; }
 
-    /* --- FOI TABELL STYLING (Oförändrad) --- */
+    /* --- FOI TABELL STYLING --- */
     .panel-header { padding: 10px 15px; background: #f1f1f1; border-bottom: 1px solid #ddd; }
     .panel-header h2 { margin: 0 0 10px 0; font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
     #searchFOI { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
@@ -192,46 +178,104 @@
 // ==========================================
 const treeData = {
   title: "Ryskt Fastighetsägande & Org. Brottslighet",
-  info: "Startnod. Klicka för att navigera.",
+  info: "Översikt av kopplingar, fastigheter och nätverk i Norden.",
   isRoot: true,
   children: [
+    // --- GREN 1: FASTIGHETER ---
     {
-      title: "1. Fastigheter & Mark (Norden)",
+      title: "1) Fastigheter & Mark (Norden)",
       children: [
         {
           title: "Sverige",
           children: [
-            { title: "FOI Kartläggning", info: "Ryska ekonomiska intressen.", link: "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
-            { title: "Säpo", info: "157 ryska medborgare / 247 fastigheter identifierade.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
-            { title: "CASE: Muskö (Marinbas)", info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", link: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
-            { title: "CASE: Skärgårdstomter", info: "Ryskt nätverk köper tomter (Aftonbladet).", link: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
-            { title: "CASE: Vidja / Rymdanläggning", info: "Penningtvättsupplägg nära Swedish Space Corp.", link: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
-            { title: "CASE: Ryska Kyrkan Västerås", info: "Strategisk placering nära flygplats.", link: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
+            { 
+              title: "FOI: Ryska ekonomiska intressen", 
+              info: "Kartläggning av tillgångar, upphandling och handel.", 
+              links: [
+                { text: "FOI Nyhet", url: "https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html" },
+                { text: "Rapport (PDF)", url: "https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf" }
+              ] 
+            },
+            { 
+              title: "Säpo & Omfattning", 
+              info: "157 ryska medborgare / 247 fastigheter identifierade.", 
+              links: [
+                { text: "SvD", url: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
+                { text: "Syre", url: "https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/" }
+              ]
+            },
+            { 
+              title: "CASE: Muskö (Marinbas)", 
+              info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", 
+              links: [
+                { text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
+                { text: "Fokus", url: "https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/" },
+                { text: "Skippo", url: "https://www.skippo.se/nyheter/ryss-har-sjotomt-vid-hemlig-svensk-militarbas" }
+              ] 
+            },
+            { 
+              title: "CASE: Skärgårdstomter", 
+              info: "Ryskt nätverk köper tomter (Aftonbladet).", 
+              links: [
+                { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
+                { text: "Video (TV)", url: "https://tv.aftonbladet.se/video/381620/ryska-naetverk-koeper-tomter-i-sverige" }
+              ] 
+            },
+            { 
+              title: "CASE: Vidja / Rymdanläggning", 
+              info: "Penningtvättsupplägg nära Swedish Space Corp.", 
+              links: [
+                { text: "Dagens Industri", url: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
+                { text: "Hem & Hyra", url: "https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/" }
+              ] 
+            },
+            { 
+              title: "CASE: Ryska Kyrkan Västerås", 
+              info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", 
+              links: [
+                { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
+              ] 
+            }
           ]
         },
         {
           title: "Finland",
           children: [
-            { title: "Lagstiftning", info: "Krav på tillstånd för icke-EU köpare." },
-            { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar 2025. Pavel Melnikov.", link: "https://yle.fi/a/7-10073103" },
-            { title: "Beslag", info: "Ryska statliga tillgångar frysta (Naftogaz-målet)." }
+            { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES (Försvarsministeriet).", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
+            { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar mot Pavel Melnikov 2025.", links: [{ text: "Yle", url: "https://yle.fi/a/7-10073103" }, { text: "HBL", url: "https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/" }] },
+            { title: "Beslag", info: "Frysning av ryska statliga tillgångar (Naftogaz-målet).", links: [{ text: "Reuters", url: "https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/" }] }
           ]
         },
         {
           title: "Norge",
           children: [
-            { title: "Norge: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }
+            { title: "CASE: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] },
+            { title: "Förhandsprövning", info: "Planerar nya regler.", links: [{ text: "Euronews", url: "https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked" }] }
+          ]
+        },
+        {
+          title: "Danmark",
+          children: [
+            { title: "Regelverk", info: "Striktare krav på hemvist/tillstånd.", links: [{ text: "UM.dk", url: "https://um.dk/en/travel-and-residence/family-abd-legal-issues/foreign-citizens-acquisition-of-property-in-denmark" }] }
           ]
         }
       ]
     },
+    // --- GREN 2: BROTTSLIGHET ---
     {
-      title: "2. Org. Brottslighet & Domar",
+      title: "2) Domar & Org. Brottslighet",
       children: [
         {
-          title: "Sverige: Byggsektorn",
+          title: "Sverige",
           children: [
-            { title: "EBM Tillslag (2024)", info: "Grov näringspenningtvätt, halv miljard kr.", link: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
+            { 
+              title: "Grov Näringspenningtvätt (Bygg)", 
+              info: "EBM-tillslag och åtal. Halv miljard kronor.", 
+              links: [
+                { text: "EBM Tillslag", url: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
+                { text: "EBM Åtal", url: "https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/" }
+              ] 
+            },
             {
               title: "DJUPANALYS: Södertörns tingsrätt (B 16726-24)",
               highlight: true,
@@ -277,28 +321,45 @@ const treeData = {
           ]
         },
         {
-          title: "Internationellt",
+          title: "EU / Europa",
           children: [
-            { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage.", link: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
-            { title: "Spanien", info: "Operation Troika & Oligarch." }
+            { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage och påverkan.", links: [{ text: "Rapport (PDF)", url: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" }, { text: "Artikel", url: "https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol" }] }
+          ]
+        },
+        {
+          title: "USA: Sanktioner",
+          children: [
+            { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
+          ]
+        },
+        {
+          title: "Spanien & Ryssland",
+          children: [
+            { title: "Operation Troika", info: "Stort maffiamål, frikännande 2018.", links: [{ text: "Jamestown", url: "https://jamestown.org/trial-decade-spain-declares-war-russian-organized-crime/" }] },
+            { title: "Operation Oligarch", info: "Tillslag mot ryska maffian 2017.", links: [{ text: "The Insider", url: "https://theins.ru/en/corruption/149860" }] },
+            { title: "Tambovskaya", info: "Vladimir Barsukov/Kumarin (domar).", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/archive/barsukov-handed-14-years-for-fraud" }] }
           ]
         }
       ]
     },
+    // --- GREN 3: MOSKVAPATRIARKATET ---
     {
-      title: "3. Moskvapatriarkatet",
+      title: "3) Moskvapatriarkatet",
       children: [
-        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform." },
-        { title: "Västerås & Rosatom", info: "Uppgifter om att Rosatom finansierade kyrkbygget i Västerås." },
-        { title: "Kopplade Bolag", children: [
-            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021)." },
-            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar." }
-        ]}
+        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] },
+        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] },
+        { 
+          title: "Kopplade Bolag", 
+          children: [
+            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns på FOI-listan.", links: [{ text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" }] },
+            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar.", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894" }] }
+          ]
+        }
       ]
     },
-    // --- GREN 5: PRAVFOND (NY) ---
+    // --- GREN 4: PRAVFOND ---
     {
-      title: "5. Pravfond (Rysk påverkan)",
+      title: "4) Pravfond (Rysk påverkan)",
       highlight: true,
       alert: true,
       children: [
@@ -306,55 +367,37 @@ const treeData = {
           title: "Grundläggande fakta",
           children: [
             { title: "Formellt namn", info: "Fonden för stöd och skydd av rättigheterna för landsmän som bor utomlands." },
-            { title: "Grundare/Huvudman", info: "Ryska federationen (dekret av Medvedev 2012) / Ryska UD." },
-            { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter/spioner." }
+            { title: "Huvudman", info: "Ryska federationen / Ryska UD." },
+            { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter." }
           ]
         },
         {
-          title: "Strategisk roll & Ledning",
+          title: "Strategisk roll",
           children: [
-            { title: "Syfte", info: "Motverka 'russofobi', mobilisera diaspora, stödja Kremls narrativ." },
-            { title: "Aleksandr Udaltsov", info: "Chef, f.d. diplomat, EU-sanktionerad." },
-            { title: "Vladimir Pozdorovkin", info: "Regionchef Norden/Baltikum. Identifierad SVR-agent." },
-            { title: "Anatolij Sorokin", info: "Koppling till SVR." }
+            { title: "Syfte", info: "Motverka 'russofobi', mobilisera diaspora." },
+            { title: "Nyckelpersoner", info: "Aleksandr Udaltsov (Chef), Vladimir Pozdorovkin (Norden/SVR-agent)." }
           ]
         },
         {
-          title: "Finansiering & Juridiskt stöd",
+          title: "Finansiering & Juridik",
           children: [
-            { title: "Finansiering", info: "Statsfinansierad via UD. >50 miljoner SEK till europeiska nätverk." },
-            { title: "Vadim Krasikov", info: "GRU/FSB-agent (mord i Berlin). Advokat betald av Pravfond." },
+            { title: "Finansiering", info: ">50 miljoner SEK till europeiska nätverk." },
+            { title: "Vadim Krasikov", info: "GRU-agent (mord i Berlin). Advokat betald av Pravfond." },
             { title: "Viktor Bout", info: "Vapenhandlare. Fick juridiskt stöd." }
           ]
         },
         {
-          title: "Sverige (Rurik & Nätverk)",
+          title: "Sverige (Rurik)",
           children: [
-            { title: "Ryska riksförbundet (Rurik)", info: "Fick ca 1 MSEK från Pravfond. Ordf Lioudmila Siegel spred propaganda." },
-            { title: "Konsekvenser", info: "MUCF krävde återbetalning, ABF avbröt samarbete. Rurik upplöstes 2024." },
-            { title: "Regionala spår", info: "Göteborg (Jurist i Högsbohöjd), Stockholm (Blomsterhandlare), Luleå (Sputnik)." }
+            { title: "Ryska riksförbundet", info: "Fick ca 1 MSEK. Ordf Lioudmila Siegel spred propaganda." },
+            { title: "Konsekvenser", info: "MUCF krävde återbetalning. Rurik upplöstes 2024." }
           ]
         },
         {
           title: "Övriga Norden",
           children: [
-            { title: "Finland", info: "Org 'Mosaiikki' fick ca 200 000 EUR. Koppling till Yle/MOT-granskning." },
-            { title: "Danmark", info: "'Velinformeret' (Telegram) fick pengar. Polisutredning." },
-            { title: "Norge", info: "Pozdorovkin ansvarig. Propaganda via Euromore/Golos." }
-          ]
-        },
-        {
-          title: "Propaganda & Sanktioner",
-          children: [
-            { title: "Plattformar", info: "Euromore, Golos (AI-översatta 'sanna nyheter' från Ukraina)." },
-            { title: "Sanktionsflykt", info: "Ombud i tredjeland, kontantsmuggling, bulvaner." }
-          ]
-        },
-        {
-          title: "Koppling till Underrättelsetjänst",
-          children: [
-            { title: "Personella", info: "SVR/GRU-officerare i ledningen." },
-            { title: "Funktionella", info: "Finansiering av agentförsvar, civil täckmantel för statlig verksamhet." }
+            { title: "Finland", info: "Org 'Mosaiikki' fick ca 200 000 EUR." },
+            { title: "Danmark", info: "'Velinformeret' (Telegram) fick pengar." }
           ]
         }
       ]
@@ -618,16 +661,6 @@ function renderTree(node, container) {
     nodeEl.classList.add('leaf');
   }
 
-  // Länk?
-  if(node.link) {
-    const a = document.createElement('a');
-    a.href = node.link;
-    a.target = "_blank";
-    a.className = 'link';
-    a.innerText = "LÄNK ↗";
-    titleEl.appendChild(a);
-  }
-
   contentEl.appendChild(titleEl);
 
   // Info-text
@@ -636,6 +669,31 @@ function renderTree(node, container) {
     infoEl.className = 'info';
     infoEl.innerText = node.info;
     contentEl.appendChild(infoEl);
+  }
+
+  // Länkar (Knappar)
+  if(node.links && node.links.length > 0) {
+    const linksDiv = document.createElement('div');
+    linksDiv.className = 'links';
+    node.links.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = "_blank";
+        a.className = 'link';
+        a.innerText = link.text + " ↗";
+        linksDiv.appendChild(a);
+    });
+    contentEl.appendChild(linksDiv);
+  } else if (node.link) { // Bakåtkompatibilitet om bara en länk finns
+    const linksDiv = document.createElement('div');
+    linksDiv.className = 'links';
+    const a = document.createElement('a');
+    a.href = node.link;
+    a.target = "_blank";
+    a.className = 'link';
+    a.innerText = "LÄNK ↗";
+    linksDiv.appendChild(a);
+    contentEl.appendChild(linksDiv);
   }
 
   nodeEl.appendChild(contentEl);

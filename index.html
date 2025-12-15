@@ -14,83 +14,117 @@
     header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 20; }
     h1 { margin: 0; font-size: 18px; color: #2c3e50; font-weight: 600; }
     
-    /* Knappar i header */
     .view-btn { padding: 6px 12px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; margin-left: 10px; }
     .view-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
     .view-btn:hover:not(.active) { background: #eee; }
 
-    /* --- HUVUDCONTAINER (SPLIT VIEW) --- */
     #main-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 50px); position: relative; }
     
-    /* VÄNSTER: VY-CONTAINER (Mindmap + Karta) */
     #left-panel { flex: 2; position: relative; border-right: 1px solid #ddd; min-width: 300px; display: flex; flex-direction: column; }
     
-    /* Vyer */
     .view-section { flex: 1; display: none; width: 100%; height: 100%; overflow: hidden; }
     .view-section.active { display: block; }
     
-    /* Mindmap Scroll */
-    #tree-container { overflow-y: auto; padding: 0 20px 20px 20px; background: #f8f9fa; height: 100%; box-sizing: border-box; }
+    /* Mindmap Container - Tillåter både X och Y scroll */
+    #tree-container { overflow: auto; padding: 40px; background: #f8f9fa; height: 100%; box-sizing: border-box; cursor: grab; }
+    #tree-container:active { cursor: grabbing; }
 
-    /* Karta */
     #map-container { width: 100%; height: 100%; background: #e5e9ec; }
 
-    /* HÖGER: FOI LISTA */
     #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 15; }
 
-    /* --- TRÄD-STRUKTUR CSS --- */
-    .tree-controls { position: sticky; top: 0; background: #f8f9fa; padding: 10px 0; border-bottom: 1px solid #ddd; margin-bottom: 10px; z-index: 10; display: flex; gap: 10px; }
-    .ctrl-btn { padding: 4px 10px; font-size: 12px; cursor: pointer; background: #e9ecef; border: 1px solid #ced4da; border-radius: 3px; color: #495057; }
-    .ctrl-btn:hover { background: #dde2e6; }
+    .tree-controls { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); padding: 5px; border-radius: 4px; border: 1px solid #ddd; z-index: 100; display: flex; gap: 5px; }
+    .ctrl-btn { padding: 4px 10px; font-size: 11px; cursor: pointer; background: #fff; border: 1px solid #bbb; border-radius: 3px; color: #333; font-weight: bold; }
+    .ctrl-btn:hover { background: #eee; }
 
-    .tree { margin-left: 10px; }
-    .node { position: relative; padding-left: 20px; margin: 8px 0; }
-    .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: 2px solid #ccc; }
-    .node:last-child::before { height: 16px; } 
-    
-    .content { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; transition: all 0.2s; }
-    .content::before { content: ''; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 2px solid #ccc; }
-    .content:hover { border-color: #aaa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    /* --- HORISONTELL TRÄD-STRUKTUR (CSS FLEXBOX) --- */
+    .tree { display: flex; flex-direction: column; }
 
-    .node.root > .content { background: #2c3e50; color: #fff; font-size: 16px; font-weight: bold; border: none; }
-    .node.root > .content .info { color: #ccc; }
-    .highlight-box { background-color: #fff8e1; border-left: 4px solid #f39c12; }
-    .alert-box { background-color: #ffebee; border-left: 4px solid #c62828; } /* För Pravfond */
+    /* Varje Nod (Innehåll + Barn-grupp) */
+    .node { 
+        display: flex; 
+        align-items: center; /* Centrera vertikalt */
+        margin: 5px 0;
+    }
 
-    .title { font-weight: 600; font-size: 14px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .info { display: block; font-size: 12px; color: #666; margin-top: 3px; line-height: 1.4; }
-    .link { color: #0066cc; text-decoration: none; font-size: 11px; margin-left: 5px; font-weight: bold; background: #eef6fc; padding: 1px 4px; border-radius: 3px; }
-    
-    .toggle-btn { width: 14px; height: 14px; border-radius: 50%; background: #eee; border: 1px solid #ccc; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #555; margin-right: 5px; cursor: pointer; }
-    .node.leaf .toggle-btn { visibility: hidden; }
-    .children { margin-left: 20px; display: block; border-left: 1px dashed rgba(0,0,0,0.05); }
+    /* Själva kortet (Rutan med text) */
+    .content { 
+        display: flex; 
+        flex-direction: column;
+        background: #fff; 
+        border: 1px solid #ccc; 
+        padding: 8px 12px; 
+        border-radius: 6px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        position: relative; 
+        transition: all 0.2s; 
+        min-width: 180px;
+        max-width: 250px;
+        z-index: 2;
+    }
+    .content:hover { border-color: #999; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
+
+    /* Linjer */
+    .content::after { /* Linje högerut från kortet */
+        content: ''; position: absolute; right: -20px; top: 50%; width: 20px; height: 2px; background: #ccc; z-index: 1;
+    }
+    .node.leaf .content::after { display: none; } /* Inga linjer från löv */
+
+    /* Container för barnen (Ligger till höger om föräldern) */
+    .children { 
+        display: flex; 
+        flex-direction: column; 
+        margin-left: 20px; /* Avstånd för linjen */
+        position: relative;
+        border-left: 2px solid #ccc; /* Den vertikala ryggraden */
+    }
     .children.hidden { display: none; }
 
-    /* --- FOI TABELL STYLING --- */
+    /* Justering av barn-noder för att träffa linjen */
+    .children .node {
+        position: relative;
+        padding-left: 20px; /* Plats för horisontell linje in till barnet */
+    }
+    .children .node::before { /* Linje från ryggraden in till barnet */
+        content: ''; position: absolute; left: 0; top: 50%; width: 20px; height: 2px; background: #ccc;
+    }
+
+    /* RÖTTER & SPECIAL */
+    .node.root > .content { background: #2c3e50; color: #fff; border: none; min-width: 200px; }
+    .node.root > .content .info { color: #ddd; }
+    .node.root > .content::after { background: #2c3e50; }
+    
+    .highlight-box { background-color: #fff8e1; border-left: 4px solid #f39c12; }
+    .alert-box { background-color: #ffebee; border-left: 4px solid #c62828; }
+
+    .title { font-weight: 600; font-size: 13px; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .info { display: block; font-size: 11px; color: #666; margin-top: 4px; line-height: 1.3; }
+    .link { color: #0066cc; text-decoration: none; font-size: 10px; font-weight: bold; background: #eef6fc; padding: 2px 4px; border-radius: 3px; display: inline-block; margin-top: 4px;}
+    .link:hover { text-decoration: underline; background: #dceefb; }
+
+    /* Toggle +/- knapp (Ligger nu till höger i kortet) */
+    .toggle-icon { font-size: 14px; font-weight: bold; color: #777; margin-left: 8px; width: 16px; text-align: center; }
+    .node.leaf .toggle-icon { visibility: hidden; }
+
+    /* --- FOI TABELL STYLING (Oförändrad) --- */
     .panel-header { padding: 10px 15px; background: #f1f1f1; border-bottom: 1px solid #ddd; }
     .panel-header h2 { margin: 0 0 10px 0; font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
     #searchFOI { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    
     .table-wrapper { flex: 1; overflow-y: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th { position: sticky; top: 0; background: #fff; border-bottom: 2px solid #333; text-align: left; padding: 8px; z-index: 5; font-weight: 700; color: #333; }
     td { padding: 6px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
     tr:nth-child(even) { background-color: #f9f9f9; }
     tr:hover { background-color: #eef6fc; cursor: pointer; }
-    
     .sni-tag { display: inline-block; padding: 1px 4px; border-radius: 3px; color: white; font-weight: bold; font-size: 10px; min-width: 15px; text-align: center; }
-    .sni-F { background: #e67e22; } /* Bygg */
-    .sni-G { background: #27ae60; } /* Handel */
-    .sni-K { background: #8e44ad; } /* Finans */
-    .sni-M { background: #2980b9; } /* Juridik/Teknik */
-    .sni-def { background: #95a5a6; } /* Övrigt */
+    .sni-F { background: #e67e22; } .sni-G { background: #27ae60; } .sni-K { background: #8e44ad; } .sni-M { background: #2980b9; } .sni-def { background: #95a5a6; }
 
-    /* RESPONSIVITET */
     @media (max-width: 768px) {
       #main-container { flex-direction: column; overflow-y: auto; }
       #left-panel, #foi-panel { flex: none; width: 100%; min-width: 0; }
-      #left-panel { height: 50vh; }
-      #foi-panel { height: 50vh; border-left: none; border-top: 2px solid #333; }
+      #left-panel { height: 60vh; }
+      #foi-panel { height: 40vh; border-left: none; border-top: 2px solid #333; }
+      .tree { margin-left: 0; }
       body { overflow: auto; }
     }
   </style>
@@ -105,18 +139,18 @@
         <button class="view-btn" onclick="setView('map')">Karta</button>
     </div>
   </div>
-  <div style="font-size:12px; color:#666;">Analys av fastigheter, brottslighet & Pravfond</div>
+  <div style="font-size:12px; color:#666;">Interaktiv analys</div>
 </header>
 
 <div id="main-container">
   <div id="left-panel">
     
     <div id="view-tree" class="view-section active">
+        <div class="tree-controls">
+            <button class="ctrl-btn" onclick="expandAll()">[+] Fäll ut allt</button>
+            <button class="ctrl-btn" onclick="collapseAll()">[-] Fäll ihop allt</button>
+        </div>
         <div id="tree-container">
-            <div class="tree-controls">
-                <button class="ctrl-btn" onclick="expandAll()">[+] Fäll ut allt</button>
-                <button class="ctrl-btn" onclick="collapseAll()">[-] Fäll ihop allt</button>
-            </div>
             <div id="tree-root" class="tree"></div>
         </div>
     </div>
@@ -158,7 +192,7 @@
 // ==========================================
 const treeData = {
   title: "Ryskt Fastighetsägande & Org. Brottslighet",
-  info: "Klicka på noder för att se detaljer.",
+  info: "Startnod. Klicka för att navigera.",
   isRoot: true,
   children: [
     {
@@ -262,7 +296,7 @@ const treeData = {
         ]}
       ]
     },
-    // --- NY GREN: PRAVFOND ---
+    // --- GREN 5: PRAVFOND (NY) ---
     {
       title: "5. Pravfond (Rysk påverkan)",
       highlight: true,
@@ -540,7 +574,7 @@ function setView(viewName) {
     }
 }
 
-// --- RITA TRÄDET ---
+// --- RITA TRÄDET (HORISONTELLT) ---
 const treeRoot = document.getElementById('tree-root');
 
 function renderTree(node, container) {
@@ -552,21 +586,28 @@ function renderTree(node, container) {
   const contentEl = document.createElement('div');
   contentEl.className = 'content';
   if(node.highlight) contentEl.classList.add('highlight-box');
-  if(node.alert) contentEl.classList.add('alert-box'); // För Pravfond
+  if(node.alert) contentEl.classList.add('alert-box');
 
   // Titel-raden
   const titleEl = document.createElement('div');
   titleEl.className = 'title';
   
+  // Titeltext
+  const textSpan = document.createElement('span');
+  textSpan.innerText = node.title;
+  titleEl.appendChild(textSpan);
+
+  // Toggle +/- knapp (Ligger till höger nu)
   const hasChildren = node.children && node.children.length > 0;
   if(hasChildren) {
     const btn = document.createElement('span');
-    btn.className = 'toggle-btn';
-    btn.innerText = '-'; 
+    btn.className = 'toggle-icon';
+    btn.innerText = '-'; // Standard: utfälld
     titleEl.appendChild(btn);
     
+    // Klick-event för att fälla in/ut
     contentEl.onclick = function(e) {
-      if(e.target.classList.contains('link')) return; 
+      if(e.target.classList.contains('link')) return; // Klicka ej på länkar
       const childCont = nodeEl.querySelector('.children');
       if(childCont) {
         childCont.classList.toggle('hidden');
@@ -577,10 +618,7 @@ function renderTree(node, container) {
     nodeEl.classList.add('leaf');
   }
 
-  const textSpan = document.createElement('span');
-  textSpan.innerText = node.title;
-  titleEl.appendChild(textSpan);
-
+  // Länk?
   if(node.link) {
     const a = document.createElement('a');
     a.href = node.link;
@@ -592,6 +630,7 @@ function renderTree(node, container) {
 
   contentEl.appendChild(titleEl);
 
+  // Info-text
   if(node.info) {
     const infoEl = document.createElement('div');
     infoEl.className = 'info';
@@ -601,6 +640,7 @@ function renderTree(node, container) {
 
   nodeEl.appendChild(contentEl);
 
+  // Rendera barn rekursivt
   if(hasChildren) {
     const childContainer = document.createElement('div');
     childContainer.className = 'children';
@@ -615,7 +655,7 @@ function renderTree(node, container) {
 function expandAll() {
     document.querySelectorAll('.children').forEach(el => {
         el.classList.remove('hidden');
-        const btn = el.parentElement.querySelector('.toggle-btn');
+        const btn = el.parentElement.querySelector('.toggle-icon');
         if(btn) btn.innerText = '-';
     });
 }
@@ -623,14 +663,14 @@ function expandAll() {
 function collapseAll() {
     document.querySelectorAll('.children').forEach(el => {
         el.classList.add('hidden');
-        const btn = el.parentElement.querySelector('.toggle-btn');
+        const btn = el.parentElement.querySelector('.toggle-icon');
         if(btn) btn.innerText = '+';
     });
     // Håll roten öppen
     const root = document.querySelector('.children'); 
     if(root) {
         root.classList.remove('hidden');
-        const btn = root.parentElement.querySelector('.toggle-btn');
+        const btn = root.parentElement.querySelector('.toggle-icon');
         if(btn) btn.innerText = '-';
     }
 }

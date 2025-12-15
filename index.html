@@ -30,7 +30,7 @@
     .view-section.active { display: block; }
     
     /* Mindmap Scroll */
-    #tree-container { overflow-y: auto; padding: 20px; background: #f8f9fa; height: 100%; box-sizing: border-box; }
+    #tree-container { overflow-y: auto; padding: 0 20px 20px 20px; background: #f8f9fa; height: 100%; box-sizing: border-box; }
 
     /* Karta */
     #map-container { width: 100%; height: 100%; background: #e5e9ec; }
@@ -39,6 +39,10 @@
     #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 15; }
 
     /* --- TRÄD-STRUKTUR CSS --- */
+    .tree-controls { position: sticky; top: 0; background: #f8f9fa; padding: 10px 0; border-bottom: 1px solid #ddd; margin-bottom: 10px; z-index: 10; display: flex; gap: 10px; }
+    .ctrl-btn { padding: 4px 10px; font-size: 12px; cursor: pointer; background: #e9ecef; border: 1px solid #ced4da; border-radius: 3px; color: #495057; }
+    .ctrl-btn:hover { background: #dde2e6; }
+
     .tree { margin-left: 10px; }
     .node { position: relative; padding-left: 20px; margin: 8px 0; }
     .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: 2px solid #ccc; }
@@ -51,6 +55,7 @@
     .node.root > .content { background: #2c3e50; color: #fff; font-size: 16px; font-weight: bold; border: none; }
     .node.root > .content .info { color: #ccc; }
     .highlight-box { background-color: #fff8e1; border-left: 4px solid #f39c12; }
+    .alert-box { background-color: #ffebee; border-left: 4px solid #c62828; } /* För Pravfond */
 
     .title { font-weight: 600; font-size: 14px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .info { display: block; font-size: 12px; color: #666; margin-top: 3px; line-height: 1.4; }
@@ -94,13 +99,13 @@
 
 <header>
   <div style="display:flex; align-items:center;">
-    <h1>Ryska Intressen</h1>
+    <h1>Ryska Intressen & Nätverk</h1>
     <div style="margin-left:20px;">
-        <button class="view-btn active" onclick="setView('tree')">Mindmap (Analys)</button>
-        <button class="view-btn" onclick="setView('map')">Karta (Heatmap)</button>
+        <button class="view-btn active" onclick="setView('tree')">Mindmap</button>
+        <button class="view-btn" onclick="setView('map')">Karta</button>
     </div>
   </div>
-  <div style="font-size:12px; color:#666;">Totalt 128 bolag i registret</div>
+  <div style="font-size:12px; color:#666;">Analys av fastigheter, brottslighet & Pravfond</div>
 </header>
 
 <div id="main-container">
@@ -108,6 +113,10 @@
     
     <div id="view-tree" class="view-section active">
         <div id="tree-container">
+            <div class="tree-controls">
+                <button class="ctrl-btn" onclick="expandAll()">[+] Fäll ut allt</button>
+                <button class="ctrl-btn" onclick="collapseAll()">[-] Fäll ihop allt</button>
+            </div>
             <div id="tree-root" class="tree"></div>
         </div>
     </div>
@@ -251,6 +260,69 @@ const treeData = {
             { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021)." },
             { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar." }
         ]}
+      ]
+    },
+    // --- NY GREN: PRAVFOND ---
+    {
+      title: "5. Pravfond (Rysk påverkan)",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "Grundläggande fakta",
+          children: [
+            { title: "Formellt namn", info: "Fonden för stöd och skydd av rättigheterna för landsmän som bor utomlands." },
+            { title: "Grundare/Huvudman", info: "Ryska federationen (dekret av Medvedev 2012) / Ryska UD." },
+            { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter/spioner." }
+          ]
+        },
+        {
+          title: "Strategisk roll & Ledning",
+          children: [
+            { title: "Syfte", info: "Motverka 'russofobi', mobilisera diaspora, stödja Kremls narrativ." },
+            { title: "Aleksandr Udaltsov", info: "Chef, f.d. diplomat, EU-sanktionerad." },
+            { title: "Vladimir Pozdorovkin", info: "Regionchef Norden/Baltikum. Identifierad SVR-agent." },
+            { title: "Anatolij Sorokin", info: "Koppling till SVR." }
+          ]
+        },
+        {
+          title: "Finansiering & Juridiskt stöd",
+          children: [
+            { title: "Finansiering", info: "Statsfinansierad via UD. >50 miljoner SEK till europeiska nätverk." },
+            { title: "Vadim Krasikov", info: "GRU/FSB-agent (mord i Berlin). Advokat betald av Pravfond." },
+            { title: "Viktor Bout", info: "Vapenhandlare. Fick juridiskt stöd." }
+          ]
+        },
+        {
+          title: "Sverige (Rurik & Nätverk)",
+          children: [
+            { title: "Ryska riksförbundet (Rurik)", info: "Fick ca 1 MSEK från Pravfond. Ordf Lioudmila Siegel spred propaganda." },
+            { title: "Konsekvenser", info: "MUCF krävde återbetalning, ABF avbröt samarbete. Rurik upplöstes 2024." },
+            { title: "Regionala spår", info: "Göteborg (Jurist i Högsbohöjd), Stockholm (Blomsterhandlare), Luleå (Sputnik)." }
+          ]
+        },
+        {
+          title: "Övriga Norden",
+          children: [
+            { title: "Finland", info: "Org 'Mosaiikki' fick ca 200 000 EUR. Koppling till Yle/MOT-granskning." },
+            { title: "Danmark", info: "'Velinformeret' (Telegram) fick pengar. Polisutredning." },
+            { title: "Norge", info: "Pozdorovkin ansvarig. Propaganda via Euromore/Golos." }
+          ]
+        },
+        {
+          title: "Propaganda & Sanktioner",
+          children: [
+            { title: "Plattformar", info: "Euromore, Golos (AI-översatta 'sanna nyheter' från Ukraina)." },
+            { title: "Sanktionsflykt", info: "Ombud i tredjeland, kontantsmuggling, bulvaner." }
+          ]
+        },
+        {
+          title: "Koppling till Underrättelsetjänst",
+          children: [
+            { title: "Personella", info: "SVR/GRU-officerare i ledningen." },
+            { title: "Funktionella", info: "Finansiering av agentförsvar, civil täckmantel för statlig verksamhet." }
+          ]
+        }
       ]
     }
   ]
@@ -480,6 +552,7 @@ function renderTree(node, container) {
   const contentEl = document.createElement('div');
   contentEl.className = 'content';
   if(node.highlight) contentEl.classList.add('highlight-box');
+  if(node.alert) contentEl.classList.add('alert-box'); // För Pravfond
 
   // Titel-raden
   const titleEl = document.createElement('div');
@@ -538,6 +611,30 @@ function renderTree(node, container) {
   container.appendChild(nodeEl);
 }
 
+// Globala funktioner för knapparna
+function expandAll() {
+    document.querySelectorAll('.children').forEach(el => {
+        el.classList.remove('hidden');
+        const btn = el.parentElement.querySelector('.toggle-btn');
+        if(btn) btn.innerText = '-';
+    });
+}
+
+function collapseAll() {
+    document.querySelectorAll('.children').forEach(el => {
+        el.classList.add('hidden');
+        const btn = el.parentElement.querySelector('.toggle-btn');
+        if(btn) btn.innerText = '+';
+    });
+    // Håll roten öppen
+    const root = document.querySelector('.children'); 
+    if(root) {
+        root.classList.remove('hidden');
+        const btn = root.parentElement.querySelector('.toggle-btn');
+        if(btn) btn.innerText = '-';
+    }
+}
+
 // --- RITA FOI TABELLEN ---
 const foiBody = document.getElementById('foi-body');
 const foiCount = document.getElementById('foi-count');
@@ -580,7 +677,7 @@ function filterFOI() {
 let map;
 function initMap() {
     if(map) {
-        map.invalidateSize();
+        setTimeout(() => map.invalidateSize(), 100);
         return; 
     }
 
@@ -589,7 +686,7 @@ function initMap() {
 
     // Gratis kartlager (OpenStreetMap)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
@@ -629,8 +726,6 @@ function initMap() {
             hits++;
         }
     });
-    
-    console.log("Karta ritad med " + hits + " bolag.");
 }
 
 // Starta allt

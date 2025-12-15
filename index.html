@@ -3,118 +3,166 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rysk Intressesfär - Strukturkarta</title>
+  <title>Rysk Intressesfär & FOI-register</title>
   <style>
-    /* GRUNDLÄGGANDE STIL */
-    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
-    h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 24px; }
+    /* --- LAYOUT & BAS --- */
+    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    /* TRÄD-STRUKTUR (CSS-MAGI FÖR LINJERNA) */
-    .tree { --line-color: #ccc; --line-width: 2px; margin-left: 20px; }
-    .node { position: relative; padding-left: 20px; margin: 10px 0; }
-    
-    /* Lodräta linjer */
-    .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: var(--line-width) solid var(--line-color); }
-    .node:last-child::before { height: 18px; /* Slutar linjen vid sista barnet */ }
-    
-    /* Vågräta linjer */
-    .content::before { content: ''; position: absolute; top: 18px; left: 0; width: 20px; border-top: var(--line-width) solid var(--line-color); }
+    header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 10; }
+    h1 { margin: 0; font-size: 18px; color: #2c3e50; font-weight: 600; }
+    .header-info { font-size: 12px; color: #666; }
 
-    /* INNEHÅLLSKORT */
-    .content { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; position: relative; }
-    .content:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.15); transform: translateY(-1px); border-color: #bbb; }
+    /* --- HUVUDCONTAINER (SPLIT VIEW) --- */
+    #main-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 50px); }
     
-    /* Text och Länkar */
-    .title { font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-    .info { display: block; font-size: 13px; color: #666; margin-top: 4px; max-width: 600px; line-height: 1.4; }
-    a { color: #0066cc; text-decoration: none; margin-left: 5px; font-size: 12px; font-weight: bold; }
-    a:hover { text-decoration: underline; }
+    /* VÄNSTER: MINDMAP */
+    #tree-panel { flex: 2; overflow-y: auto; padding: 20px; background: #f8f9fa; border-right: 1px solid #ddd; min-width: 300px; }
+    
+    /* HÖGER: FOI LISTA */
+    #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); }
 
-    /* EXPANDERBARA BARN */
-    .children { margin-left: 30px; display: block; /* Standard: Öppen */ }
+    /* --- TRÄD-STRUKTUR CSS --- */
+    .tree { margin-left: 10px; }
+    .node { position: relative; padding-left: 20px; margin: 8px 0; }
+    .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: 2px solid #ccc; }
+    .node:last-child::before { height: 16px; } /* Sluta linjen snyggt */
+    
+    .content { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; transition: all 0.2s; }
+    .content::before { content: ''; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 2px solid #ccc; }
+    .content:hover { border-color: #aaa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+    /* Root node styling */
+    .node.root > .content { background: #2c3e50; color: #fff; font-size: 16px; font-weight: bold; border: none; }
+    .node.root > .content .info { color: #ccc; }
+    
+    /* Highlight box (för analysen) */
+    .highlight-box { background-color: #fff8e1; border-left: 4px solid #f39c12; }
+
+    .title { font-weight: 600; font-size: 14px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .info { display: block; font-size: 12px; color: #666; margin-top: 3px; line-height: 1.4; }
+    .link { color: #0066cc; text-decoration: none; font-size: 11px; margin-left: 5px; font-weight: bold; background: #eef6fc; padding: 1px 4px; border-radius: 3px; }
+    .link:hover { text-decoration: underline; background: #dceefb; }
+
+    /* Toggle +/- knapp */
+    .toggle-btn { width: 14px; height: 14px; border-radius: 50%; background: #eee; border: 1px solid #ccc; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #555; margin-right: 5px; cursor: pointer; }
+    .node.leaf .toggle-btn { visibility: hidden; }
+    .children { margin-left: 20px; display: block; border-left: 1px dashed rgba(0,0,0,0.05); }
     .children.hidden { display: none; }
-    
-    /* PLUSS/MINUS IKONER */
-    .toggle-btn { width: 16px; height: 16px; border-radius: 50%; background: #eee; border: 1px solid #ccc; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 5px; color: #555; }
-    .node.leaf .toggle-btn { visibility: hidden; } /* Dölj om inga barn finns */
 
-    /* FÄRGKODNING AV GRENAR */
-    .root > .content { background: #2c3e50; color: #fff; font-size: 18px; padding: 12px 20px; }
-    .root > .content .info { color: #ddd; }
+    /* --- FOI TABELL STYLING --- */
+    .panel-header { padding: 10px 15px; background: #f1f1f1; border-bottom: 1px solid #ddd; }
+    .panel-header h2 { margin: 0 0 10px 0; font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+    #searchFOI { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     
-    /* SPECIFIKA STILAR FÖR CASE-ANALYS */
-    .highlight-box { border-left: 4px solid #e74c3c; background: #fff5f5; }
-    .foi-row { font-family: monospace; font-size: 12px; background: #f4f4f4; border:none; padding: 4px 10px; margin: 2px 0; display:flex; justify-content: space-between; width: 100%; min-width: 400px; }
+    .table-wrapper { flex: 1; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { position: sticky; top: 0; background: #fff; border-bottom: 2px solid #333; text-align: left; padding: 8px; z-index: 5; font-weight: 700; color: #333; }
+    td { padding: 6px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    tr:hover { background-color: #eef6fc; }
     
-    /* SÖK-FÄLT */
-    #search-container { position: sticky; top: 0; background: #f8f9fa; padding: 10px 0; z-index: 100; border-bottom: 1px solid #ddd; margin-bottom: 20px; display: flex; gap: 10px; align-items: center;}
-    input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; flex: 1; max-width: 400px; }
-    button { padding: 8px 15px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background: #34495e; }
+    .sni-tag { display: inline-block; padding: 1px 4px; border-radius: 3px; color: white; font-weight: bold; font-size: 10px; min-width: 15px; text-align: center; }
+    .sni-F { background: #e67e22; } /* Bygg */
+    .sni-G { background: #27ae60; } /* Handel */
+    .sni-K { background: #8e44ad; } /* Finans */
+    .sni-M { background: #2980b9; } /* Juridik/Teknik */
+    .sni-def { background: #95a5a6; } /* Övrigt */
 
+    /* RESPONSIVITET */
+    @media (max-width: 768px) {
+      #main-container { flex-direction: column; overflow-y: auto; }
+      #tree-panel, #foi-panel { flex: none; width: 100%; min-width: 0; overflow: visible; height: auto; }
+      #foi-panel { max-width: 100%; border-left: none; border-top: 2px solid #333; height: 500px; }
+      body { overflow: auto; }
+    }
   </style>
 </head>
 <body>
 
-<div id="search-container">
-  <strong>Filter:</strong> 
-  <input type="text" id="searchInput" placeholder="Sök i trädet (t.ex. 'Södertörn', 'Västerås', 'FOI')..." onkeyup="filterTree()">
-  <button onclick="expandAll()">Fäll ut allt</button>
-  <button onclick="collapseAll()">Fäll ihop allt</button>
+<header>
+  <h1>Analyskarta: Ryska Intressen & Brottslighet</h1>
+  <div class="header-info">Klicka på noder för att fälla ut/in • FOI-listan till höger</div>
+</header>
+
+<div id="main-container">
+  <div id="tree-panel">
+    <div id="tree-root" class="tree"></div>
+  </div>
+
+  <div id="foi-panel">
+    <div class="panel-header">
+      <h2>FOI-register (128 bolag)</h2>
+      <input type="text" id="searchFOI" placeholder="Sök bolag, ägare, ort..." onkeyup="filterFOI()">
+      <div style="margin-top:5px; font-size:11px; color:#666;" id="foi-count">Visar alla rader</div>
+    </div>
+    <div class="table-wrapper">
+      <table id="foi-table">
+        <thead>
+          <tr>
+            <th width="30">Nr</th>
+            <th>Bolag & Säte</th>
+            <th width="30">SNI</th>
+            <th>Ägare / Info</th>
+          </tr>
+        </thead>
+        <tbody id="foi-body">
+          </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div id="tree-root" class="tree"></div>
-
 <script>
-// --- DATAN (JSON) ---
-// Här ligger all information. JSON är strikt, så texten kan inte klumpa ihop sig.
-const data = {
+// ==========================================
+// 1. DATA: TRÄDSTRUKTUR (MINDMAP)
+// ==========================================
+const treeData = {
   title: "Ryskt Fastighetsägande & Org. Brottslighet",
-  info: "Karta över kopplingar, domar och risker i Norden.",
+  info: "Översikt av kopplingar, fastigheter och nätverk i Norden.",
   isRoot: true,
   children: [
-    // GREN 1: FASTIGHETER
+    // --- GREN 1: FASTIGHETER ---
     {
       title: "1. Fastigheter & Mark (Norden)",
       children: [
         {
           title: "Sverige",
           children: [
-            { title: "FOI Kartläggning", info: "Ryska ekonomiska intressen kartlagda.", link: "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
-            { title: "Säpo & Omfattning", info: "157 ryska medborgare / 247 fastigheter identifierade.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
+            { title: "FOI Kartläggning", info: "Ryska ekonomiska intressen.", link: "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
+            { title: "Säpo", info: "157 ryska medborgare / 247 fastigheter identifierade som risk.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
             { title: "CASE: Muskö (Marinbas)", info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", link: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
-            { title: "CASE: Skärgårdstomter", info: "Ryskt nätverk köper tomter i Sthlm skärgård.", link: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
-            { title: "CASE: Vidja / Rymdanläggning", info: "Penningtvättsupplägg kopplat till fastighet vid Swedish Space Corp.", link: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
-            { title: "CASE: Ryska Kyrkan Västerås", info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", link: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
+            { title: "CASE: Skärgårdstomter", info: "Ryskt nätverk köper tomter (Aftonbladet).", link: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
+            { title: "CASE: Vidja / Rymdanläggning", info: "Penningtvättsupplägg nära Swedish Space Corp.", link: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
+            { title: "CASE: Ryska Kyrkan Västerås", info: "Strategisk placering nära flygplats.", link: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
           ]
         },
         {
           title: "Finland",
           children: [
-            { title: "CASE: Airiston Helmi", info: "Stor razzia 2018, domar mot Pavel Melnikov 2025.", link: "https://yle.fi/a/7-10073103" },
-            { title: "Lagstiftning", info: "Krav på tillstånd för köpare utanför EU/EES." },
-            { title: "Beslag", info: "Frysning av ryska statliga tillgångar (Naftogaz-målet)." }
+            { title: "Lagstiftning", info: "Krav på tillstånd för icke-EU köpare (Försvarsministeriet)." },
+            { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar 2025. Pavel Melnikov.", link: "https://yle.fi/a/7-10073103" },
+            { title: "Beslag", info: "Ryska statliga tillgångar frysta (Naftogaz-målet)." }
           ]
         },
         {
-          title: "Norge",
+          title: "Norge & Danmark",
           children: [
-            { title: "CASE: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" },
-            { title: "Lagstiftning", info: "Planerar förhandsgodkännande vid fastighetsköp." }
+            { title: "Norge: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" },
+            { title: "Danmark", info: "Striktare regler kring hemvist för köp." }
           ]
         }
       ]
     },
-    // GREN 2: BROTTSLIGHET (Här ligger din djupanalys)
+    // --- GREN 2: BROTTSLIGHET (MED DJUPANALYS) ---
     {
       title: "2. Org. Brottslighet & Domar",
       children: [
         {
-          title: "Sverige: Byggsektorn & Penningtvätt",
+          title: "Sverige: Byggsektorn",
           children: [
-            { title: "EBM Tillslag (Sep 2024)", info: "Grov näringspenningtvätt, halv miljard kronor.", link: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
+            { title: "EBM Tillslag (2024)", info: "Grov näringspenningtvätt, halv miljard kr.", link: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
             {
-              title: "DJPUPANALYS: Södertörns tingsrätt (B 16726-24)",
+              title: "DJUPANALYS: Södertörns tingsrätt (B 16726-24)",
               highlight: true,
               children: [
                 {
@@ -126,32 +174,32 @@ const data = {
                   ]
                 },
                 {
-                  title: "Hur har man agerat?",
+                  title: "Agerande i praktiken",
                   children: [
-                    { title: "Fasadbolag", info: "Bolag som instrument, fiktiv/manipulerad bokföring. Syfte: Dölja ursprung & skapa legitimitet." },
-                    { title: "Industriell skala", info: "30–36 transaktioner per huvudman. Spritt över tid för att undvika 'flaggor' hos banker." },
-                    { title: "Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
+                    { title: "1. Fasadbolag", info: "Instrument för tvätt, fiktiv bokföring. Syfte: Dölja ursprung." },
+                    { title: "2. Industriell skala", info: "30–36 transaktioner/person. Spritt över tid för att undvika bank-flaggor." },
+                    { title: "3. Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
                   ]
                 },
                 {
                   title: "Koppling till Ryska intressen",
                   children: [
                     { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
-                    { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk, ej lokalt." },
-                    { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner. Sverige attraktivt pga stabilt system." }
+                    { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
+                    { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
                   ]
                 },
                 {
                   title: "Hybridhot-indikatorer",
                   children: [
-                    { title: "Uthållighet", info: "Verksamhet över flera år kräver disciplin och resurser." },
-                    { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistiska baser)." },
-                    { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse/samordning)." }
+                    { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
+                    { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
+                    { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
                   ]
                 },
                 {
                   title: "Slutsats",
-                  info: "Internationell finansiell infrastruktur som objektivt gynnar ryska statliga intressen. Gränsland mellan organiserad brottslighet och ekonomisk hybridkrigföring."
+                  info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
                 }
               ]
             }
@@ -160,210 +208,312 @@ const data = {
         {
           title: "Internationellt",
           children: [
-            { title: "Europol SOCTA 2025", info: "Varning för ryska nätverks sabotage och påverkan.", link: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
-            { title: "Spanien", info: "Operation Troika & Oligarch (Maffiamål)." },
-            { title: "USA", info: "OFAC-sanktioner mot 'Thieves-in-law'." }
+            { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage.", link: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
+            { title: "Spanien", info: "Operation Troika & Oligarch." },
+            { title: "USA", info: "OFAC-sanktioner (Thieves-in-law)." }
           ]
         }
       ]
     },
-    // GREN 3: KYRKAN
+    // --- GREN 3: KYRKAN ---
     {
       title: "3. Moskvapatriarkatet",
       children: [
-        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform för inhämtning." },
-        { title: "Koppling: Rosatom", info: "Uppgifter om att Rosatom finansierade kyrkbygget i Västerås." },
-        { title: "Närliggande bolag", children: [
-            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns på FOI-listan." },
+        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform." },
+        { title: "Västerås & Rosatom", info: "Uppgifter om att Rosatom finansierade kyrkbygget i Västerås." },
+        { title: "Kopplade Bolag", children: [
+            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns i FOI-listan." },
             { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar i media." }
         ]}
-      ]
-    },
-    // GREN 4: FOI LISTAN
-    {
-      title: "4. FOI-registret (Urval & Hela listan)",
-      children: [
-        {
-            title: "Byggverksamhet (SNI F)",
-            children: [
-                { title: "STRABAG-koncernen", info: "Oleg Deripaska (Sanktionerad). Flera bolag: STRABAG AB, NIMAB, Züblin." },
-                { title: "VR ENTREPRENAD AB", info: "Victor Kersikov." },
-                { title: "NPN Bygg Sthlm AB", info: "Elena Kopteva." },
-                { title: "KV GROUP AB", info: "Georgijs Kascejevs." },
-                { title: "Se fullständig lista i sökfiltret..." }
-            ]
-        },
-        {
-            title: "Tillverkning & Industri (SNI C/M)",
-            children: [
-                { title: "Kubikenborg Aluminium AB", info: "En+/Sual (Deripaska/Vekselberg)." },
-                { title: "Sulzer Pumps Sweden AB", info: "Viktor Vekselberg (Renova)." },
-                { title: "Eskaro Ukraine AB", info: "Igor Chumakov." }
-            ]
-        },
-        {
-            title: "Handel & IT (SNI G/J)",
-            children: [
-                { title: "Nordic Water Holding AB", info: "Viktor Vekselberg." },
-                { title: "InstrumentElectronics i Stockholm", info: "Vladimir Kulemekov." },
-                { title: "Reksoft AB", info: "Alexander Egorov." }
-            ]
-        },
-        {
-            title: "Finans & Fastighet (SNI K/L)",
-            children: [
-                { title: "4finance AB", info: "Vera Boiko." },
-                { title: "Fastighetsförvaltning i Värmland AB", info: "Rais Gayfullin." },
-                { title: "RISE Capital AB", info: "Igor Snegurov." }
-            ]
-        }
       ]
     }
   ]
 };
 
-// --- LOGIK FÖR ATT RITA TRÄDET ---
-
-const container = document.getElementById('tree-root');
-
-function createNodeElement(nodeData) {
-  const nodeDiv = document.createElement('div');
-  nodeDiv.className = 'node';
-  if(!nodeData.children || nodeData.children.length === 0) nodeDiv.classList.add('leaf');
-  if(nodeData.isRoot) nodeDiv.classList.add('root');
-
-  // Skapa innehållskortet
-  const contentDiv = document.createElement('div');
-  contentDiv.className = 'content';
-  if(nodeData.highlight) contentDiv.classList.add('highlight-box');
-
-  // Titel-rad med toggle-knapp
-  const titleDiv = document.createElement('div');
-  titleDiv.className = 'title';
+// ==========================================
+// 2. DATA: FOI-REGISTER (HELA LISTAN - 128 BOLAG)
+// ==========================================
+// Jag har genererat hela listan baserat på din första prompt.
+const foiList = [
+  // FINANS (K)
+  {id:1, name:"4finance AB", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko RU"},
+  {id:2, name:"4spar Aktiebolag", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko RU"},
+  {id:5, name:"Amitjugofem AB", loc:"Stockholm", sni:"K", info:"Hydrys Investments Mikhail Prokhorov"},
+  {id:40, name:"Kubikenborg Al. i Sundsvall", loc:"Sundsvall", sni:"K", info:"En+/Sual (Deripaska/Vekselberg)"},
+  {id:61, name:"RISE Capital AB", loc:"Stockholm", sni:"K", info:"Igor Snegurov RU"},
+  {id:63, name:"Safetech International Holding", loc:"Stockholm", sni:"K", info:"Indigo Capital Petr Zhukov"},
+  {id:65, name:"Stadsis AB", loc:"Malmö", sni:"K", info:"Citadel Ltd Vagif Aliev"},
+  {id:75, name:"Teknicast Investment Group", loc:"Malmö", sni:"K", info:"Leonid Kiryakov RU"},
+  {id:76, name:"Tele2 Russia Holding AB", loc:"Kista", sni:"K", info:"VTB Bank Andrej Kostin RU"},
+  {id:77, name:"Tele2 Russian Investments", loc:"Stockholm", sni:"K", info:"VTB Bank Andrej Kostin RU"},
+  {id:80, name:"UMWELTGREEN AB", loc:"Stockholm", sni:"K", info:"Medinilla Holding Sergey Sokolov"},
   
-  // Lägg till +/- knapp om barn finns
-  if (nodeData.children && nodeData.children.length > 0) {
-    const toggleBtn = document.createElement('span');
-    toggleBtn.className = 'toggle-btn';
-    toggleBtn.innerText = '-'; // Startar utfälld
-    titleDiv.appendChild(toggleBtn);
+  // GRUVOR (B)
+  {id:37, name:"Kopy Goldfields AB (publ)", loc:"Stockholm", sni:"B", info:"Hc Alliance Ltd Arsen Idrisov"},
+  {id:38, name:"Krasny Gold Fields AB", loc:"Stockholm", sni:"B", info:"Hc Alliance Ltd Arsen Idrisov"},
+
+  // TILLVERKNING (C)
+  {id:18, name:"Eskaro Ukraine AB", loc:"Göteborg", sni:"C", info:"Lassier Engineering Igor Chumakov"},
+  {id:41, name:"Kubikenborg Aluminium AB", loc:"Sundsvall", sni:"C", info:"En+/Sual (Deripaska/Vekselberg)"},
+  {id:57, name:"Recore Industries AB", loc:"Timrå", sni:"C", info:"Dimitry Zaytsev RU"},
+  {id:58, name:"ARTBOARD Aktiebolag", loc:"Timrå", sni:"C", info:"Recore / Dimitry Zaytsev RU"},
+  {id:73, name:"Sulzer Pumps Sweden AB", loc:"Vadstena", sni:"C", info:"Sulzer AG/Renova (Vekselberg)"},
+  {id:81, name:"Videre Rebus Coatings", loc:"Stockholm", sni:"C", info:"Nina Rodionova RU"},
+  {id:108, name:"Kristan Bygg AB", loc:"Hjärtum", sni:"C", info:"Kristina Solestrand"},
+
+  // BYGG (F) - Största gruppen
+  {id:43, name:"KV GROUP AB", loc:"Långshyttan", sni:"F", info:"Georgijs Kascejevs LV"},
+  {id:50, name:"Nimab Anläggning AB", loc:"Sjöbo", sni:"F", info:"Oleg Deripaska (Likviderat)"},
+  {id:51, name:"NIMAB Entreprenad AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Oleg Deripaska)"},
+  {id:52, name:"Nimab Support AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Oleg Deripaska)"},
+  {id:67, name:"STRABAG AB", loc:"Örebro", sni:"F", info:"STRABAG SE (Oleg Deripaska)"},
+  {id:68, name:"STRABAG Projektutveckling", loc:"Solna", sni:"F", info:"STRABAG (Oleg Deripaska)"},
+  {id:69, name:"Vasagatan Op6 Holding AB", loc:"Örebro", sni:"F", info:"Oleg Deripaska"},
+  {id:71, name:"STRABAG Rail AB", loc:"Örebro", sni:"F", info:"STRABAG (Oleg Deripaska)"},
+  {id:72, name:"STRABAG Sverige AB", loc:"Solna", sni:"F", info:"STRABAG (Oleg Deripaska)"},
+  {id:74, name:"Sweden Bygg Kraft AB", loc:"Hägersten", sni:"F", info:"Iman Sebieva RU"},
+  {id:84, name:"Züblin Scandinavia AB", loc:"Solna", sni:"F", info:"Züblin Spez (Oleg Deripaska)"},
+  {id:91, name:"ATYX AB", loc:"Stöde", sni:"F", info:"Alexey Molokov SE"},
+  {id:93, name:"Beltrusbygg AB", loc:"Uttran", sni:"F", info:"Nikolay Korzh SE"},
+  {id:94, name:"BMD GROUP AB", loc:"Tyresö", sni:"F", info:"Elena Kopteva SE"},
+  {id:95, name:"Bärbalken 356 AB", loc:"Järfälla", sni:"F", info:"Bashir Motaliev SE"},
+  {id:97, name:"Elvins Bilexpert AB", loc:"Skogås", sni:"F", info:"Elvin Nagizade SE"},
+  {id:98, name:"Fundamental Fastighetsservice", loc:"Enskede", sni:"F", info:"Elena Podolnaia SE"},
+  {id:99, name:"Galaj Bygg AB", loc:"Södertälje", sni:"F", info:"Lidia Galaeva SE"},
+  {id:102, name:"Hellgrens Ventilation & Bygg", loc:"Skarpnäck", sni:"F", info:"Sergey Matveev SE"},
+  {id:107, name:"Klinkersson&Kakelson AB", loc:"Nykvarn", sni:"F", info:"Bogdan Chuvachalov SE"},
+  {id:109, name:"Kvist Skandinavien AB", loc:"Vårby", sni:"F", info:"Veronika Kvist SE"},
+  {id:113, name:"NPN Bygg Sthlm AB", loc:"Bagarmossen", sni:"F", info:"Elena Kopteva SE"},
+  {id:114, name:"NPP BYGG AB", loc:"Partille", sni:"F", info:"Aslan Gogitidze SE"},
+  {id:115, name:"PSP Ventilation AB", loc:"Tyresö", sni:"F", info:"Andrei Kudrinskii SE"},
+  {id:119, name:"SAA BYGG AB", loc:"Gunnilse", sni:"F", info:"Alexey Sokolov SE"},
+  {id:122, name:"SHS Gruppen AB", loc:"Bromma", sni:"F", info:"Igor Boyko SE"},
+  {id:123, name:"Shtark Interiör AB", loc:"Arlandastad", sni:"F", info:"Svetlana Shtark SE"},
+  {id:127, name:"Toseto Sweden AB", loc:"Bromma", sni:"F", info:"Kirill Kuzhelko SE"},
+  {id:128, name:"VR ENTREPRENAD AB", loc:"Bålsta", sni:"F", info:"Victor Kersikov SE"},
+
+  // HANDEL (G)
+  {id:7, name:"ATI Europe AB", loc:"Stockholm", sni:"G", info:"Alengdar Ltd Grigory Shiyan"},
+  {id:8, name:"ATI Nordic AB", loc:"Stockholm", sni:"G", info:"Alengdar Ltd Grigory Shiyan"},
+  {id:12, name:"Baltresto AB", loc:"Kungälv", sni:"G", info:"Roman Lushnikov EE"},
+  {id:14, name:"Coffee Please Home AB", loc:"Norsborg", sni:"G", info:"Aleksey Kavtrev ES"},
+  {id:27, name:"Global Triangle AB", loc:"Bandhagen", sni:"G", info:"Nikolay Belov RU"},
+  {id:30, name:"InstrumentElectronics AB", loc:"Nacka", sni:"G", info:"Vladimir Kulemekov"},
+  {id:44, name:"Malmö Lumber Technology", loc:"Malmö", sni:"G", info:"Evgeny Superfin DE"},
+  {id:49, name:"NC Nordic Control AB", loc:"Lidingö", sni:"G", info:"Pavel Gerasimov RU"},
+  {id:53, name:"Nordic Water Holding AB", loc:"Mölndal", sni:"G", info:"Tiwel / Viktor Vekselberg"},
+  {id:54, name:"Nordic Water Products AB", loc:"Mölndal", sni:"G", info:"Tiwel / Viktor Vekselberg"},
+  {id:66, name:"Steelmar Scandinavia AB", loc:"Lidingö", sni:"G", info:"Alexandr Gazalov RU"},
+  {id:79, name:"Thermo Industri i Sthlm", loc:"Stockholm", sni:"G", info:"Vladimir Kilin RU"},
+  {id:82, name:"WIRUD AB", loc:"Tranås", sni:"G", info:"Elena Sotnikova RU"},
+  {id:83, name:"Woodrow Management AB", loc:"Enskede", sni:"G", info:"Sergey Tataurov RU"},
+  {id:96, name:"CLEAN CAR PLUS AB", loc:"Älvsjö", sni:"G", info:"Svetlana Mechouki SE"},
+  {id:101, name:"GreenBjork AB", loc:"Beddingestrand", sni:"G", info:"Sergei Dymov SE"},
+  {id:106, name:"KHJ Innovations AB", loc:"Stockholm", sni:"G", info:"Kristina Jakobsson SE"},
+  {id:118, name:"R-G TRANSPORT AB", loc:"Järfälla", sni:"G", info:"Artush Oganesyan SE"},
+  {id:124, name:"Tasty America AB", loc:"Johanneshov", sni:"G", info:"Irena Elanskaya SE"},
+
+  // TRANSPORT (H)
+  {id:15, name:"Cool Carriers AB", loc:"Stockholm", sni:"H", info:"Mikhail Ganyushin"},
+  {id:86, name:"Sendify AB", loc:"Göteborg", sni:"H", info:"Alexander Eliseev RU"},
+  {id:92, name:"Aveda flytt AB", loc:"Handen", sni:"H", info:"Zukhra Dzhalilova SE"},
+
+  // HOTELL (I)
+  {id:28, name:"Hotell Roslagen Nya AB", loc:"Norrtälje", sni:"I", info:"Yury Vasin RU"},
+  {id:29, name:"Evion Hotell & Restaurang", loc:"Göteborg", sni:"I", info:"Yury Vasin RU"},
+  {id:64, name:"Slami AB", loc:"Mariefred", sni:"I", info:"Viacheslav Mikhaylov"},
+
+  // IT & INFO (J)
+  {id:6, name:"AmpTrack Technologies AB", loc:"Örebro", sni:"J", info:"Vladimir Kalinin"},
+  {id:9, name:"CMA Small Systems AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan RU"},
+  {id:10, name:"Highex AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan RU"},
+  {id:11, name:"Avionero AB", loc:"Malmö", sni:"J", info:"Anton Tyulenev RU"},
+  {id:16, name:"deriStrat AB", loc:"Stockholm", sni:"J", info:"Alexey Zhigarev AT"},
+  {id:26, name:"Gamersgate AB", loc:"Stockholm", sni:"J", info:"Nikolay Trusov RU"},
+  {id:31, name:"IST Group AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby CH"},
+  {id:32, name:"IST Sverige AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby CH"},
+  {id:33, name:"Ja Rocka Roll Studios AB", loc:"Linköping", sni:"J", info:"Tatiana Sundeby CH"},
+  {id:59, name:"Reksoft AB", loc:"Upplands-Väsby", sni:"J", info:"Alexander Egorov RU"},
+  {id:60, name:"RETN Nordic AB", loc:"Solna", sni:"J", info:"Polina Maltseva AT"},
+  {id:89, name:"Alexey Kuznetsov AB", loc:"Stockholm", sni:"J", info:"Alexey Kuznetsov SE"},
+  {id:105, name:"Kabardin Media AB", loc:"Stockholm", sni:"J", info:"Tatiana Lytasova SE"},
+  {id:110, name:"Limavi AB", loc:"Skogås", sni:"J", info:"Andrey Kolpakov SE"},
+  {id:111, name:"Max Logunov AB", loc:"Kungsängen", sni:"J", info:"Maksim Logunov SE"},
+  {id:112, name:"NextCode AB", loc:"Stockholm", sni:"J", info:"Dmitry Vyalshin SE"},
+
+  // FASTIGHET (L)
+  {id:4, name:"Tomten 2:179 AB", loc:"Stockholm", sni:"L", info:"Mikhail Mantrov RU"},
+  {id:20, name:"Fastighetsförvalt. Värmland", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
+  {id:21, name:"Solanz Skandinavien AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
+  {id:22, name:"Kurlanda Gård Aktiebolag", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
+  {id:24, name:"Ellapac 11 AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
+  {id:25, name:"Gayfullin Fastigheter AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
+  {id:35, name:"Sigfridshäll i Växjö AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby CH"},
+  {id:36, name:"Lärandets Hus AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby CH"},
+  {id:48, name:"Rörvik Timber Höglandet", loc:"Jönköping", sni:"L", info:"Natalia Törnqvist CH"},
+  {id:62, name:"RISE Estate AB", loc:"Stockholm", sni:"L", info:"Igor Snegurov RU"},
+  {id:100, name:"Grand Arctic Sweden AB", loc:"Älvsjö", sni:"L", info:"Iurii Kuzhelko SE"},
+  {id:117, name:"Resursbostäder Spånga AB", loc:"Spånga", sni:"L", info:"Dmitrij Simis SE"},
+  {id:121, name:"SFUP AB", loc:"Uppsala", sni:"L", info:"Konstantin Bryunin SE"},
+
+  // KONSULT/JURIDIK (M)
+  {id:3, name:"Akersberg Development AB", loc:"Stockholm", sni:"M", info:"Mikhail Mantrov RU"},
+  {id:13, name:"CML Construction Services", loc:"Solna", sni:"M", info:"Oleg Deripaska"},
+  {id:17, name:"Eskaro Group AB", loc:"Göteborg", sni:"M", info:"Igor Chumakov EE"},
+  {id:19, name:"EVOPIPES RG AB", loc:"Ljungby", sni:"M", info:"Miron Gorilovskiy RU"},
+  {id:45, name:"Meerwind AB", loc:"Helsingborg", sni:"M", info:"Natalia Törnqvist CH"},
+  {id:46, name:"Rörvik Industri och Handel", loc:"Jönköping", sni:"M", info:"Natalia Törnqvist CH"},
+  {id:47, name:"Rörvik Swedfore AB", loc:"Stockaryd", sni:"M", info:"Natalia Törnqvist CH"},
+  {id:55, name:"PetroGrand AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov ES"},
+  {id:56, name:"Petrosibir AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov ES"},
+  {id:70, name:"STRABAG BRVZ AB", loc:"Örebro", sni:"M", info:"Oleg Deripaska"},
+  {id:85, name:"NCAB Group", loc:"Sundbyberg", sni:"M", info:"Vladimir Makarov RU"},
+  {id:120, name:"Scandinavian M&T AB", loc:"Uppsala", sni:"M", info:"Konstantin Bryunin SE"},
+  {id:126, name:"The Barkas Collective AB", loc:"Stockholm", sni:"M", info:"Vitaly Poluzhnikov"},
+
+  // TJÄNSTER (N)
+  {id:23, name:"GF Service och Installation", loc:"Kristinehamn", sni:"N", info:"Rais Gayfullin RU"},
+  {id:39, name:"KRAG Solutions AB", loc:"Stockholm", sni:"N", info:"Mikhail Peretyatko LV"},
+  {id:78, name:"The Books Sweden AB", loc:"Enskede", sni:"N", info:"Ekaterina Maliushenkova"},
+  {id:87, name:"Tui Sverige AB", loc:"Stockholm", sni:"N", info:"Alexei Mordashov (Severgroup)"},
+  {id:88, name:"Voi Technologies", loc:"Stockholm", sni:"N", info:"Alexander Eliseev (Minoritet)"},
+  {id:90, name:"ALLSERVICE AM AB", loc:"Upplands Väsby", sni:"N", info:"Alan Mamiev SE"},
+  {id:103, name:"Hjälper SWE AB", loc:"Farsta", sni:"N", info:"Konstantin Kantor SE"},
+  {id:125, name:"Team77 Sweden AB", loc:"Segeltorp", sni:"N", info:"Nikolay Korzh SE"},
+
+  // ÖVRIGT (E, P, R)
+  {id:42, name:"GANSCA Deponi Aktiebolag", loc:"Sundsvall", sni:"E", info:"En+/Sual (Deripaska)"},
+  {id:34, name:"Schoolido AB", loc:"Nacka", sni:"P", info:"Tatiana Sundeby CH"},
+  {id:104, name:"Jasmine AB", loc:"Gävle", sni:"P", info:"Dzhennet Abasova SE"},
+  {id:116, name:"Questroom AB", loc:"Åkersberga", sni:"R", info:"Grigory Koshmak SE"}
+];
+
+// ==========================================
+// 3. LOGIK (JS)
+// ==========================================
+
+// --- RITA TRÄDET ---
+const treeRoot = document.getElementById('tree-root');
+
+function renderTree(node, container) {
+  const nodeEl = document.createElement('div');
+  nodeEl.className = 'node';
+  if(node.isRoot) nodeEl.classList.add('root');
+
+  // Skapa Content-boxen
+  const contentEl = document.createElement('div');
+  contentEl.className = 'content';
+  if(node.highlight) contentEl.classList.add('highlight-box');
+
+  // Titel-raden
+  const titleEl = document.createElement('div');
+  titleEl.className = 'title';
+  
+  // Lägg till toggle-knapp om barn finns
+  const hasChildren = node.children && node.children.length > 0;
+  if(hasChildren) {
+    const btn = document.createElement('span');
+    btn.className = 'toggle-btn';
+    btn.innerText = '-'; // Standard: utfälld
+    titleEl.appendChild(btn);
     
-    // Klick-event för att öppna/stänga
-    titleDiv.onclick = function(e) {
-        if(e.target.tagName === 'A') return; // Klicka inte om det är en länk
-        const childrenContainer = nodeDiv.querySelector('.children');
-        if(childrenContainer) {
-            const isHidden = childrenContainer.classList.toggle('hidden');
-            toggleBtn.innerText = isHidden ? '+' : '-';
-        }
+    // Klick-event för att fälla in/ut
+    contentEl.onclick = function(e) {
+      if(e.target.classList.contains('link')) return; // Klicka ej på länkar
+      const childCont = nodeEl.querySelector('.children');
+      if(childCont) {
+        childCont.classList.toggle('hidden');
+        btn.innerText = childCont.classList.contains('hidden') ? '+' : '-';
+      }
     };
+  } else {
+    nodeEl.classList.add('leaf');
   }
 
-  // Text
+  // Titeltext
   const textSpan = document.createElement('span');
-  textSpan.innerText = nodeData.title;
-  titleDiv.appendChild(textSpan);
+  textSpan.innerText = node.title;
+  titleEl.appendChild(textSpan);
 
-  // Länk
-  if (nodeData.link) {
-    const linkTag = document.createElement('a');
-    linkTag.href = nodeData.link;
-    linkTag.target = "_blank";
-    linkTag.innerText = "🔗 Länk";
-    titleDiv.appendChild(linkTag);
+  // Länk?
+  if(node.link) {
+    const a = document.createElement('a');
+    a.href = node.link;
+    a.target = "_blank";
+    a.className = 'link';
+    a.innerText = "LÄNK ↗";
+    titleEl.appendChild(a);
   }
 
-  contentDiv.appendChild(titleDiv);
+  contentEl.appendChild(titleEl);
 
-  // Info-text under titel
-  if (nodeData.info) {
-    const infoDiv = document.createElement('span');
-    infoDiv.className = 'info';
-    infoDiv.innerText = nodeData.info;
-    contentDiv.appendChild(infoDiv);
+  // Info-text
+  if(node.info) {
+    const infoEl = document.createElement('div');
+    infoEl.className = 'info';
+    infoEl.innerText = node.info;
+    contentEl.appendChild(infoEl);
   }
 
-  nodeDiv.appendChild(contentDiv);
+  nodeEl.appendChild(contentEl);
 
-  // Skapa barn-container
-  if (nodeData.children && nodeData.children.length > 0) {
-    const childrenDiv = document.createElement('div');
-    childrenDiv.className = 'children';
-    
-    nodeData.children.forEach(child => {
-        childrenDiv.appendChild(createNodeElement(child));
-    });
-    
-    nodeDiv.appendChild(childrenDiv);
+  // Rendera barn rekursivt
+  if(hasChildren) {
+    const childContainer = document.createElement('div');
+    childContainer.className = 'children';
+    node.children.forEach(child => renderTree(child, childContainer));
+    nodeEl.appendChild(childContainer);
   }
 
-  return nodeDiv;
+  container.appendChild(nodeEl);
 }
 
-// Initiera
-container.appendChild(createNodeElement(data));
+// Starta ritningen
+renderTree(treeData, treeRoot);
 
-// --- FUNKTIONER ---
 
-function expandAll() {
-    document.querySelectorAll('.children').forEach(el => {
-        el.classList.remove('hidden');
-    });
-    document.querySelectorAll('.toggle-btn').forEach(btn => btn.innerText = '-');
+// --- RITA FOI TABELLEN ---
+const foiBody = document.getElementById('foi-body');
+const foiCount = document.getElementById('foi-count');
+
+function renderFOI(data) {
+  foiBody.innerHTML = "";
+  data.forEach(item => {
+    // Färga SNI-taggen
+    let sniClass = "sni-def";
+    if(item.sni === "F") sniClass = "sni-F";
+    else if(item.sni === "G") sniClass = "sni-G";
+    else if(item.sni === "K") sniClass = "sni-K";
+    else if(item.sni === "M") sniClass = "sni-M";
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${item.id}</td>
+      <td>
+        <div style="font-weight:bold;">${item.name}</div>
+        <div style="color:#666;">${item.loc}</div>
+      </td>
+      <td style="text-align:center;"><span class="sni-tag ${sniClass}">${item.sni}</span></td>
+      <td>${item.info}</td>
+    `;
+    foiBody.appendChild(tr);
+  });
+  foiCount.innerText = "Visar " + data.length + " av " + foiList.length + " bolag";
 }
 
-function collapseAll() {
-    document.querySelectorAll('.children').forEach(el => {
-        el.classList.add('hidden');
-    });
-    document.querySelectorAll('.toggle-btn').forEach(btn => btn.innerText = '+');
-    // Behåll roten öppen
-    const rootChildren = document.querySelector('.root > .children');
-    if(rootChildren) {
-        rootChildren.classList.remove('hidden');
-        const rootBtn = document.querySelector('.root .toggle-btn');
-        if(rootBtn) rootBtn.innerText = '-';
-    }
+// Filterfunktion för tabellen
+function filterFOI() {
+  const q = document.getElementById('searchFOI').value.toLowerCase();
+  const filtered = foiList.filter(item => 
+    item.name.toLowerCase().includes(q) || 
+    item.info.toLowerCase().includes(q) ||
+    item.loc.toLowerCase().includes(q)
+  );
+  renderFOI(filtered);
 }
 
-// Enkel sökfunktion
-function filterTree() {
-    const term = document.getElementById('searchInput').value.toLowerCase();
-    const contents = document.querySelectorAll('.content');
-    
-    if (term === "") {
-        // Återställ
-        contents.forEach(c => {
-            c.style.display = "";
-            c.parentElement.style.display = "";
-        });
-        return;
-    }
-
-    contents.forEach(c => {
-        const text = c.innerText.toLowerCase();
-        const node = c.parentElement;
-        
-        if (text.includes(term)) {
-            node.style.display = "";
-            c.style.backgroundColor = "#fff3cd"; // Markera träff
-            // Visa alla föräldrar
-            let parent = node.parentElement;
-            while(parent && parent.classList.contains('children')) {
-                parent.classList.remove('hidden');
-                parent.style.display = "";
-                parent.parentElement.style.display = "";
-                // Uppdatera knapp
-                const btn = parent.parentElement.querySelector('.toggle-btn');
-                if(btn) btn.innerText = '-';
-                parent = parent.parentElement.parentElement;
-            }
-        } else {
-            node.style.display = "none";
-            c.style.backgroundColor = "";
-        }
-    });
-}
+// Starta tabellen
+renderFOI(foiList);
 
 </script>
 </body>

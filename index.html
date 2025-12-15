@@ -1,946 +1,123 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mindmap (ALLT) – Moskvapatriarkatet + FOI</title>
-  <style>
-    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    header { position: sticky; top: 0; z-index: 10; display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,.12); background: #fff; }
-    button { padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,.15); background: #f7f7f7; cursor: pointer; }
-    button.active { background: #111; color: #fff; border-color: #111; }
-    .spacer { flex: 1; }
-    .hint { font-size: 13px; color: rgba(0,0,0,.65); }
-    main { height: calc(100vh - 56px); }
-    .tab { display: none; height: 100%; }
-    .tab.active { display: block; }
-    .markmap { width: 100%; height: 100%; }
-    .panel { height: 100%; display: flex; flex-direction: column; gap: 10px; padding: 12px; box-sizing: border-box; }
-    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .controls input { flex: 1; min-width: 240px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,.15); }
-    .meta { font-size: 13px; color: rgba(0,0,0,.65); }
-    .tablewrap { flex: 1; overflow: auto; border: 1px solid rgba(0,0,0,.12); border-radius: 14px; }
-    table { border-collapse: collapse; width: 100%; font-size: 13px; }
-    th, td { padding: 7px 10px; border-bottom: 1px solid rgba(0,0,0,.06); text-align: left; vertical-align: top; }
-    th { position: sticky; top: 0; background: #fff; border-bottom: 1px solid rgba(0,0,0,.12); }
-    tr:target { outline: 3px solid rgba(0,0,0,.35); outline-offset: -3px; background: rgba(0,0,0,.03); }
-    td.num { width: 60px; white-space: nowrap; }
-    td.sni { width: 60px; white-space: nowrap; }
-  </style>
-</head>
-<body>
+# Vad har hänt – fördjupad operativ analys (B 16726-24)
 
-<header>
-  <button id="btn-map" class="active">Mindmap</button>
-  <button id="btn-foi">FOI-register</button>
-  <div class="spacer"></div>
-  <div class="hint">Klicka nod = fäll in/ut. Externa länkar öppnas i ny flik. Företagslänkar hoppar till FOI-rad.</div>
-</header>
+## Övergripande händelseförlopp
+- Målet rör en **långvarig och systematiskt uppbyggd struktur för näringspenningtvätt** som varit verksam i Sverige sedan minst **2021**.
+- Upplägget omfattar **flera personer, bolag och roller**, där nyckelaktörer har bakgrund i:
+  - Ryssland
+  - Belarus
+  - Ukraina
+  - Baltikum
+- Brottsligheten är **upprepad, organiserad och professionellt genomförd**, vilket ligger till grund för rubriceringen *grovt brott* i samtliga åtalspunkter.
 
-<main>
-  <section id="tab-map" class="tab active">
-    <div class="markmap">
----
-title: Mindmap – Ryskt fastighetsägande & rysk organiserad brottslighet
-markmap:
-  colorFreezeLevel: 2
-  maxWidth: 340
-  initialExpandLevel: 2
-  duration: 200
-  direction: TB
----
+## Hur har man agerat i praktiken?
 
-# Ryskt fastighetsägande (Sverige & Norden) + rysk organiserad brottslighet (Sverige & internationellt)
+### 1. Bolag som fasader för penningtvätt
+- Bolag har använts som **instrument för penningtvätt**, inte som verkliga affärsverksamheter.
+- Bokföringen har:
+  - varit helt eller delvis fiktiv, eller
+  - systematiskt manipulerad.
+- Syftet har varit att:
+  - dölja pengarnas ursprung,
+  - ge dem ett sken av legitimitet,
+  - föra in dem i det svenska och europeiska finansiella systemet.
 
-> Klicka på en nod för att **fälla in/ut** (collapse/expand). Länkar i noderna är **klickbara**.
+### 2. Storskalig och upprepad transaktionshantering
+- Varje huvudspår omfattar **30–36 separata penningtvättstillfällen per person**.
+- Detta visar på:
+  - seriemässig hantering,
+  - inte enstaka eller tillfälliga brott.
+- Transaktionerna har spridits över tid för att:
+  - minska upptäcktsrisk,
+  - undvika varningsflaggor i banksystemen.
+- Upplägget är typiskt för **industriell penningtvätt**, inte för småskalig kriminalitet.
 
-## 1) Fastigheter/mark: ryskt ägande, exponering och riskmönster (Norden) ### Sverige - **FOI: kartläggning av ryska ekonomiska intressen** (inkl. fastigheter/tillgångar, upphandling, handel)
-  - [FOI nyhetssida](https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html)
-  - [FOI rapportsammanfattning (FOI-R--5377--SE)](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
-  - [FOI PDF (FOI-2022-481_7)](https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf)
+### 3. Tydlig roll- och funktionsfördelning
+- Nätverket uppvisar en **klar arbetsdelning**:
+  - huvudmän och koordinatorer,
+  - operativa genomförare,
+  - målvakter och facilitators.
+- Detta:
+  - minskar spårbarhet,
+  - skyddar de centrala aktörerna,
+  - gör strukturen motståndskraftig mot ingripanden.
+- Mönstret är förenligt med **professionellt organiserade internationella nätverk**.
 
-- **Säpo/medieuppgifter om omfattning**: 157 ryska medborgare – 247 fastigheter (citerat i svensk press)
-  - [SvD](https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop)
-  - [Tidningen Syre](https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/)
+## På vilket sätt gynnar detta ryska intressen?
 
-- **Case: Muskö / fastighet nära marinbas** (Stanislav Aleshchenko – mediebevakning)
-  - [Expressen (2025-11-11)](https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/)
-  - [Fokus (2025-11-05)](https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/)
-  - [Skippo (bakgrund 2023)](https://www.skippo.se/nyheter/ryss-har-sjotomt-vid-hemlig-svensk-militarbas)
-  - [SVT: bakgrund Muskö örlogsbas](https://www.svt.se/nyheter/lokalt/stockholm/torpedbat-och-cibil-foretagsby-musko-orlogbas-2005)
+### 1. Rysk medborgare i central position
+- **Viktor Soloviev**, rysk medborgare, har en **framträdande roll** i ett av huvudspåren.
+- Han misstänks för:
+  - grov näringspenningtvätt i ett stort antal fall,
+  - grovt bokföringsbrott.
+- Detta rör sig inte om perifer medverkan, utan om **kärnfunktion i strukturen**.
 
-- **Case: ”ryskt nätverk köper tomter i skärgården”** (Aftonbladet) – kopplingar som diskuteras i rapportering
-  - [Aftonbladet (2025-03-09)](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
-  - [Aftonbladet TV (video)](https://tv.aftonbladet.se/video/381620/ryska-naetverk-koeper-tomter-i-sverige)
-  - [Aftonbladet (2025-03-12): L vill stoppa ryska markköp](https://www.aftonbladet.se/nyheter/a/8qopM2/l-vill-stoppa-ryska-markkop-i-sverige)
+### 2. Ryskspråkig operativ miljö
+- Rysk tolk har krävts för flera av de centrala misstänkta.
+- Detta indikerar att:
+  - intern kommunikation sannolikt skett på ryska,
+  - nätverket inte varit språkligt eller kulturellt integrerat i Sverige.
+- Sådana parallella, språkligt slutna miljöer är typiska för:
+  - externa aktörsnätverk,
+  - inte för lokal, spontan brottslighet.
 
-- **Case: ”Vidja/rymdanläggning”** – fastighets-/adresskontroll i penningtvättsupplägg (medier + EBM)
-  - [Dagens industri (2025-08-24)](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
-  - [Hem & Hyra (2025-08-22)](https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/)
-  - [Ekobrottsmyndigheten: åtal (2025-08-11)](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
-  - [Ekobrottsmyndigheten: tillslag (2024-09-25)](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
+### 3. Funktion i relation till sanktioner och kapitalflykt
+- Sedan 2014, och i synnerhet efter 2022, har Ryssland haft ett uttalat behov av:
+  - att föra ut kapital,
+  - kringgå finansiella sanktioner,
+  - omvandla spärrade eller riskexponerade medel.
+- Den typ av struktur som beskrivs i målet:
+  - möjliggör kapitalrörelser inom EU,
+  - reducerar effekten av sanktioner,
+  - skapar ekonomisk handlingsfrihet utanför Ryssland.
+- Sverige är särskilt attraktivt som bas på grund av:
+  - stabilt finansiellt system,
+  - hög internationell legitimitet,
+  - tidigare relativt låg säkerhetsfokusering på ekonomiska hot.
 
-- **Case: rysk-ortodoxa kyrkan i Västerås**
-  - [Aftonbladet (2025-09-24)](https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna)
+## Indikationer på att detta går bortom ”vanlig” organiserad brottslighet
 
-### Finland - **Tillståndskrav för icke‑EU/EEA‑köpare** (försvarsministeriet)
-  - [DefMin: authorisation to buy real estate](https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate)
+### 1. Tidsdjup och uthållighet
+- Verksamheten har pågått under flera år utan att kollapsa.
+- Detta kräver:
+  - disciplin,
+  - samordning,
+  - tillgång till resurser.
+- Det talar emot tillfällig eller opportunistisk brottslighet.
 
-- **Case: Airiston Helmi** – razzia 2018; dom mot Pavel Melnikov (rapporterat 2025)
-  - [Yle (2025-02-24)](https://yle.fi/a/7-10073103)
-  - [HBL (2025-02-24)](https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/)
-  - [ÅU (2025-03-02)](https://www.abounderrattelser.fi/artikel/airiston-helmi-satte-pargas-pa-varldskartan-sa-har-borjade-allting/)
+### 2. Geografisk struktur
+- Återkommande kluster i:
+  - Bandhagen,
+  - Vårby,
+  - Farsta,
+  - Huddinge.
+- I kombination med utländska huvudmän pekar detta på:
+  - logistiska baser,
+  - inte slumpmässiga bostadsadresser.
 
-- **Ryska statliga tillgångar frysta/beslag** (Naftogaz-målet)
-  - [Naftogaz (2024-10-28)](https://www.naftogaz.com/en/news/seizure-of-russian-assets-in-finland)
-  - [Reuters (2024-10-30)](https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/)
-  - [Euronews (2024-10-30)](https://www.euronews.com/2024/10/30/finland-orders-seizure-of-russian-assets-at-request-of-ukrainian-oil-and-gas-company)
+### 3. Restriktionsnivå i rättsprocessen
+- Åklagaren har begärt omfattande restriktioner.
+- Motiveringarna rör:
+  - risk för bevisförstörelse,
+  - risk för samordning mellan misstänkta.
+- Sådana restriktioner används typiskt när:
+  - det finns aktörer utanför landets jurisdiktion,
+  - kommunikationen bedöms vara centralstyrd.
 
-### Norge - **Case: ”russerhytter” nära Bardufoss**
-  - [Forsvarets forum (2024-04-10)](https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880)
-  - [Bygg.no (2024-04-06)](https://www.bygg.no/tv-2-russere-eier-hytter-like-ved-forsvarsanlegg-i-bardufoss/465968)
+## Samlad analytisk bedömning
+- Målet visar en **internationell, ryskspråkig finansiell infrastruktur** som:
+  - är uthållig,
+  - funktionsuppdelad,
+  - operativt effektiv.
+- Även utan bevis för direkt statlig styrning:
+  - verkar strukturen **objektivt i linje med ryska statliga intressen**,
+  - särskilt vad gäller sanktionsundandragande och kapitalrörlighet.
+- Detta placerar målet i gränslandet mellan:
+  - organiserad brottslighet,
+  - ekonomisk hybridverksamhet.
 
-- **Planerad förhandsprövning/”pre-approval”** (rapportering)
-  - [Euronews (2024-07-09)](https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked)
-
-### Danmark - **Grundregel**: hemvist/bosättning eller tillstånd
-  - [UM.dk](https://um.dk/en/travel-and-residence/family-abd-legal-issues/foreign-citizens-acquisition-of-property-in-denmark)
-  - [Civilstyrelsen FAQ](https://www.civilstyrelsen.dk/sagsomraader/erhvervelse-af-fast-ejendom/ofte-stillede-spoergsmaal/kan-jeg-koebe-fast-ejendom-i-danmark)
-  - [Life in Denmark (borger.dk)](https://lifeindenmark.borger.dk/housing-and-moving/buying/purchasing-real-property)
-
-## 2) Domar, upplägg och nätverk kopplade till rysk organiserad brottslighet (Sverige + internationellt) ### Sverige - **Grov näringspenningtvätt (byggsektorn)** – EBM (tillslag + åtal)
-  - [EBM tillslag (2024-09-25)](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
-  - [EBM åtal (2025-08-11)](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
-
-  - **Förtydligande/operativ analys: B 16726-24**
-    - **Övergripande händelseförlopp**
-      - Långvarig, systematiskt uppbyggd struktur för näringspenningtvätt i Sverige sedan minst 2021
-      - Flera personer/bolag/roller med bakgrund i Ryssland, Belarus, Ukraina och Baltikum
-      - Upprepad och professionell brottslighet (grovt brott i åtalspunkterna)
-    - **Praktiskt tillvägagångssätt**
-      - **Bolag som fasader**: fiktiv/manipulerad bokföring för att dölja ursprung och legitimera medel
-      - **Storskalighet**: 30–36 penningtvättstillfällen per person, spritt över tid för att minska upptäckt
-      - **Arbetsdelning**: huvudmän/koordinatorer, operatörer, målvakter/facilitators
-    - **Koppling till ryska intressen (funktionellt)**
-      - **Viktor Soloviev**: rysk medborgare i framträdande roll (grov näringspenningtvätt + grovt bokföringsbrott)
-      - Ryskspråkig operativ miljö (tolkbehov för centrala misstänkta)
-      - Struktur som möjliggör kapitalrörlighet inom EU och kan reducera sanktionsfriktion (kapitalflykt/undandragande)
-    - **Indikationer på högre komplexitet**
-      - Tidsdjup/uthållighet (flera år)
-      - Geografiska kluster (Bandhagen, Vårby, Farsta, Huddinge)
-      - Omfattande restriktionsyrkanden (risk för samordning/bevisförstörelse)
-    - **Säkerhetspolitisk relevans**
-      - Finansiell infrastruktur i gränsland organiserad brottslighet ↔ ekonomisk hybridverksamhet
-
-
-- **Medier**: skärgårdstomter + Vidja/rymdanläggning (rapportering)
-  - [Aftonbladet (2025-03-09)](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
-  - [DI (2025-08-24)](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
-  - [Hem & Hyra (2025-08-22)](https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/)
-
-### EU/Europa - **Europol: EU‑SOCTA 2025**
-  - [PDF](https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf)
-  - [Rapportsida](https://www.europol.europa.eu/publication-events/main-reports/changing-dna-of-serious-and-organised-crime)
-
-- **Sekundärkällor om SOCTA-fynd**
-  - [The Guardian (2025-03-18)](https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol)
-  - [Financial Times (2025-03-18)](https://www.ft.com/content/755593c8-8614-4953-a4b2-09a0d2794684)
-
-### USA: sanktioner (OFAC) - **U.S. Treasury / OFAC**
-  - [TG1811 (2012)](https://home.treasury.gov/news/press-releases/tg1811)
-  - [JL2196 (2013)](https://home.treasury.gov/news/press-releases/jl2196)
-
-### Spanien/Ryssland: större rättsfall (urval) - **Operation Troika (Spanien)** – frikännande 2018 (rapportering)
-  - [Bolsamania (2018-10-18)](https://www.bolsamania.com/noticias/justicia/la-audiencia-nacional-absuelve-a-los-17-acusados-de-la-operacion-troika-al-no-acreditar-su-relacion-con-la-mafia-rusa--3546938.html)
-  - [TBC Archives](https://tbcarchives.org/spanish-russian-mafia-troika-case-press-release-of-the-court-on-uneconomic-transcations-of-the-defendants/)
-  - [Jamestown (2018)](https://jamestown.org/trial-decade-spain-declares-war-russian-organized-crime/)
-
-- **Operation Oligarch (Spanien 2017)** – bakgrund
-  - [The Insider (2019-04-02)](https://theins.ru/en/corruption/149860)
-  - [Byline Times (2019-04-26)](https://bylinetimes.com/2019/04/26/alleged-russian-mafia-boss-found-dead-after-football-corruption-arrest/)
-
-- **Tambovskaya – Vladimir Barsukov/Kumarin** (domar/rapportering)
-  - [Moscow Times (2009): 14 år](https://www.themoscowtimes.com/archive/barsukov-handed-14-years-for-fraud)
-  - [Moscow Times (2012): 15 år](https://www.themoscowtimes.com/archive/tambov-gang-boss-jailed-for-15-years)
-  - [TASS archive (2012)](https://tass.com/archive/671255)
-  - [RFE/RL (2016): 23 år](https://www.rferl.org/a/russian-mobster-kumarin-23-years-jail/27931897.html)
-
-## 3) Löpande påfyllnad (”to‑do”) - **Baslinje**: FOI‑listor + komplettera med fastighets-/adressspårning nära riskobjekt
-  - [FOI rapportsammanfattning](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
-
-- **Sverige**: följ EBM pressrum + domstolsprocesser
-  - [EBM pressrum](https://www.ekobrottsmyndigheten.se/press/)
-
-- **Nordisk jämförelse**: DK/FI/NO
-  - [DK Civilstyrelsen](https://www.civilstyrelsen.dk/sagsomraader/erhvervelse-af-fast-ejendom)
-  - [FI DefMin permit](https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate)
-  - [NO Euronews (policy)](https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked)
-
-## Moskvapatriarkatet & FOI-listan (från din text) ### Moskvapatriarkatet (Rysk-ortodoxa kyrkan) - Sverige: modern etablering från början av 1990-talet
-- Församling: Helige Sergij av Radonezh (Stockholm, 1992)
-- Medieuppgifter: plattform för påverkan/inhämtning
-  - https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/
-  - https://www.sverigesradio.se/artikel/efter-sapovarning-ryska-statskyrkan-utan-stod
-- FOI: religion används i militära syften
-  - https://www.foi.se/nyheter-och-press/nyheter/2024-06-05-sa-anvander-ryssland-religion-i-militara-syften.html
-
-### Rosatom (statligt bolag) - Uppgift: Rosatom kopplas till finansiering av Västeråskyrkan
-  - https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras
-- Soft power via sociala fonder (enligt din text/källor)
-
-### Västerås: kyrka nära flygplats/skyppsobjekt (case) - Medier: byggkostnad ~35 MSEK (enligt din text)
-- Placering: nära Västerås flygplats (skyddsobjekt) (enligt din text)
-
-### Bolagsnoder kopplade till kyrkoflöden (som du nämner) - [NC Nordic Control AB](#c49) (finns i FOI-listan)
-  - Dagen (2021): grovt bokföringsbrott
-    - https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/
-- [InstrumentElectronics i Stockholm AB](#c30) (finns i FOI-listan)
-  - The Moscow Times (2023): GRU-misstankar i rapportering
-    - https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894
-
-
-## FOI: Ryskt ägande i svenska företag (Tabell 2.1) – samtliga bolag (från din lista) - https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE
-
-### Utvinning av mineral (SNI B) – 2 företag - [Kopy Goldfields AB (publ)](#c37) - Nr: 37
-  - Säte: Stockholm
-  - SNI: B (Utvinning av mineral)
-  - Övrigt (FOI-rad): 1 150 1 974 987 Hc Alliance Ltd Arsen Idrisov RU 25-50
-- [AB](#c38) - Nr: 38
-  - Säte: Krasny Gold Fields Stockholm
-  - SNI: B (Utvinning av mineral)
-  - Övrigt (FOI-rad): 0 108 674 Hc Alliance Ltd Arsen Idrisov RU 49
-
-### Tillverkning (SNI C) – 7 företag - [Eskaro Ukraine AB](#c18) - Nr: 18
-  - Säte: Göteborg
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 0 62 648 Lassier Engineering Ltd Igor Chumakov EE 50-75
-- [Kubikenborg Aluminium AB](#c41) - Nr: 41
-  - Säte: Sundsvall
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 1 845 634 2 258 416 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50
-- [Recore Industries AB](#c57) - Nr: 57
-  - Säte: Timrå
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 329 4 709 Dimitry Zaytsev RU 100
-- [ARTBOARD Aktiebolag](#c58) - Nr: 58
-  - Säte: Timrå
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 27 033 25 851 Recore Industries AB Dimitry Zaytsev RU 91
-- [Sulzer Pumps Sweden AB](#c73) - Nr: 73
-  - Säte: Vadstena
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 609 181 338 152 Sulzer AG/Renova Viktor Vekselberg CH 48
-- [Videre Rebus Coatings Aktiebolag](#c81) - Nr: 81
-  - Säte: Stockholm
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 431 2 549 Nina Rodionova RU 100 Likvidation beslutad 20220517
-- [Kristan Bygg AB](#c108) - Nr: 108
-  - Säte: Hjärtum
-  - SNI: C (Tillverkning)
-  - Övrigt (FOI-rad): 12 905 3 522 Kristina Solestrand SE 100
-
-### Vattenförsörjning, avloppsrening, avfallshantering och sanering (SNI E) – 1 företag - [GANSCA Deponi Aktiebolag](#c42) - Nr: 42
-  - Säte: Sundsvall
-  - SNI: E (Vattenförsörjning, avloppsrening, avfallshantering och sanering)
-  - Övrigt (FOI-rad): 11 156 20 196 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50
-
-### Byggverksamhet (SNI F) – 29 företag - [KV GROUP AB](#c43) - Nr: 43
-  - Säte: Långshyttan
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 3 890 Georgijs Kascejevs LV 100
-- [Nimab Anläggning AB](#c50) - Nr: 50
-  - Säte: Sjöbo
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 7 145 Oleg Deripaska RU 25-50 Sålt, namnbytt och likviderat 20220111
-- [NIMAB Entreprenad AB](#c51) - Nr: 51
-  - Säte: Sjöbo
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 549 117 244 107 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [Nimab Support AB](#c52) - Nr: 52
-  - Säte: Sjöbo
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 52 250 15 386 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [STRABAG AB](#c67) - Nr: 67
-  - Säte: Örebro
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 16 049 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [STRABAG Projektutveckling AB](#c68) - Nr: 68
-  - Säte: Solna
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 30 70 907 STRABAG AB Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [Vasagatan Op6 Holding AB](#c69) - Nr: 69
-  - Säte: Örebro
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 45 306 Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [STRABAG Rail AB](#c71) - Nr: 71
-  - Säte: Örebro
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 36 952 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [STRABAG Sverige AB](#c72) - Nr: 72
-  - Säte: Solna
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 413 513 275 007 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [Sweden Bygg Kraft AB](#c74) - Nr: 74
-  - Säte: Hägersten
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 29 153 9 448 Iman Sebieva RU 100
-- [Züblin Scandinavia AB](#c84) - Nr: 84
-  - Säte: Solna
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 1 024 909 569 783 Züblin Spez Gmbh Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [ATYX AB](#c91) - Nr: 91
-  - Säte: Stöde
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 0 0 Alexey Molokov SE 25-50
-- [Beltrusbygg AB](#c93) - Nr: 93
-  - Säte: Uttran
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 1 673 509 Nikolay Korzh SE 100
-- [BMD GROUP AB](#c94) - Nr: 94
-  - Säte: Tyresö
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 2 291 399 Elena Kopteva SE 100
-- [Bärbalken 356 AB](#c95) - Nr: 95
-  - Säte: Järfälla
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 3 895 986 Bashir Motaliev SE 25-50
-- [Elvins Bilexpert AB](#c97) - Nr: 97
-  - Säte: Skogås
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 2 403 1 411 Elvin Nagizade SE 50-75
-- [Fundamental Fastighetsservice Aktiebolag](#c98) - Nr: 98
-  - Säte: Enskede
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 4 178 471 Elena Podolnaia SE 100
-- [Galaj Bygg AB](#c99) - Nr: 99
-  - Säte: Södertälje
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 6 500 1 110 Lidia Galaeva SE 50-75
-- [Hellgrens Ventilation & Bygg AB](#c102) - Nr: 102
-  - Säte: Skarpnäck
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 6 685 2 038 Sergey Matveev SE 25-50
-- [Klinkersson&Kakelson AB](#c107) - Nr: 107
-  - Säte: Nykvarn
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 2 303 1 053 Bogdan Chuvachalov SE 100
-- [Kvist Skandinavien AB](#c109) - Nr: 109
-  - Säte: Vårby
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 2 217 642 Veronika Kvist SE 100
-- [NPN Bygg Sthlm AB](#c113) - Nr: 113
-  - Säte: Bagarmossen
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 9 180 4 593 Elena Kopteva SE 100
-- [NPP BYGG AB](#c114) - Nr: 114
-  - Säte: Partille
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 5 201 2 591 Aslan Gogitidze SE 100
-- [PSP Ventilation AB](#c115) - Nr: 115
-  - Säte: Tyresö
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 3 711 2 245 Andrei Kudrinskii SE 100
-- [SAA BYGG AB](#c119) - Nr: 119
-  - Säte: Gunnilse
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 2 232 1 191 Alexey Sokolov SE 100
-- [SHS Gruppen AB](#c122) - Nr: 122
-  - Säte: Bromma
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 4 241 885 Igor Boyko SE 25-50
-- [Shtark Interiör AB](#c123) - Nr: 123
-  - Säte: Arlandastad
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 4 782 1 134 Svetlana Shtark SE 100
-- [Toseto Sweden AB](#c127) - Nr: 127
-  - Säte: Bromma
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 12 275 874 Kirill Kuzhelko SE 25-50
-- [VR ENTREPRENAD AB](#c128) - Nr: 128
-  - Säte: Bålsta
-  - SNI: F (Byggverksamhet)
-  - Övrigt (FOI-rad): 4 699 932 Victor Kersikov SE 50-75
-
-### Handel; reparation av motorfordon och motorcyklar (SNI G) – 19 företag - [ATI Europe AB](#c7) - Nr: 7
-  - Säte: Stockholm
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 0 12 668 Alengdar Ltd Grigory Shiyan RU 100
-- [ATI Nordic AB](#c8) - Nr: 8
-  - Säte: Stockholm
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 4 876 58 954 Alengdar Ltd Grigory Shiyan RU 100
-- [Baltresto AB](#c12) - Nr: 12
-  - Säte: Kungälv
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 2 919 504 Roman Lushnikov EE 25-50
-- [Coffee Please Home AB](#c14) - Nr: 14
-  - Säte: Norsborg
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 11 770 3 423 Coffee Please Holding AB Aleksey Kavtrev ES 50-75
-- [Global Triangle AB](#c27) - Nr: 27
-  - Säte: Bandhagen
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 17 410 837 Nikolay Belov RU 100
-- [InstrumentElectronics i Stockholm AB](#c30) - Nr: 30
-  - Säte: Nacka
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 2 003 434 Yassco Investments Ltd Vladimir Kulemekov RU 100 Likvidation beslutad 20200729
-- [Malmö Lumber Technology Wood Products AB](#c44) - Nr: 44
-  - Säte: Malmö
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 5 621 3 385 Evgeny Superfin DE 25-50
-- [NC Nordic Control AB](#c49) - Nr: 49
-  - Säte: Lidingö
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 7 083 7 794 Pavel Gerasimov RU 100
-- [Nordic Water Holding AB](#c53) - Nr: 53
-  - Säte: Mölndal
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 208 101 513 Tiwel Holding AG Viktor Vekselberg CH 25-50
-- [Nordic Water Products AB](#c54) - Nr: 54
-  - Säte: Mölndal
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 480 010 285 269 Viktor Vekselberg CH 25-50
-- [Steelmar Scandinavia AB](#c66) - Nr: 66
-  - Säte: Lidingö
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 742 154 312 Giselmo Enterprises Ltd Alexandr Gazalov RU 100
-- [Thermo Industri i Stockholm Aktiebolag](#c79) - Nr: 79
-  - Säte: Stockholm
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 13 523 2 695 Vladimir Kilin/Vladimir Bobrov RU/FI 25-50/25-50
-- [WIRUD AB](#c82) - Nr: 82
-  - Säte: Tranås
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 2 821 5 018 Elena Sotnikova RU 25-50
-- [Woodrow Management AB](#c83) - Nr: 83
-  - Säte: Enskede gård
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 38 440 1 761 Sergey Tataurov RU 25-50
-- [CLEAN CAR PLUS AB](#c96) - Nr: 96
-  - Säte: Älvsjö
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 2 173 529 Svetlana Mechouki SE 100
-- [GreenBjork AB](#c101) - Nr: 101
-  - Säte: Beddingestrand
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 3 416 2 989 Sergei Dymov SE 100
-- [KHJ Innovations AB](#c106) - Nr: 106
-  - Säte: Stockholm
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 1 438 966 Kristina Jakobsson SE 25-50
-- [R-G TRANSPORT AB](#c118) - Nr: 118
-  - Säte: Järfälla
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 8 704 1 586 Artush Oganesyan SE 100
-- [Tasty America AB](#c124) - Nr: 124
-  - Säte: Johanneshov
-  - SNI: G (Handel; reparation av motorfordon och motorcyklar)
-  - Övrigt (FOI-rad): 12 132 3 180 Irena Elanskaya SE 25-50
-
-### Transport och magasinering (SNI H) – 3 företag - [Cool Carriers AB](#c15) - Nr: 15
-  - Säte: Stockholm
-  - SNI: H (Transport och magasinering)
-  - Övrigt (FOI-rad): 1 307 369 304 548 Fritra AG Mikhail Ganyushin/Elena Borisenko CY/RU 25-50/25-50 Från mars 2022 ändrat till Ganyushin 100 %
-- [Sendify AB](#c86) - Nr: 86
-  - Säte: Göteborg
-  - SNI: H (Transport och magasinering)
-  - Övrigt (FOI-rad): 58 524 28 939 Litten Investments Alexander Eliseev RU 14,2
-- [Aveda flytt AB](#c92) - Nr: 92
-  - Säte: Handen
-  - SNI: H (Transport och magasinering)
-  - Övrigt (FOI-rad): 2 411 233 Zukhra Dzhalilova SE 100
-
-### Hotell- och restaurangverksamhet (SNI I) – 3 företag - [Hotell Roslagen Nya AB](#c28) - Nr: 28
-  - Säte: Norrtälje
-  - SNI: I (Hotell- och restaurangverksamhet)
-  - Övrigt (FOI-rad): 7 932 4 970 Yury Vasin RU 100 Ändrat medborgarskap och bosättning till TR 20220308
-- [Evion Hotell & Restaurang AB](#c29) - Nr: 29
-  - Säte: Göteborg
-  - SNI: I (Hotell- och restaurangverksamhet)
-  - Övrigt (FOI-rad): 8 247 4 403 Hotell Roslagen Nya AB Yury Vasin RU 100 Ändrat medborgarskap och bosättning till TR 20220308
-- [Slami AB](#c64) - Nr: 64
-  - Säte: Mariefred
-  - SNI: I (Hotell- och restaurangverksamhet)
-  - Övrigt (FOI-rad): 739 39 140 Viacheslav Mikhaylov RU 100 Upphört huvudmannaskap 20211210, kvar i styrelsen
-
-### Informations- och kommunikationsverksamhet (SNI J) – 16 företag - [AmpTrack Technologies AB](#c6) - Nr: 6
-  - Säte: Örebro
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 186 25 764 Vladimir Kalinin/Elena Martiyanova CH/ES 50-75/25-50
-- [CMA Small Systems Aktiebolag](#c9) - Nr: 9
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 229 891 184 642 Alengdar Ltd Grigory Shiyan RU 49
-- [Highex AB](#c10) - Nr: 10
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 39 985 14 705 Alengdar Ltd Grigory Shiyan RU 49
-- [Avionero AB](#c11) - Nr: 11
-  - Säte: Malmö
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 63 5 124 Anton Tyulenev RU 25-50 Upphört huvudmannaskap 20220401
-- [deriStrat AB](#c16) - Nr: 16
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 1 919 4 426 Alexey Zhigarev AT 0-25
-- [Gamersgate AB](#c26) - Nr: 26
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 247 919 26 255 Nikolay Trusov RU 100
-- [IST Group AB](#c31) - Nr: 31
-  - Säte: Växjö
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 167 517 217 672 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615
-- [IST Sverige AB](#c32) - Nr: 32
-  - Säte: Växjö
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 175 779 45 803 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615
-- [Ja Rocka Roll Studios AB](#c33) - Nr: 33
-  - Säte: Linköping
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 4 242 1 211 IST International Holding S.A. Tatiana Sundeby CH 0-25 Upphört huvudmannaskap 20220516
-- [Reksoft AB](#c59) - Nr: 59
-  - Säte: Upplands-Väsby
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 29 868 3 701 QUADRA++ LLC/NextStep LLC Alexander Egorov RU 100
-- [RETN Nordic AB](#c60) - Nr: 60
-  - Säte: Solna
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 9 757 16 374 RETN Capital Ltd Polina Maltseva AT 25-50 Upphört huvudmannaskap 20220524
-- [Alexey Kuznetsov AB](#c89) - Nr: 89
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 0 341 Alexey Kuznetsov SE 100
-- [Kabardin Media AB](#c105) - Nr: 105
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 0 0 Tatiana Nikolaevna Lytasova/Nikita Sergeevich Kabardin SE/SE 25-50/25-50 Upphört huvudmannaskap 220603, nya RU huvudmän boende i SE: M Ivanov & A Kuznetsova Nytt namn: Nauchu AB
-- [Limavi AB](#c110) - Nr: 110
-  - Säte: Skogås
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 2 367 539 Andrey Kolpakov SE 100
-- [Max Logunov AB](#c111) - Nr: 111
-  - Säte: Kungsängen
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 1 280 367 Maksim Logunov SE 100
-- [NextCode AB](#c112) - Nr: 112
-  - Säte: Stockholm
-  - SNI: J (Informations- och kommunikationsverksamhet)
-  - Övrigt (FOI-rad): 17 588 13 222 Northbound Holding AB Dmitry Vyalshin SE 25-50
-
-### Finans- och försäkringsverksamhet (SNI K) – 11 företag - [4finance AB](#c1) - Nr: 1
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 76 552 99 330 Tirona Ltd Vera Boiko RU 25-50 Upphört huvudmannaskap 20220608
-- [4spar Aktiebolag](#c2) - Nr: 2
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 129 046 Tirona Ltd Vera Boiko RU 25-50 Likvidation beslutad 20220323
-- [Amitjugofem AB](#c5) - Nr: 5
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 487 325 Hydrys Investments S.a.r.l. Mikhail Prokhorov CH 100
-- [Kubikenborg Aluminium i Sundsvall AB](#c40) - Nr: 40
-  - Säte: Sundsvall
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 204 264 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50
-- [RISE Capital AB](#c61) - Nr: 61
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 13 176 221 Igor Snegurov RU 75-100
-- [Safetech International Holding AB](#c63) - Nr: 63
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 87 017 Indigo Capital Petr Zhukov RU 25-50
-- [Stadsis AB](#c65) - Nr: 65
-  - Säte: Malmö
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 2 111 396 Citadel Ltd Vagif Aliev UA 100
-- [Teknicast Investment Group AB](#c75) - Nr: 75
-  - Säte: Malmö
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 5 667 Nalendi Investments Limited Leonid Kiryakov RU 50-75 Upphört huvudmannaskap 20220223. Likvidation avslutad 20220803
-- [Tele2 Russia Holding AB](#c76) - Nr: 76
-  - Säte: Kista
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 16 954 591 VTB Bank Andrej Kostin RU 100 Likvidation beslutad 20220223
-- [Tele2 Russian Investments AB](#c77) - Nr: 77
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 0 893 209 VTB Bank Andrej Kostin RU 100 Konkurs inledd 20220520
-- [UMWELTGREEN AB](#c80) - Nr: 80
-  - Säte: Stockholm
-  - SNI: K (Finans- och försäkringsverksamhet)
-  - Övrigt (FOI-rad): 921 85 147 Medinilla Holding Sergey Sokolov RU 100
-
-### Fastighetsverksamhet (SNI L) – 13 företag - [Tomten 2:179 AB](#c4) - Nr: 4
-  - Säte: Stockholm
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 0 11 041 Akersberg Development AB Mikhail Mantrov RU 50-75
-- [Fastighets- och kapitalförvaltning i Värmland AB](#c20) - Nr: 20
-  - Säte: Kristinehamn
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 581 30 487 Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [Solanz Skandinavien AB](#c21) - Nr: 21
-  - Säte: Kristinehamn
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 212 4 879 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [Kurlanda Gård Aktiebolag](#c22) - Nr: 22
-  - Säte: Kristinehamn
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 1 097 7 704 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [Ellapac 11 AB](#c24) - Nr: 24
-  - Säte: Kristinehamn
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 4 455 22 041 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [Gayfullin Fastigheter AB](#c25) - Nr: 25
-  - Säte: Kristinehamn
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 1 832 13 633 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [Sigfridshäll i Växjö AB](#c35) - Nr: 35
-  - Säte: Växjö
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 6 277 53 320 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615
-- [Lärandets Hus AB](#c36) - Nr: 36
-  - Säte: Växjö
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 0 10 131 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615
-- [Rörvik Timber Höglandet AB](#c48) - Nr: 48
-  - Säte: Jönköping
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 2 774 24 147 Frefika Invest Ltd Corp Natalia Törnqvist CH 100
-- [RISE Estate AB](#c62) - Nr: 62
-  - Säte: Stockholm
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 0 102 279 RISE Capital AB Igor Snegurov RU 75-100
-- [Grand Arctic Sweden AB](#c100) - Nr: 100
-  - Säte: Älvsjö
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 270 7 883 Iurii Kuzhelko SE 100
-- [Resursbostäder i Spånga AB](#c117) - Nr: 117
-  - Säte: Spånga
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 632 5 237 Dmitrij Simis SE 100
-- [SFUP AB](#c121) - Nr: 121
-  - Säte: Uppsala
-  - SNI: L (Fastighetsverksamhet)
-  - Övrigt (FOI-rad): 0 2 997 Scandinavian M&T AB Konstantin Bryunin SE 100
-
-### Verksamhet inom juridik, ekonomi, vetenskap och teknik (SNI M) – 13 företag - [Akersberg Development AB](#c3) - Nr: 3
-  - Säte: Stockholm
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 0 58 222 Mikhail Mantrov RU 50-75
-- [CML Construction Services AB](#c13) - Nr: 13
-  - Säte: Solna
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 2 399 1 281 Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [Eskaro Group AB](#c17) - Nr: 17
-  - Säte: Göteborg
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 518 934 377 982 Lassier Engineering Ltd Igor Chumakov EE 100
-- [EVOPIPES RG AB](#c19) - Nr: 19
-  - Säte: Ljungby
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 3 253 1 294 Evopipes SIA Miron Gorilovskiy RU 25-50
-- [Meerwind AB](#c45) - Nr: 45
-  - Säte: Helsingborg
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 30 900 38 300 Frefika Invest Ltd Corp Natalia Törnqvist CH 100
-- [Rörvik Industri och Handel AB](#c46) - Nr: 46
-  - Säte: Jönköping
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 0 32 523 Frefika Invest Ltd Corp Natalia Törnqvist CH 100
-- [Rörvik Swedfore AB](#c47) - Nr: 47
-  - Säte: Stockaryd
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 29 377 20 105 Frefika Invest Ltd Corp Natalia Törnqvist CH 100
-- [PetroGrand AB](#c55) - Nr: 55
-  - Säte: Stockholm
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 0 28 391 Natlata Partners Ltd Maxim Korobov ES 55,5
-- [Petrosibir AB](#c56) - Nr: 56
-  - Säte: Stockholm
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 0 217 464 Natlata Partners Ltd Maxim Korobov ES 39,2
-- [STRABAG BRVZ AB](#c70) - Nr: 70
-  - Säte: Örebro
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 23 774 348 383 SBS Strabag Bau Holding Service Gmbh Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel
-- [NCAB](#c85) - Nr: 85
-  - Säte: Group Sundbyberg
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 170 830 88 568 Vladimir Makarov RU 1,5
-- [Scandinavian M&T AB](#c120) - Nr: 120
-  - Säte: Uppsala
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 3 802 1 534 Konstantin Bryunin SE 50-75
-- [The Barkas Collective AB](#c126) - Nr: 126
-  - Säte: Stockholm
-  - SNI: M (Verksamhet inom juridik, ekonomi, vetenskap och teknik)
-  - Övrigt (FOI-rad): 5 382 3 058 Vitaly Poluzhnikov SE 25-50
-
-### Uthyrning, fastighetsservice, resetjänster och andra stödtjänster (SNI N) – 8 företag - [GF Service och Installation AB](#c23) - Nr: 23
-  - Säte: Kristinehamn
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 0 22 382 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25
-- [KRAG Solutions AB](#c39) - Nr: 39
-  - Säte: Stockholm
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 1 625 2 104 Mikhail Peretyatko LV 25-50 Konkurs inledd 20220428
-- [The Books Sweden AB](#c78) - Nr: 78
-  - Säte: Enskede
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 2 791 776 Ekaterina Maliushenkova RU 100
-- [Tui Sverige AB](#c87) - Nr: 87
-  - Säte: Stockholm
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 5 870 956 2 526 066 Severgroup/Ondero Alexei Mordashov/Marina Mordashova RU 4,1/29,9 (Engagemangsförändring 20220228)
-- [Voi Technologies](#c88) - Nr: 88
-  - Säte: Stockholm
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 386 866 1 289 147 PTC/ Alexander Eliseev/Ilya Yushvaev RU 1,2/2,9
-- [ALLSERVICE AM AB](#c90) - Nr: 90
-  - Säte: Upplands Väsby
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 3 214 1 450 Alan Mamiev SE 75-100
-- [Hjälper SWE AB](#c103) - Nr: 103
-  - Säte: Farsta
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 10 103 6 531 Konstantin Kantor SE 100
-- [Team77 Sweden AB](#c125) - Nr: 125
-  - Säte: Segeltorp
-  - SNI: N (Uthyrning, fastighetsservice, resetjänster och andra stödtjänster)
-  - Övrigt (FOI-rad): 1 943 1 536 Nikolay Korzh SE 100
-
-### Utbildning (SNI P) – 2 företag - [Schoolido AB](#c34) - Nr: 34
-  - Säte: Nacka
-  - SNI: P (Utbildning)
-  - Övrigt (FOI-rad): 13 476 12 864 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615
-- [Jasmine AB](#c104) - Nr: 104
-  - Säte: Gävle
-  - SNI: P (Utbildning)
-  - Övrigt (FOI-rad): 3 634 1 508 Dzhennet Abasova SE 100
-
-### Kultur, nöje och fritid (SNI R) – 1 företag - [Questroom AB](#c116) - Nr: 116
-  - Säte: Åkersberga
-  - SNI: R (Kultur, nöje och fritid)
-  - Övrigt (FOI-rad): 2 410 710 Grigory Andreevich Koshmak SE 25-50
-    </div>
-  </section>
-
-  <section id="tab-foi" class="tab">
-    <div class="panel">
-      <div class="controls">
-        <input id="filter" type="search" placeholder="Sök i FOI-tabellen (bolag, säte, SNI, ägare, kommentar)…"/>
-        <span class="meta" id="count"></span>
-      </div>
-      <div class="meta">FOI Tabell 2.1. Ankare: c1–c128.</div>
-      <div class="tablewrap">
-        <table id="t">
-          <thead><tr><th>Nr</th><th>Företag</th><th>Säte</th><th>SNI</th><th>Övrigt</th></tr></thead>
-          <tbody>
-            <tr id='c1'><td class='num'>1</td><td>4finance AB</td><td>Stockholm</td><td class='sni'>K</td><td>76 552 99 330 Tirona Ltd Vera Boiko RU 25-50 Upphört huvudmannaskap 20220608</td></tr>
-            <tr id='c2'><td class='num'>2</td><td>4spar Aktiebolag</td><td>Stockholm</td><td class='sni'>K</td><td>0 129 046 Tirona Ltd Vera Boiko RU 25-50 Likvidation beslutad 20220323</td></tr>
-            <tr id='c3'><td class='num'>3</td><td>Akersberg Development AB</td><td>Stockholm</td><td class='sni'>M</td><td>0 58 222 Mikhail Mantrov RU 50-75</td></tr>
-            <tr id='c4'><td class='num'>4</td><td>Tomten 2:179 AB</td><td>Stockholm</td><td class='sni'>L</td><td>0 11 041 Akersberg Development AB Mikhail Mantrov RU 50-75</td></tr>
-            <tr id='c5'><td class='num'>5</td><td>Amitjugofem AB</td><td>Stockholm</td><td class='sni'>K</td><td>0 487 325 Hydrys Investments S.a.r.l. Mikhail Prokhorov CH 100</td></tr>
-            <tr id='c6'><td class='num'>6</td><td>AmpTrack Technologies AB</td><td>Örebro</td><td class='sni'>J</td><td>186 25 764 Vladimir Kalinin/Elena Martiyanova CH/ES 50-75/25-50</td></tr>
-            <tr id='c7'><td class='num'>7</td><td>ATI Europe AB</td><td>Stockholm</td><td class='sni'>G</td><td>0 12 668 Alengdar Ltd Grigory Shiyan RU 100</td></tr>
-            <tr id='c8'><td class='num'>8</td><td>ATI Nordic AB</td><td>Stockholm</td><td class='sni'>G</td><td>4 876 58 954 Alengdar Ltd Grigory Shiyan RU 100</td></tr>
-            <tr id='c9'><td class='num'>9</td><td>CMA Small Systems Aktiebolag</td><td>Stockholm</td><td class='sni'>J</td><td>229 891 184 642 Alengdar Ltd Grigory Shiyan RU 49</td></tr>
-            <tr id='c10'><td class='num'>10</td><td>Highex AB</td><td>Stockholm</td><td class='sni'>J</td><td>39 985 14 705 Alengdar Ltd Grigory Shiyan RU 49</td></tr>
-            <tr id='c11'><td class='num'>11</td><td>Avionero AB</td><td>Malmö</td><td class='sni'>J</td><td>63 5 124 Anton Tyulenev RU 25-50 Upphört huvudmannaskap 20220401</td></tr>
-            <tr id='c12'><td class='num'>12</td><td>Baltresto AB</td><td>Kungälv</td><td class='sni'>G</td><td>2 919 504 Roman Lushnikov EE 25-50</td></tr>
-            <tr id='c13'><td class='num'>13</td><td>CML Construction Services AB</td><td>Solna</td><td class='sni'>M</td><td>2 399 1 281 Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c14'><td class='num'>14</td><td>Coffee Please Home AB</td><td>Norsborg</td><td class='sni'>G</td><td>11 770 3 423 Coffee Please Holding AB Aleksey Kavtrev ES 50-75</td></tr>
-            <tr id='c15'><td class='num'>15</td><td>Cool Carriers AB</td><td>Stockholm</td><td class='sni'>H</td><td>1 307 369 304 548 Fritra AG Mikhail Ganyushin/Elena Borisenko CY/RU 25-50/25-50 Från mars 2022 ändrat till Ganyushin 100 %</td></tr>
-            <tr id='c16'><td class='num'>16</td><td>deriStrat AB</td><td>Stockholm</td><td class='sni'>J</td><td>1 919 4 426 Alexey Zhigarev AT 0-25</td></tr>
-            <tr id='c17'><td class='num'>17</td><td>Eskaro Group AB</td><td>Göteborg</td><td class='sni'>M</td><td>518 934 377 982 Lassier Engineering Ltd Igor Chumakov EE 100</td></tr>
-            <tr id='c18'><td class='num'>18</td><td>Eskaro Ukraine AB</td><td>Göteborg</td><td class='sni'>C</td><td>0 62 648 Lassier Engineering Ltd Igor Chumakov EE 50-75</td></tr>
-            <tr id='c19'><td class='num'>19</td><td>EVOPIPES RG AB</td><td>Ljungby</td><td class='sni'>M</td><td>3 253 1 294 Evopipes SIA Miron Gorilovskiy RU 25-50</td></tr>
-            <tr id='c20'><td class='num'>20</td><td>Fastighets- och kapitalförvaltning i Värmland AB</td><td>Kristinehamn</td><td class='sni'>L</td><td>581 30 487 Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c21'><td class='num'>21</td><td>Solanz Skandinavien AB</td><td>Kristinehamn</td><td class='sni'>L</td><td>212 4 879 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c22'><td class='num'>22</td><td>Kurlanda Gård Aktiebolag</td><td>Kristinehamn</td><td class='sni'>L</td><td>1 097 7 704 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c23'><td class='num'>23</td><td>GF Service och Installation AB</td><td>Kristinehamn</td><td class='sni'>N</td><td>0 22 382 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c24'><td class='num'>24</td><td>Ellapac 11 AB</td><td>Kristinehamn</td><td class='sni'>L</td><td>4 455 22 041 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c25'><td class='num'>25</td><td>Gayfullin Fastigheter AB</td><td>Kristinehamn</td><td class='sni'>L</td><td>1 832 13 633 Fastighets- och kapitalförvaltning i Värmland AB Rais Gayfullin/Robert Gayfullin RU/SE 50-75 / 0-25</td></tr>
-            <tr id='c26'><td class='num'>26</td><td>Gamersgate AB</td><td>Stockholm</td><td class='sni'>J</td><td>247 919 26 255 Nikolay Trusov RU 100</td></tr>
-            <tr id='c27'><td class='num'>27</td><td>Global Triangle AB</td><td>Bandhagen</td><td class='sni'>G</td><td>17 410 837 Nikolay Belov RU 100</td></tr>
-            <tr id='c28'><td class='num'>28</td><td>Hotell Roslagen Nya AB</td><td>Norrtälje</td><td class='sni'>I</td><td>7 932 4 970 Yury Vasin RU 100 Ändrat medborgarskap och bosättning till TR 20220308</td></tr>
-            <tr id='c29'><td class='num'>29</td><td>Evion Hotell & Restaurang AB</td><td>Göteborg</td><td class='sni'>I</td><td>8 247 4 403 Hotell Roslagen Nya AB Yury Vasin RU 100 Ändrat medborgarskap och bosättning till TR 20220308</td></tr>
-            <tr id='c30'><td class='num'>30</td><td>InstrumentElectronics i Stockholm AB</td><td>Nacka</td><td class='sni'>G</td><td>2 003 434 Yassco Investments Ltd Vladimir Kulemekov RU 100 Likvidation beslutad 20200729</td></tr>
-            <tr id='c31'><td class='num'>31</td><td>IST Group AB</td><td>Växjö</td><td class='sni'>J</td><td>167 517 217 672 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615</td></tr>
-            <tr id='c32'><td class='num'>32</td><td>IST Sverige AB</td><td>Växjö</td><td class='sni'>J</td><td>175 779 45 803 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615</td></tr>
-            <tr id='c33'><td class='num'>33</td><td>Ja Rocka Roll Studios AB</td><td>Linköping</td><td class='sni'>J</td><td>4 242 1 211 IST International Holding S.A. Tatiana Sundeby CH 0-25 Upphört huvudmannaskap 20220516</td></tr>
-            <tr id='c34'><td class='num'>34</td><td>Schoolido AB</td><td>Nacka</td><td class='sni'>P</td><td>13 476 12 864 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615</td></tr>
-            <tr id='c35'><td class='num'>35</td><td>Sigfridshäll i Växjö AB</td><td>Växjö</td><td class='sni'>L</td><td>6 277 53 320 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615</td></tr>
-            <tr id='c36'><td class='num'>36</td><td>Lärandets Hus AB</td><td>Växjö</td><td class='sni'>L</td><td>0 10 131 IST International Holding S.A. Tatiana Sundeby CH 75-100 Upphört huvudmannaskap 20220615</td></tr>
-            <tr id='c37'><td class='num'>37</td><td>Kopy Goldfields AB (publ)</td><td>Stockholm</td><td class='sni'>B</td><td>1 150 1 974 987 Hc Alliance Ltd Arsen Idrisov RU 25-50</td></tr>
-            <tr id='c38'><td class='num'>38</td><td>AB</td><td>Krasny Gold Fields Stockholm</td><td class='sni'>B</td><td>0 108 674 Hc Alliance Ltd Arsen Idrisov RU 49</td></tr>
-            <tr id='c39'><td class='num'>39</td><td>KRAG Solutions AB</td><td>Stockholm</td><td class='sni'>N</td><td>1 625 2 104 Mikhail Peretyatko LV 25-50 Konkurs inledd 20220428</td></tr>
-            <tr id='c40'><td class='num'>40</td><td>Kubikenborg Aluminium i Sundsvall AB</td><td>Sundsvall</td><td class='sni'>K</td><td>0 204 264 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50</td></tr>
-            <tr id='c41'><td class='num'>41</td><td>Kubikenborg Aluminium AB</td><td>Sundsvall</td><td class='sni'>C</td><td>1 845 634 2 258 416 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50</td></tr>
-            <tr id='c42'><td class='num'>42</td><td>GANSCA Deponi Aktiebolag</td><td>Sundsvall</td><td class='sni'>E</td><td>11 156 20 196 En+/Sual Partners Ltd Oleg Deripaska/Viktor Vekselberg RU/RU >50</td></tr>
-            <tr id='c43'><td class='num'>43</td><td>KV GROUP AB</td><td>Långshyttan</td><td class='sni'>F</td><td>0 3 890 Georgijs Kascejevs LV 100</td></tr>
-            <tr id='c44'><td class='num'>44</td><td>Malmö Lumber Technology Wood Products AB</td><td>Malmö</td><td class='sni'>G</td><td>5 621 3 385 Evgeny Superfin DE 25-50</td></tr>
-            <tr id='c45'><td class='num'>45</td><td>Meerwind AB</td><td>Helsingborg</td><td class='sni'>M</td><td>30 900 38 300 Frefika Invest Ltd Corp Natalia Törnqvist CH 100</td></tr>
-            <tr id='c46'><td class='num'>46</td><td>Rörvik Industri och Handel AB</td><td>Jönköping</td><td class='sni'>M</td><td>0 32 523 Frefika Invest Ltd Corp Natalia Törnqvist CH 100</td></tr>
-            <tr id='c47'><td class='num'>47</td><td>Rörvik Swedfore AB</td><td>Stockaryd</td><td class='sni'>M</td><td>29 377 20 105 Frefika Invest Ltd Corp Natalia Törnqvist CH 100</td></tr>
-            <tr id='c48'><td class='num'>48</td><td>Rörvik Timber Höglandet AB</td><td>Jönköping</td><td class='sni'>L</td><td>2 774 24 147 Frefika Invest Ltd Corp Natalia Törnqvist CH 100</td></tr>
-            <tr id='c49'><td class='num'>49</td><td>NC Nordic Control AB</td><td>Lidingö</td><td class='sni'>G</td><td>7 083 7 794 Pavel Gerasimov RU 100</td></tr>
-            <tr id='c50'><td class='num'>50</td><td>Nimab Anläggning AB</td><td>Sjöbo</td><td class='sni'>F</td><td>0 7 145 Oleg Deripaska RU 25-50 Sålt, namnbytt och likviderat 20220111</td></tr>
-            <tr id='c51'><td class='num'>51</td><td>NIMAB Entreprenad AB</td><td>Sjöbo</td><td class='sni'>F</td><td>549 117 244 107 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c52'><td class='num'>52</td><td>Nimab Support AB</td><td>Sjöbo</td><td class='sni'>F</td><td>52 250 15 386 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c53'><td class='num'>53</td><td>Nordic Water Holding AB</td><td>Mölndal</td><td class='sni'>G</td><td>208 101 513 Tiwel Holding AG Viktor Vekselberg CH 25-50</td></tr>
-            <tr id='c54'><td class='num'>54</td><td>Nordic Water Products AB</td><td>Mölndal</td><td class='sni'>G</td><td>480 010 285 269 Viktor Vekselberg CH 25-50</td></tr>
-            <tr id='c55'><td class='num'>55</td><td>PetroGrand AB</td><td>Stockholm</td><td class='sni'>M</td><td>0 28 391 Natlata Partners Ltd Maxim Korobov ES 55,5</td></tr>
-            <tr id='c56'><td class='num'>56</td><td>Petrosibir AB</td><td>Stockholm</td><td class='sni'>M</td><td>0 217 464 Natlata Partners Ltd Maxim Korobov ES 39,2</td></tr>
-            <tr id='c57'><td class='num'>57</td><td>Recore Industries AB</td><td>Timrå</td><td class='sni'>C</td><td>329 4 709 Dimitry Zaytsev RU 100</td></tr>
-            <tr id='c58'><td class='num'>58</td><td>ARTBOARD Aktiebolag</td><td>Timrå</td><td class='sni'>C</td><td>27 033 25 851 Recore Industries AB Dimitry Zaytsev RU 91</td></tr>
-            <tr id='c59'><td class='num'>59</td><td>Reksoft AB</td><td>Upplands-Väsby</td><td class='sni'>J</td><td>29 868 3 701 QUADRA++ LLC/NextStep LLC Alexander Egorov RU 100</td></tr>
-            <tr id='c60'><td class='num'>60</td><td>RETN Nordic AB</td><td>Solna</td><td class='sni'>J</td><td>9 757 16 374 RETN Capital Ltd Polina Maltseva AT 25-50 Upphört huvudmannaskap 20220524</td></tr>
-            <tr id='c61'><td class='num'>61</td><td>RISE Capital AB</td><td>Stockholm</td><td class='sni'>K</td><td>13 176 221 Igor Snegurov RU 75-100</td></tr>
-            <tr id='c62'><td class='num'>62</td><td>RISE Estate AB</td><td>Stockholm</td><td class='sni'>L</td><td>0 102 279 RISE Capital AB Igor Snegurov RU 75-100</td></tr>
-            <tr id='c63'><td class='num'>63</td><td>Safetech International Holding AB</td><td>Stockholm</td><td class='sni'>K</td><td>0 87 017 Indigo Capital Petr Zhukov RU 25-50</td></tr>
-            <tr id='c64'><td class='num'>64</td><td>Slami AB</td><td>Mariefred</td><td class='sni'>I</td><td>739 39 140 Viacheslav Mikhaylov RU 100 Upphört huvudmannaskap 20211210, kvar i styrelsen</td></tr>
-            <tr id='c65'><td class='num'>65</td><td>Stadsis AB</td><td>Malmö</td><td class='sni'>K</td><td>0 2 111 396 Citadel Ltd Vagif Aliev UA 100</td></tr>
-            <tr id='c66'><td class='num'>66</td><td>Steelmar Scandinavia AB</td><td>Lidingö</td><td class='sni'>G</td><td>742 154 312 Giselmo Enterprises Ltd Alexandr Gazalov RU 100</td></tr>
-            <tr id='c67'><td class='num'>67</td><td>STRABAG AB</td><td>Örebro</td><td class='sni'>F</td><td>0 16 049 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c68'><td class='num'>68</td><td>STRABAG Projektutveckling AB</td><td>Solna</td><td class='sni'>F</td><td>30 70 907 STRABAG AB Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c69'><td class='num'>69</td><td>Vasagatan Op6 Holding AB</td><td>Örebro</td><td class='sni'>F</td><td>0 45 306 Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c70'><td class='num'>70</td><td>STRABAG BRVZ AB</td><td>Örebro</td><td class='sni'>M</td><td>23 774 348 383 SBS Strabag Bau Holding Service Gmbh Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c71'><td class='num'>71</td><td>STRABAG Rail AB</td><td>Örebro</td><td class='sni'>F</td><td>0 36 952 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c72'><td class='num'>72</td><td>STRABAG Sverige AB</td><td>Solna</td><td class='sni'>F</td><td>413 513 275 007 STRABAG Holding Gmbh/STRABAG SE Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c73'><td class='num'>73</td><td>Sulzer Pumps Sweden AB</td><td>Vadstena</td><td class='sni'>C</td><td>609 181 338 152 Sulzer AG/Renova Viktor Vekselberg CH 48</td></tr>
-            <tr id='c74'><td class='num'>74</td><td>Sweden Bygg Kraft AB</td><td>Hägersten</td><td class='sni'>F</td><td>29 153 9 448 Iman Sebieva RU 100</td></tr>
-            <tr id='c75'><td class='num'>75</td><td>Teknicast Investment Group AB</td><td>Malmö</td><td class='sni'>K</td><td>0 5 667 Nalendi Investments Limited Leonid Kiryakov RU 50-75 Upphört huvudmannaskap 20220223. Likvidation avslutad 20220803</td></tr>
-            <tr id='c76'><td class='num'>76</td><td>Tele2 Russia Holding AB</td><td>Kista</td><td class='sni'>K</td><td>0 16 954 591 VTB Bank Andrej Kostin RU 100 Likvidation beslutad 20220223</td></tr>
-            <tr id='c77'><td class='num'>77</td><td>Tele2 Russian Investments AB</td><td>Stockholm</td><td class='sni'>K</td><td>0 893 209 VTB Bank Andrej Kostin RU 100 Konkurs inledd 20220520</td></tr>
-            <tr id='c78'><td class='num'>78</td><td>The Books Sweden AB</td><td>Enskede</td><td class='sni'>N</td><td>2 791 776 Ekaterina Maliushenkova RU 100</td></tr>
-            <tr id='c79'><td class='num'>79</td><td>Thermo Industri i Stockholm Aktiebolag</td><td>Stockholm</td><td class='sni'>G</td><td>13 523 2 695 Vladimir Kilin/Vladimir Bobrov RU/FI 25-50/25-50</td></tr>
-            <tr id='c80'><td class='num'>80</td><td>UMWELTGREEN AB</td><td>Stockholm</td><td class='sni'>K</td><td>921 85 147 Medinilla Holding Sergey Sokolov RU 100</td></tr>
-            <tr id='c81'><td class='num'>81</td><td>Videre Rebus Coatings Aktiebolag</td><td>Stockholm</td><td class='sni'>C</td><td>431 2 549 Nina Rodionova RU 100 Likvidation beslutad 20220517</td></tr>
-            <tr id='c82'><td class='num'>82</td><td>WIRUD AB</td><td>Tranås</td><td class='sni'>G</td><td>2 821 5 018 Elena Sotnikova RU 25-50</td></tr>
-            <tr id='c83'><td class='num'>83</td><td>Woodrow Management AB</td><td>Enskede gård</td><td class='sni'>G</td><td>38 440 1 761 Sergey Tataurov RU 25-50</td></tr>
-            <tr id='c84'><td class='num'>84</td><td>Züblin Scandinavia AB</td><td>Solna</td><td class='sni'>F</td><td>1 024 909 569 783 Züblin Spez Gmbh Oleg Deripaska RU 25-50 Avregistrerad som huvudman 2021, men har kvar ägarandel</td></tr>
-            <tr id='c85'><td class='num'>85</td><td>NCAB</td><td>Group Sundbyberg</td><td class='sni'>M</td><td>170 830 88 568 Vladimir Makarov RU 1,5</td></tr>
-            <tr id='c86'><td class='num'>86</td><td>Sendify AB</td><td>Göteborg</td><td class='sni'>H</td><td>58 524 28 939 Litten Investments Alexander Eliseev RU 14,2</td></tr>
-            <tr id='c87'><td class='num'>87</td><td>Tui Sverige AB</td><td>Stockholm</td><td class='sni'>N</td><td>5 870 956 2 526 066 Severgroup/Ondero Alexei Mordashov/Marina Mordashova RU 4,1/29,9 (Engagemangsförändring 20220228)</td></tr>
-            <tr id='c88'><td class='num'>88</td><td>Voi Technologies</td><td>Stockholm</td><td class='sni'>N</td><td>386 866 1 289 147 PTC/ Alexander Eliseev/Ilya Yushvaev RU 1,2/2,9</td></tr>
-            <tr id='c89'><td class='num'>89</td><td>Alexey Kuznetsov AB</td><td>Stockholm</td><td class='sni'>J</td><td>0 341 Alexey Kuznetsov SE 100</td></tr>
-            <tr id='c90'><td class='num'>90</td><td>ALLSERVICE AM AB</td><td>Upplands Väsby</td><td class='sni'>N</td><td>3 214 1 450 Alan Mamiev SE 75-100</td></tr>
-            <tr id='c91'><td class='num'>91</td><td>ATYX AB</td><td>Stöde</td><td class='sni'>F</td><td>0 0 Alexey Molokov SE 25-50</td></tr>
-            <tr id='c92'><td class='num'>92</td><td>Aveda flytt AB</td><td>Handen</td><td class='sni'>H</td><td>2 411 233 Zukhra Dzhalilova SE 100</td></tr>
-            <tr id='c93'><td class='num'>93</td><td>Beltrusbygg AB</td><td>Uttran</td><td class='sni'>F</td><td>1 673 509 Nikolay Korzh SE 100</td></tr>
-            <tr id='c94'><td class='num'>94</td><td>BMD GROUP AB</td><td>Tyresö</td><td class='sni'>F</td><td>2 291 399 Elena Kopteva SE 100</td></tr>
-            <tr id='c95'><td class='num'>95</td><td>Bärbalken 356 AB</td><td>Järfälla</td><td class='sni'>F</td><td>3 895 986 Bashir Motaliev SE 25-50</td></tr>
-            <tr id='c96'><td class='num'>96</td><td>CLEAN CAR PLUS AB</td><td>Älvsjö</td><td class='sni'>G</td><td>2 173 529 Svetlana Mechouki SE 100</td></tr>
-            <tr id='c97'><td class='num'>97</td><td>Elvins Bilexpert AB</td><td>Skogås</td><td class='sni'>F</td><td>2 403 1 411 Elvin Nagizade SE 50-75</td></tr>
-            <tr id='c98'><td class='num'>98</td><td>Fundamental Fastighetsservice Aktiebolag</td><td>Enskede</td><td class='sni'>F</td><td>4 178 471 Elena Podolnaia SE 100</td></tr>
-            <tr id='c99'><td class='num'>99</td><td>Galaj Bygg AB</td><td>Södertälje</td><td class='sni'>F</td><td>6 500 1 110 Lidia Galaeva SE 50-75</td></tr>
-            <tr id='c100'><td class='num'>100</td><td>Grand Arctic Sweden AB</td><td>Älvsjö</td><td class='sni'>L</td><td>270 7 883 Iurii Kuzhelko SE 100</td></tr>
-            <tr id='c101'><td class='num'>101</td><td>GreenBjork AB</td><td>Beddingestrand</td><td class='sni'>G</td><td>3 416 2 989 Sergei Dymov SE 100</td></tr>
-            <tr id='c102'><td class='num'>102</td><td>Hellgrens Ventilation & Bygg AB</td><td>Skarpnäck</td><td class='sni'>F</td><td>6 685 2 038 Sergey Matveev SE 25-50</td></tr>
-            <tr id='c103'><td class='num'>103</td><td>Hjälper SWE AB</td><td>Farsta</td><td class='sni'>N</td><td>10 103 6 531 Konstantin Kantor SE 100</td></tr>
-            <tr id='c104'><td class='num'>104</td><td>Jasmine AB</td><td>Gävle</td><td class='sni'>P</td><td>3 634 1 508 Dzhennet Abasova SE 100</td></tr>
-            <tr id='c105'><td class='num'>105</td><td>Kabardin Media AB</td><td>Stockholm</td><td class='sni'>J</td><td>0 0 Tatiana Nikolaevna Lytasova/Nikita Sergeevich Kabardin SE/SE 25-50/25-50 Upphört huvudmannaskap 220603, nya RU huvudmän boende i SE: M Ivanov & A Kuznetsova Nytt namn: Nauchu AB</td></tr>
-            <tr id='c106'><td class='num'>106</td><td>KHJ Innovations AB</td><td>Stockholm</td><td class='sni'>G</td><td>1 438 966 Kristina Jakobsson SE 25-50</td></tr>
-            <tr id='c107'><td class='num'>107</td><td>Klinkersson&Kakelson AB</td><td>Nykvarn</td><td class='sni'>F</td><td>2 303 1 053 Bogdan Chuvachalov SE 100</td></tr>
-            <tr id='c108'><td class='num'>108</td><td>Kristan Bygg AB</td><td>Hjärtum</td><td class='sni'>C</td><td>12 905 3 522 Kristina Solestrand SE 100</td></tr>
-            <tr id='c109'><td class='num'>109</td><td>Kvist Skandinavien AB</td><td>Vårby</td><td class='sni'>F</td><td>2 217 642 Veronika Kvist SE 100</td></tr>
-            <tr id='c110'><td class='num'>110</td><td>Limavi AB</td><td>Skogås</td><td class='sni'>J</td><td>2 367 539 Andrey Kolpakov SE 100</td></tr>
-            <tr id='c111'><td class='num'>111</td><td>Max Logunov AB</td><td>Kungsängen</td><td class='sni'>J</td><td>1 280 367 Maksim Logunov SE 100</td></tr>
-            <tr id='c112'><td class='num'>112</td><td>NextCode AB</td><td>Stockholm</td><td class='sni'>J</td><td>17 588 13 222 Northbound Holding AB Dmitry Vyalshin SE 25-50</td></tr>
-            <tr id='c113'><td class='num'>113</td><td>NPN Bygg Sthlm AB</td><td>Bagarmossen</td><td class='sni'>F</td><td>9 180 4 593 Elena Kopteva SE 100</td></tr>
-            <tr id='c114'><td class='num'>114</td><td>NPP BYGG AB</td><td>Partille</td><td class='sni'>F</td><td>5 201 2 591 Aslan Gogitidze SE 100</td></tr>
-            <tr id='c115'><td class='num'>115</td><td>PSP Ventilation AB</td><td>Tyresö</td><td class='sni'>F</td><td>3 711 2 245 Andrei Kudrinskii SE 100</td></tr>
-            <tr id='c116'><td class='num'>116</td><td>Questroom AB</td><td>Åkersberga</td><td class='sni'>R</td><td>2 410 710 Grigory Andreevich Koshmak SE 25-50</td></tr>
-            <tr id='c117'><td class='num'>117</td><td>Resursbostäder i Spånga AB</td><td>Spånga</td><td class='sni'>L</td><td>632 5 237 Dmitrij Simis SE 100</td></tr>
-            <tr id='c118'><td class='num'>118</td><td>R-G TRANSPORT AB</td><td>Järfälla</td><td class='sni'>G</td><td>8 704 1 586 Artush Oganesyan SE 100</td></tr>
-            <tr id='c119'><td class='num'>119</td><td>SAA BYGG AB</td><td>Gunnilse</td><td class='sni'>F</td><td>2 232 1 191 Alexey Sokolov SE 100</td></tr>
-            <tr id='c120'><td class='num'>120</td><td>Scandinavian M&T AB</td><td>Uppsala</td><td class='sni'>M</td><td>3 802 1 534 Konstantin Bryunin SE 50-75</td></tr>
-            <tr id='c121'><td class='num'>121</td><td>SFUP AB</td><td>Uppsala</td><td class='sni'>L</td><td>0 2 997 Scandinavian M&T AB Konstantin Bryunin SE 100</td></tr>
-            <tr id='c122'><td class='num'>122</td><td>SHS Gruppen AB</td><td>Bromma</td><td class='sni'>F</td><td>4 241 885 Igor Boyko SE 25-50</td></tr>
-            <tr id='c123'><td class='num'>123</td><td>Shtark Interiör AB</td><td>Arlandastad</td><td class='sni'>F</td><td>4 782 1 134 Svetlana Shtark SE 100</td></tr>
-            <tr id='c124'><td class='num'>124</td><td>Tasty America AB</td><td>Johanneshov</td><td class='sni'>G</td><td>12 132 3 180 Irena Elanskaya SE 25-50</td></tr>
-            <tr id='c125'><td class='num'>125</td><td>Team77 Sweden AB</td><td>Segeltorp</td><td class='sni'>N</td><td>1 943 1 536 Nikolay Korzh SE 100</td></tr>
-            <tr id='c126'><td class='num'>126</td><td>The Barkas Collective AB</td><td>Stockholm</td><td class='sni'>M</td><td>5 382 3 058 Vitaly Poluzhnikov SE 25-50</td></tr>
-            <tr id='c127'><td class='num'>127</td><td>Toseto Sweden AB</td><td>Bromma</td><td class='sni'>F</td><td>12 275 874 Kirill Kuzhelko SE 25-50</td></tr>
-            <tr id='c128'><td class='num'>128</td><td>VR ENTREPRENAD AB</td><td>Bålsta</td><td class='sni'>F</td><td>4 699 932 Victor Kersikov SE 50-75</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.18.0"></script>
-<script>
-  const btnMap = document.getElementById('btn-map');
-  const btnFoi = document.getElementById('btn-foi');
-  const tabMap = document.getElementById('tab-map');
-  const tabFoi = document.getElementById('tab-foi');
-
-  function show(which){
-    if(which==='map') {
-      btnMap.classList.add('active'); btnFoi.classList.remove('active');
-      tabMap.classList.add('active'); tabFoi.classList.remove('active');
-      window.dispatchEvent(new Event('resize'));
-    } else {
-      btnFoi.classList.add('active'); btnMap.classList.remove('active');
-      tabFoi.classList.add('active'); tabMap.classList.remove('active');
-    }
-  }
-  btnMap.addEventListener('click', ()=>show('map'));
-  btnFoi.addEventListener('click', ()=>show('foi'));
-
-  // Link handling
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest && e.target.closest('a');
-    if(!a) return;
-    const href = a.getAttribute('href') || '';
-    if(href.startsWith('http')) {
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      return;
-    }
-    if(href.startsWith('#c')) {
-      e.preventDefault();
-      show('foi');
-      const id = href.slice(1);
-      const el = document.getElementById(id);
-      if(el) {
-        history.replaceState(null,'',href);
-        el.scrollIntoView({block:'center'});
-        // Highlight effect
-        el.style.backgroundColor = 'rgba(255, 235, 59, 0.3)';
-        setTimeout(() => el.style.backgroundColor = '', 2000);
-      }
-    }
-  }, true);
-
-  // Search filter
-  const input = document.getElementById('filter');
-  const tbody = document.querySelector('#t tbody');
-  const rows = Array.from(tbody.querySelectorAll('tr'));
-  const count = document.getElementById('count');
-
-  function updateCount(){
-    const vis = rows.filter(r => r.style.display !== 'none').length;
-    count.textContent = vis + ' / ' + rows.length;
-  }
-  function applyFilter(q){
-    q = (q || '').trim().toLowerCase();
-    for(const r of rows){
-      if(!q) { r.style.display=''; continue; }
-      r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
-    }
-    updateCount();
-  }
-  input.addEventListener('input', ()=>applyFilter(input.value));
-  updateCount();
-</script>
-
-</body>
-</html>
+## Säkerhetspolitisk relevans
+- Detta är inte enbart ett ekobrottsmål.
+- Det är ett konkret exempel på hur:
+  - finansiella strukturer kan användas som verktyg i hybridmiljön,
+  - där kriminalitet och geopolitik sammanfaller.
+- Denna typ av upplägg är central för hur ryska intressen verkar under tröskeln för öppen statlig konflikt.

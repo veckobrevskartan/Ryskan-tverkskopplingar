@@ -1,268 +1,369 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rysk Intressesfär & Brottslighet - Interaktiv Karta</title>
-<style>
-  body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
-  svg { width: 100%; height: 100%; }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"></script>
-<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rysk Intressesfär - Strukturkarta</title>
+  <style>
+    /* GRUNDLÄGGANDE STIL */
+    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+    h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 24px; }
+    
+    /* TRÄD-STRUKTUR (CSS-MAGI FÖR LINJERNA) */
+    .tree { --line-color: #ccc; --line-width: 2px; margin-left: 20px; }
+    .node { position: relative; padding-left: 20px; margin: 10px 0; }
+    
+    /* Lodräta linjer */
+    .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: var(--line-width) solid var(--line-color); }
+    .node:last-child::before { height: 18px; /* Slutar linjen vid sista barnet */ }
+    
+    /* Vågräta linjer */
+    .content::before { content: ''; position: absolute; top: 18px; left: 0; width: 20px; border-top: var(--line-width) solid var(--line-color); }
+
+    /* INNEHÅLLSKORT */
+    .content { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; position: relative; }
+    .content:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.15); transform: translateY(-1px); border-color: #bbb; }
+    
+    /* Text och Länkar */
+    .title { font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .info { display: block; font-size: 13px; color: #666; margin-top: 4px; max-width: 600px; line-height: 1.4; }
+    a { color: #0066cc; text-decoration: none; margin-left: 5px; font-size: 12px; font-weight: bold; }
+    a:hover { text-decoration: underline; }
+
+    /* EXPANDERBARA BARN */
+    .children { margin-left: 30px; display: block; /* Standard: Öppen */ }
+    .children.hidden { display: none; }
+    
+    /* PLUSS/MINUS IKONER */
+    .toggle-btn { width: 16px; height: 16px; border-radius: 50%; background: #eee; border: 1px solid #ccc; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 5px; color: #555; }
+    .node.leaf .toggle-btn { visibility: hidden; } /* Dölj om inga barn finns */
+
+    /* FÄRGKODNING AV GRENAR */
+    .root > .content { background: #2c3e50; color: #fff; font-size: 18px; padding: 12px 20px; }
+    .root > .content .info { color: #ddd; }
+    
+    /* SPECIFIKA STILAR FÖR CASE-ANALYS */
+    .highlight-box { border-left: 4px solid #e74c3c; background: #fff5f5; }
+    .foi-row { font-family: monospace; font-size: 12px; background: #f4f4f4; border:none; padding: 4px 10px; margin: 2px 0; display:flex; justify-content: space-between; width: 100%; min-width: 400px; }
+    
+    /* SÖK-FÄLT */
+    #search-container { position: sticky; top: 0; background: #f8f9fa; padding: 10px 0; z-index: 100; border-bottom: 1px solid #ddd; margin-bottom: 20px; display: flex; gap: 10px; align-items: center;}
+    input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; flex: 1; max-width: 400px; }
+    button { padding: 8px 15px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #34495e; }
+
+  </style>
 </head>
 <body>
 
-<svg id="mindmap"></svg>
+<div id="search-container">
+  <strong>Filter:</strong> 
+  <input type="text" id="searchInput" placeholder="Sök i trädet (t.ex. 'Södertörn', 'Västerås', 'FOI')..." onkeyup="filterTree()">
+  <button onclick="expandAll()">Fäll ut allt</button>
+  <button onclick="collapseAll()">Fäll ihop allt</button>
+</div>
+
+<div id="tree-root" class="tree"></div>
 
 <script>
-// Här definierar vi all data i en struktur som inte kan gå sönder av kopiering
-const rawData = `
-# Ryskt fastighetsägande & Organiserad brottslighet
+// --- DATAN (JSON) ---
+// Här ligger all information. JSON är strikt, så texten kan inte klumpa ihop sig.
+const data = {
+  title: "Ryskt Fastighetsägande & Org. Brottslighet",
+  info: "Karta över kopplingar, domar och risker i Norden.",
+  isRoot: true,
+  children: [
+    // GREN 1: FASTIGHETER
+    {
+      title: "1. Fastigheter & Mark (Norden)",
+      children: [
+        {
+          title: "Sverige",
+          children: [
+            { title: "FOI Kartläggning", info: "Ryska ekonomiska intressen kartlagda.", link: "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
+            { title: "Säpo & Omfattning", info: "157 ryska medborgare / 247 fastigheter identifierade.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
+            { title: "CASE: Muskö (Marinbas)", info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", link: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
+            { title: "CASE: Skärgårdstomter", info: "Ryskt nätverk köper tomter i Sthlm skärgård.", link: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
+            { title: "CASE: Vidja / Rymdanläggning", info: "Penningtvättsupplägg kopplat till fastighet vid Swedish Space Corp.", link: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
+            { title: "CASE: Ryska Kyrkan Västerås", info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", link: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
+          ]
+        },
+        {
+          title: "Finland",
+          children: [
+            { title: "CASE: Airiston Helmi", info: "Stor razzia 2018, domar mot Pavel Melnikov 2025.", link: "https://yle.fi/a/7-10073103" },
+            { title: "Lagstiftning", info: "Krav på tillstånd för köpare utanför EU/EES." },
+            { title: "Beslag", info: "Frysning av ryska statliga tillgångar (Naftogaz-målet)." }
+          ]
+        },
+        {
+          title: "Norge",
+          children: [
+            { title: "CASE: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" },
+            { title: "Lagstiftning", info: "Planerar förhandsgodkännande vid fastighetsköp." }
+          ]
+        }
+      ]
+    },
+    // GREN 2: BROTTSLIGHET (Här ligger din djupanalys)
+    {
+      title: "2. Org. Brottslighet & Domar",
+      children: [
+        {
+          title: "Sverige: Byggsektorn & Penningtvätt",
+          children: [
+            { title: "EBM Tillslag (Sep 2024)", info: "Grov näringspenningtvätt, halv miljard kronor.", link: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
+            {
+              title: "DJPUPANALYS: Södertörns tingsrätt (B 16726-24)",
+              highlight: true,
+              children: [
+                {
+                  title: "Övergripande händelseförlopp",
+                  children: [
+                    { title: "Systematik", info: "Långvarig struktur verksam sedan minst 2021." },
+                    { title: "Aktörer", info: "Ryssland, Belarus, Ukraina, Baltikum." },
+                    { title: "Rubricering", info: "Grovt brott p.g.a. professionellt genomförande." }
+                  ]
+                },
+                {
+                  title: "Hur har man agerat?",
+                  children: [
+                    { title: "Fasadbolag", info: "Bolag som instrument, fiktiv/manipulerad bokföring. Syfte: Dölja ursprung & skapa legitimitet." },
+                    { title: "Industriell skala", info: "30–36 transaktioner per huvudman. Spritt över tid för att undvika 'flaggor' hos banker." },
+                    { title: "Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
+                  ]
+                },
+                {
+                  title: "Koppling till Ryska intressen",
+                  children: [
+                    { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
+                    { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk, ej lokalt." },
+                    { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner. Sverige attraktivt pga stabilt system." }
+                  ]
+                },
+                {
+                  title: "Hybridhot-indikatorer",
+                  children: [
+                    { title: "Uthållighet", info: "Verksamhet över flera år kräver disciplin och resurser." },
+                    { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistiska baser)." },
+                    { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse/samordning)." }
+                  ]
+                },
+                {
+                  title: "Slutsats",
+                  info: "Internationell finansiell infrastruktur som objektivt gynnar ryska statliga intressen. Gränsland mellan organiserad brottslighet och ekonomisk hybridkrigföring."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "Internationellt",
+          children: [
+            { title: "Europol SOCTA 2025", info: "Varning för ryska nätverks sabotage och påverkan.", link: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
+            { title: "Spanien", info: "Operation Troika & Oligarch (Maffiamål)." },
+            { title: "USA", info: "OFAC-sanktioner mot 'Thieves-in-law'." }
+          ]
+        }
+      ]
+    },
+    // GREN 3: KYRKAN
+    {
+      title: "3. Moskvapatriarkatet",
+      children: [
+        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform för inhämtning." },
+        { title: "Koppling: Rosatom", info: "Uppgifter om att Rosatom finansierade kyrkbygget i Västerås." },
+        { title: "Närliggande bolag", children: [
+            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns på FOI-listan." },
+            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar i media." }
+        ]}
+      ]
+    },
+    // GREN 4: FOI LISTAN
+    {
+      title: "4. FOI-registret (Urval & Hela listan)",
+      children: [
+        {
+            title: "Byggverksamhet (SNI F)",
+            children: [
+                { title: "STRABAG-koncernen", info: "Oleg Deripaska (Sanktionerad). Flera bolag: STRABAG AB, NIMAB, Züblin." },
+                { title: "VR ENTREPRENAD AB", info: "Victor Kersikov." },
+                { title: "NPN Bygg Sthlm AB", info: "Elena Kopteva." },
+                { title: "KV GROUP AB", info: "Georgijs Kascejevs." },
+                { title: "Se fullständig lista i sökfiltret..." }
+            ]
+        },
+        {
+            title: "Tillverkning & Industri (SNI C/M)",
+            children: [
+                { title: "Kubikenborg Aluminium AB", info: "En+/Sual (Deripaska/Vekselberg)." },
+                { title: "Sulzer Pumps Sweden AB", info: "Viktor Vekselberg (Renova)." },
+                { title: "Eskaro Ukraine AB", info: "Igor Chumakov." }
+            ]
+        },
+        {
+            title: "Handel & IT (SNI G/J)",
+            children: [
+                { title: "Nordic Water Holding AB", info: "Viktor Vekselberg." },
+                { title: "InstrumentElectronics i Stockholm", info: "Vladimir Kulemekov." },
+                { title: "Reksoft AB", info: "Alexander Egorov." }
+            ]
+        },
+        {
+            title: "Finans & Fastighet (SNI K/L)",
+            children: [
+                { title: "4finance AB", info: "Vera Boiko." },
+                { title: "Fastighetsförvaltning i Värmland AB", info: "Rais Gayfullin." },
+                { title: "RISE Capital AB", info: "Igor Snegurov." }
+            ]
+        }
+      ]
+    }
+  ]
+};
 
-## 1. Fastigheter & Mark (Norden)
-### Sverige (Hotbild & Case)
-- **FOI: Kartläggning av ryska ekonomiska intressen**
-  - [Nyhetssida](https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html)
-  - [Rapportsammanfattning](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
-  - [PDF-Rapport](https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf)
-- **Säpo & Omfattning**
-  - 157 ryska medborgare / 247 fastigheter
-  - [Källa: SvD](https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop)
-- **Case: Muskö (Marinbas)**
-  - Stanislav Aleshchenko / Sjötomt nära skyddsobjekt
-  - [Expressen (2025)](https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/)
-  - [Fokus](https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/)
-- **Case: Skärgårdstomter**
-  - "Ryskt nätverk köper tomter" (Aftonbladet)
-  - [Artikel](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
-- **Case: Vidja / Rymdanläggning**
-  - Penningtvättsupplägg nära känslig infrastruktur
-  - [Dagens Industri](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
-- **Case: Ryska kyrkan Västerås**
-  - Strategisk placering nära flygplats
-  - [Aftonbladet](https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna)
+// --- LOGIK FÖR ATT RITA TRÄDET ---
 
-### Norden (Jämförelse)
-- **Finland**
-  - Tillståndskrav för köpare utanför EU
-  - Case: **Airiston Helmi** (Razzia, dom mot Melnikov)
-  - Beslag av ryska statliga tillgångar (Naftogaz-målet)
-- **Norge**
-  - Case: "Russerhytter" nära Bardufoss flygbas
-  - Planer på förhandsgodkännande vid köp
-- **Danmark**
-  - Strikt regelverk: Kräver hemvist/tillstånd för alla utlänningar
+const container = document.getElementById('tree-root');
 
-## 2. Organiserad Brottslighet & Nätverk
-### Sverige: Byggsektorn & Penningtvätt
-- **EBM: Tillslag & Åtal (2024/2025)**
-  - [Pressmeddelande Tillslag](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
-  - [Pressmeddelande Åtal](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
-- **CASE: Södertörns tingsrätt (B 16726-24)**
-  - **Händelseförlopp**
-    - Systematisk struktur verksam sedan 2021
-    - Aktörer från Ryssland, Belarus, Ukraina, Baltikum
-    - Rubricering: *Grovt brott* (professionellt/organiserat)
-  - **Agerande i praktiken**
-    - *Fasadbolag:* Används som instrument, fiktiv bokföring.
-    - *Industriell skala:* 30-36 transaktioner/person, spritt över tid för att undvika "flaggor".
-    - *Rollfördelning:* Tydlig uppdelning (Huvudmän -> Operativa -> Målvakter).
-  - **Koppling till Ryska intressen**
-    - *Viktor Soloviev:* Rysk medborgare i kärnfunktion.
-    - *Språklig miljö:* Sluten ryskspråkig miljö (tolkbehov), tyder på extern aktör.
-    - *Syfte:* Kapitalflykt och kringgående av sanktioner.
-  - **Hybrid-indikatorer**
-    - *Uthållighet:* Verksamhet över lång tid.
-    - *Geografi:* Kluster i Bandhagen, Vårby, Farsta.
-    - *Centralstyrning:* Behov av hårda restriktioner i häktet.
-  - **Slutsats:** Gränsland mellan organiserad brottslighet och ekonomisk hybridkrigföring.
+function createNodeElement(nodeData) {
+  const nodeDiv = document.createElement('div');
+  nodeDiv.className = 'node';
+  if(!nodeData.children || nodeData.children.length === 0) nodeDiv.classList.add('leaf');
+  if(nodeData.isRoot) nodeDiv.classList.add('root');
 
-### Internationellt
-- **Europa (Europol)**
-  - SOCTA 2025: Ryska nätverk driver sabotage och påverkan
-- **Spanien (Maffiamål)**
-  - Operation Troika (Frikännande men intressant struktur)
-  - Operation Oligarch
-- **USA**
-  - OFAC Sanktioner mot "Thieves-in-law"
+  // Skapa innehållskortet
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'content';
+  if(nodeData.highlight) contentDiv.classList.add('highlight-box');
 
-## 3. Moskvapatriarkatet (Kyrkan)
-- **Struktur i Sverige**
-  - Helige Sergij av Radonezh (Stockholm)
-  - Etablering 1990-talet
-- **Hotbild & Påverkan**
-  - Säpo: Används som plattform för underrättelseinhämtning
-  - FOI: Religion som militärt verktyg
-- **Finansiering**
-  - Kopplingar till **Rosatom** (Statligt kärnkraftsbolag betalade kyrkobygge i Västerås)
-- **Närliggande bolag**
-  - [NC Nordic Control AB](#) (Bokföringsbrott 2021)
-  - [InstrumentElectronics AB](#) (GRU-misstankar i media)
+  // Titel-rad med toggle-knapp
+  const titleDiv = document.createElement('div');
+  titleDiv.className = 'title';
+  
+  // Lägg till +/- knapp om barn finns
+  if (nodeData.children && nodeData.children.length > 0) {
+    const toggleBtn = document.createElement('span');
+    toggleBtn.className = 'toggle-btn';
+    toggleBtn.innerText = '-'; // Startar utfälld
+    titleDiv.appendChild(toggleBtn);
+    
+    // Klick-event för att öppna/stänga
+    titleDiv.onclick = function(e) {
+        if(e.target.tagName === 'A') return; // Klicka inte om det är en länk
+        const childrenContainer = nodeDiv.querySelector('.children');
+        if(childrenContainer) {
+            const isHidden = childrenContainer.classList.toggle('hidden');
+            toggleBtn.innerText = isHidden ? '+' : '-';
+        }
+    };
+  }
 
-## 4. FOI-Listan: Ryskt ägande i Sv. Företag
-### Utvinning av mineral (B)
-- Kopy Goldfields AB (publ)
-- Krasny Gold Fields AB
-### Tillverkning (C)
-- Kubikenborg Aluminium AB (Deripaska/Vekselberg)
-- Sulzer Pumps Sweden AB (Vekselberg)
-- Eskaro Ukraine AB
-- Recore Industries AB
-- ARTBOARD Aktiebolag
-- Videre Rebus Coatings
-- Kristan Bygg AB
-### Energi/Vatten/Avfall (E)
-- GANSCA Deponi Aktiebolag
-### Byggverksamhet (F)
-- **STRABAG-koncernen (Deripaska)**
-  - STRABAG AB
-  - STRABAG Sverige AB
-  - STRABAG Rail AB
-  - STRABAG Projektutveckling AB
-  - NIMAB Entreprenad AB
-  - Züblin Scandinavia AB
-- **Övriga byggbolag**
-  - KV GROUP AB
-  - ATYX AB
-  - Beltrusbygg AB
-  - BMD GROUP AB
-  - Bärbalken 356 AB
-  - Elvins Bilexpert AB
-  - Fundamental Fastighetsservice
-  - Galaj Bygg AB
-  - Hellgrens Ventilation & Bygg
-  - Klinkersson&Kakelson AB
-  - Kvist Skandinavien AB
-  - NPN Bygg Sthlm AB
-  - NPP BYGG AB
-  - PSP Ventilation AB
-  - SAA BYGG AB
-  - SHS Gruppen AB
-  - Shtark Interiör AB
-  - Toseto Sweden AB
-  - VR ENTREPRENAD AB
-  - Sweden Bygg Kraft AB
-### Handel (G)
-- **Industri & Teknik**
-  - Nordic Water Holding AB (Vekselberg)
-  - Nordic Water Products AB
-  - Thermo Industri i Stockholm AB
-  - InstrumentElectronics i Stockholm AB
-  - Malmö Lumber Technology
-  - NC Nordic Control AB
-  - Steelmar Scandinavia AB
-- **Övrig handel**
-  - ATI Europe AB / ATI Nordic AB
-  - Baltresto AB
-  - Coffee Please Home AB
-  - Global Triangle AB
-  - WIRUD AB
-  - Woodrow Management AB
-  - CLEAN CAR PLUS AB
-  - GreenBjork AB
-  - KHJ Innovations AB
-  - R-G TRANSPORT AB
-  - Tasty America AB
-### Transport (H)
-- Cool Carriers AB
-- Sendify AB
-- Aveda flytt AB
-### Hotell & Restaurang (I)
-- Hotell Roslagen Nya AB
-- Evion Hotell & Restaurang AB
-- Slami AB
-### Info & Kommunikation (J)
-- **IT & System**
-  - IST Group AB / IST Sverige AB
-  - Reksoft AB
-  - RETN Nordic AB
-  - AmpTrack Technologies AB
-  - CMA Small Systems
-  - Highex AB
-  - Avionero AB
-  - deriStrat AB
-  - Gamersgate AB
-  - Ja Rocka Roll Studios
-  - NextCode AB
-- **Övriga**
-  - Alexey Kuznetsov AB
-  - Kabardin Media AB
-  - Limavi AB
-  - Max Logunov AB
-### Finans (K)
-- 4finance AB
-- 4spar Aktiebolag
-- RISE Capital AB
-- Tele2 Russia Holding AB (Likvidation/Konkurs)
-- Tele2 Russian Investments AB
-- Kubikenborg Aluminium i Sundsvall AB
-- Amitjugofem AB
-- Safetech International Holding
-- Stadsis AB
-- Teknicast Investment Group
-- UMWELTGREEN AB
-### Fastighetsverksamhet (L)
-- **Värmlands-klustret**
-  - Fastighets- och kapitalförvaltning i Värmland AB
-  - Solanz Skandinavien AB
-  - Kurlanda Gård AB
-  - Ellapac 11 AB
-  - Gayfullin Fastigheter AB
-- **Övriga**
-  - RISE Estate AB
-  - Tomten 2:179 AB
-  - Sigfridshäll i Växjö AB
-  - Lärandets Hus AB
-  - Rörvik Timber Höglandet AB
-  - Grand Arctic Sweden AB
-  - Resursbostäder i Spånga AB
-  - SFUP AB
-### Juridik, Ekonomi, Teknik (M)
-- Akersberg Development AB
-- CML Construction Services AB (Deripaska)
-- Eskaro Group AB
-- EVOPIPES RG AB
-- Meerwind AB
-- Rörvik Industri och Handel AB
-- PetroGrand AB
-- Petrosibir AB
-- STRABAG BRVZ AB
-- NCAB
-- Scandinavian M&T AB
-- The Barkas Collective AB
-### Uthyrning & Tjänster (N)
-- Voi Technologies (Minoritetspost)
-- Tui Sverige AB (Mordashov - engagemangsförändring)
-- GF Service och Installation AB
-- KRAG Solutions AB
-- The Books Sweden AB
-- ALLSERVICE AM AB
-- Hjälper SWE AB
-- Team77 Sweden AB
-### Utbildning (P)
-- Schoolido AB
-- Jasmine AB
-### Kultur & Nöje (R)
-- Questroom AB
-`;
+  // Text
+  const textSpan = document.createElement('span');
+  textSpan.innerText = nodeData.title;
+  titleDiv.appendChild(textSpan);
 
-// Initiera Markmap
-const transformer = new markmap.Transformer();
-const { root, features } = transformer.transform(rawData);
-const { styles, scripts } = transformer.getAssets();
+  // Länk
+  if (nodeData.link) {
+    const linkTag = document.createElement('a');
+    linkTag.href = nodeData.link;
+    linkTag.target = "_blank";
+    linkTag.innerText = "🔗 Länk";
+    titleDiv.appendChild(linkTag);
+  }
 
-// Ladda stilar och skript
-if (styles) markmap.loadCSS(styles);
-if (scripts) markmap.loadJS(scripts);
+  contentDiv.appendChild(titleDiv);
 
-// Skapa visualiseringen
-Markmap.create('#mindmap', {
-  autoFit: true,        // Passa in allt på skärmen vid start
-  duration: 500,        // Mjuk animation
-  colorFreezeLevel: 2,  // Färglägg grenar
-}, root);
+  // Info-text under titel
+  if (nodeData.info) {
+    const infoDiv = document.createElement('span');
+    infoDiv.className = 'info';
+    infoDiv.innerText = nodeData.info;
+    contentDiv.appendChild(infoDiv);
+  }
+
+  nodeDiv.appendChild(contentDiv);
+
+  // Skapa barn-container
+  if (nodeData.children && nodeData.children.length > 0) {
+    const childrenDiv = document.createElement('div');
+    childrenDiv.className = 'children';
+    
+    nodeData.children.forEach(child => {
+        childrenDiv.appendChild(createNodeElement(child));
+    });
+    
+    nodeDiv.appendChild(childrenDiv);
+  }
+
+  return nodeDiv;
+}
+
+// Initiera
+container.appendChild(createNodeElement(data));
+
+// --- FUNKTIONER ---
+
+function expandAll() {
+    document.querySelectorAll('.children').forEach(el => {
+        el.classList.remove('hidden');
+    });
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.innerText = '-');
+}
+
+function collapseAll() {
+    document.querySelectorAll('.children').forEach(el => {
+        el.classList.add('hidden');
+    });
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.innerText = '+');
+    // Behåll roten öppen
+    const rootChildren = document.querySelector('.root > .children');
+    if(rootChildren) {
+        rootChildren.classList.remove('hidden');
+        const rootBtn = document.querySelector('.root .toggle-btn');
+        if(rootBtn) rootBtn.innerText = '-';
+    }
+}
+
+// Enkel sökfunktion
+function filterTree() {
+    const term = document.getElementById('searchInput').value.toLowerCase();
+    const contents = document.querySelectorAll('.content');
+    
+    if (term === "") {
+        // Återställ
+        contents.forEach(c => {
+            c.style.display = "";
+            c.parentElement.style.display = "";
+        });
+        return;
+    }
+
+    contents.forEach(c => {
+        const text = c.innerText.toLowerCase();
+        const node = c.parentElement;
+        
+        if (text.includes(term)) {
+            node.style.display = "";
+            c.style.backgroundColor = "#fff3cd"; // Markera träff
+            // Visa alla föräldrar
+            let parent = node.parentElement;
+            while(parent && parent.classList.contains('children')) {
+                parent.classList.remove('hidden');
+                parent.style.display = "";
+                parent.parentElement.style.display = "";
+                // Uppdatera knapp
+                const btn = parent.parentElement.querySelector('.toggle-btn');
+                if(btn) btn.innerText = '-';
+                parent = parent.parentElement.parentElement;
+            }
+        } else {
+            node.style.display = "none";
+            c.style.backgroundColor = "";
+        }
+    });
+}
 
 </script>
 </body>

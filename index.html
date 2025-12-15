@@ -1,453 +1,268 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mindmap & Analys</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    html, body { height: 100%; margin: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; overflow: hidden; }
-    
-    /* Layout */
-    header { position: absolute; top: 0; left: 0; right: 0; height: 50px; display: flex; gap: 10px; align-items: center; padding: 0 15px; border-bottom: 1px solid #ddd; background: #fff; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    main { position: absolute; top: 51px; bottom: 0; left: 0; right: 0; display: flex; }
-    
-    /* Buttons */
-    button { padding: 8px 16px; border-radius: 6px; border: 1px solid #ccc; background: #f0f0f0; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
-    button:hover { background: #e0e0e0; }
-    button.active { background: #333; color: #fff; border-color: #333; }
-    
-    /* Tabs */
-    .tab-content { display: none; width: 100%; height: 100%; }
-    .tab-content.active { display: block; }
-
-    /* Mindmap Container */
-    #viz { width: 100%; height: 100%; background-color: #f9f9f9; cursor: grab; }
-    #viz:active { cursor: grabbing; }
-
-    /* D3 Nodes & Links */
-    .node circle { fill: #fff; stroke: #555; stroke-width: 2px; transition: all 0.3s; cursor: pointer; }
-    .node circle:hover { stroke: #007bff; stroke-width: 3px; }
-    .node--internal circle { fill: #555; }
-    .node--internal text { text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff; font-weight: bold; }
-    .node text { font: 14px sans-serif; fill: #333; cursor: pointer; }
-    .node text:hover { fill: #0056b3; text-decoration: underline; }
-    .link { fill: none; stroke: #ccc; stroke-width: 1.5px; opacity: 0.6; }
-
-    /* Table Styles */
-    .panel { display: flex; flex-direction: column; height: 100%; padding: 20px; box-sizing: border-box; overflow: hidden; background: #fff; }
-    .controls { display: flex; gap: 10px; margin-bottom: 15px; }
-    .controls input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    .table-container { flex: 1; overflow: auto; border: 1px solid #eee; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { position: sticky; top: 0; background: #f4f4f4; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; }
-    td { padding: 8px 10px; border-bottom: 1px solid #eee; }
-    tr:hover { background: #f9fcfd; }
-    .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; color: #fff; background: #999; }
-    .tag-K { background: #e67e22; } .tag-G { background: #27ae60; } .tag-F { background: #2980b9; }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rysk Intressesfär & Brottslighet - Interaktiv Karta</title>
+<style>
+  body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
+  svg { width: 100%; height: 100%; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"></script>
 </head>
 <body>
 
-<header>
-  <button id="btn-map" class="active" onclick="switchTab('map')">Mindmap (Visuell)</button>
-  <button id="btn-table" onclick="switchTab('table')">FOI-register (Lista)</button>
-  <span style="flex:1"></span>
-  <span style="font-size:12px; color:#666; margin-right:10px;">Scrolla för att zooma • Dra för att panorera • Klicka cirklar för att öppna/stänga</span>
-</header>
-
-<main>
-  <div id="tab-map" class="tab-content active">
-    <div id="viz"></div>
-  </div>
-
-  <div id="tab-table" class="tab-content">
-    <div class="panel">
-      <div class="controls">
-        <input type="text" id="searchBox" placeholder="Sök i registret (namn, SNI, ägare)..." onkeyup="filterTable()">
-        <span id="rowCount" style="align-self: center; color:#666; font-size:13px;"></span>
-      </div>
-      <div class="table-container">
-        <table id="foiTable">
-          <thead>
-            <tr>
-              <th width="50">Nr</th>
-              <th>Företag</th>
-              <th>Säte</th>
-              <th>SNI</th>
-              <th>Ägare / Info</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</main>
+<svg id="mindmap"></svg>
 
 <script>
-// --- DATA: MINDMAP (JSON STRUCTURE) ---
-// Detta är den strukturerade datan som bygger trädet.
-const treeData = {
-  "name": "Ryskt intresse & Org. brottslighet",
-  "children": [
-    {
-      "name": "1) Fastigheter & Mark (Norden)",
-      "children": [
-        {
-          "name": "Sverige",
-          "children": [
-            { "name": "FOI Kartläggning", "url": "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
-            { "name": "Säpo: 157 ryska medborgare / 247 fastigheter", "url": "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
-            { "name": "Case: Muskö (Marinbas)", "url": "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
-            { "name": "Case: Skärgårdstomter (Aftonbladet)", "url": "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
-            { "name": "Case: Vidja / Rymdanläggning", "url": "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
-            { "name": "Case: Rysk-ortodoxa kyrkan Västerås", "url": "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
-          ]
-        },
-        {
-          "name": "Finland",
-          "children": [
-            { "name": "Tillståndskrav (DefMin)", "url": "https://defmin.fi/en/" },
-            { "name": "Case: Airiston Helmi (Razzia/Dom)", "url": "https://yle.fi/a/7-10073103" },
-            { "name": "Beslag av ryska statliga tillgångar", "url": "https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/" }
-          ]
-        },
-        {
-          "name": "Norge",
-          "children": [
-            { "name": "Case: 'Russerhytter' (Bardufoss)", "url": "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" },
-            { "name": "Planerad förhandsprövning", "url": "https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked" }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "2) Org. Brottslighet & Domar",
-      "children": [
-        {
-          "name": "Sverige: Byggsektorn (EBM)",
-          "children": [
-            { "name": "EBM Tillslag (Sep 2024)", "url": "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
-            {
-              "name": "CASE: Södertörns tingsrätt (B 16726-24)",
-              "children": [
-                {
-                  "name": "Övergripande händelseförlopp",
-                  "children": [
-                    { "name": "Systematisk struktur sedan 2021" },
-                    { "name": "Aktörer: Ryssland, Belarus, Ukraina, Baltikum" },
-                    { "name": "Rubricering: Grovt brott (professionellt)" }
-                  ]
-                },
-                {
-                  "name": "Agerande i praktiken",
-                  "children": [
-                    { "name": "Bolag som fasader (fiktiv bokföring)" },
-                    { "name": "Industriell skala (30-36 transaktioner/person)" },
-                    { "name": "Tydlig rollfördelning (Huvudmän/Målvakter)" }
-                  ]
-                },
-                {
-                  "name": "Koppling till Ryska intressen",
-                  "children": [
-                    { "name": "Viktor Soloviev (Rysk medborgare i kärnroll)" },
-                    { "name": "Ryskspråkig sluten miljö (tolkbehov)" },
-                    { "name": "Undviker sanktioner / Kapitalflykt" }
-                  ]
-                },
-                {
-                  "name": "Hybridhot-indikatorer",
-                  "children": [
-                    { "name": "Uthållighet över tid (disciplin)" },
-                    { "name": "Geografiska kluster (Bandhagen, Vårby m.fl.)" },
-                    { "name": "Höga restriktioner (centralstyrning)" }
-                  ]
-                },
-                {
-                  "name": "Analys & Slutsats",
-                  "children": [
-                    { "name": "Internationell finansiell infrastruktur" },
-                    { "name": "Objektivt i linje med ryska statliga intressen" },
-                    { "name": "Gränsland: Kriminalitet <-> Hybridkrigföring" }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Internationellt",
-          "children": [
-            { "name": "Europol: SOCTA 2025", "url": "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
-            { "name": "Spanien: Op. Troika & Oligarch" },
-            { "name": "USA: OFAC Sanktioner" }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Moskvapatriarkatet",
-      "children": [
-        { "name": "Sverige: Helige Sergij (Sthlm)" },
-        { "name": "Kopplingar: Rosatom (Västerås kyrkfinansiering)" },
-        { "name": "Säpo: Plattform för påverkan" },
-        { "name": "Bolag: NC Nordic Control & InstrumentElectronics" }
-      ]
-    }
-  ]
-};
+// Här definierar vi all data i en struktur som inte kan gå sönder av kopiering
+const rawData = `
+# Ryskt fastighetsägande & Organiserad brottslighet
 
-// --- DATA: FOI REGISTER (ARRAY) ---
-const foiData = [
-  {id:1, name:"4finance AB", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko RU"},
-  {id:37, name:"Kopy Goldfields AB", loc:"Stockholm", sni:"B", info:"Hc Alliance Ltd Arsen Idrisov RU"},
-  {id:41, name:"Kubikenborg Aluminium AB", loc:"Sundsvall", sni:"C", info:"En+/Sual Partners (Deripaska/Vekselberg)"},
-  {id:51, name:"NIMAB Entreprenad AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:53, name:"Nordic Water Holding AB", loc:"Mölndal", sni:"G", info:"Tiwel Holding AG (Viktor Vekselberg)"},
-  {id:72, name:"STRABAG Sverige AB", loc:"Solna", sni:"F", info:"STRABAG SE (Oleg Deripaska)"},
-  {id:73, name:"Sulzer Pumps Sweden AB", loc:"Vadstena", sni:"C", info:"Sulzer AG/Renova (Viktor Vekselberg)"},
-  {id:88, name:"Voi Technologies", loc:"Stockholm", sni:"N", info:"PTC/ Alexander Eliseev RU (Minoritet)"},
-  {id:30, name:"InstrumentElectronics AB", loc:"Nacka", sni:"G", info:"Vladimir Kulemekov (Likvidation)"},
-  {id:49, name:"NC Nordic Control AB", loc:"Lidingö", sni:"G", info:"Pavel Gerasimov RU"},
-  {id:128, name:"VR ENTREPRENAD AB", loc:"Bålsta", sni:"F", info:"Victor Kersikov SE"},
-  // Lägg till fler rader här om du vill ha hela listan på 128 bolag
-  {id:999, name:"[Se fullständig lista i originalfilen]", loc:"-", sni:"-", info:"..."}
-];
+## 1. Fastigheter & Mark (Norden)
+### Sverige (Hotbild & Case)
+- **FOI: Kartläggning av ryska ekonomiska intressen**
+  - [Nyhetssida](https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html)
+  - [Rapportsammanfattning](https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE)
+  - [PDF-Rapport](https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf)
+- **Säpo & Omfattning**
+  - 157 ryska medborgare / 247 fastigheter
+  - [Källa: SvD](https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop)
+- **Case: Muskö (Marinbas)**
+  - Stanislav Aleshchenko / Sjötomt nära skyddsobjekt
+  - [Expressen (2025)](https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/)
+  - [Fokus](https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/)
+- **Case: Skärgårdstomter**
+  - "Ryskt nätverk köper tomter" (Aftonbladet)
+  - [Artikel](https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard)
+- **Case: Vidja / Rymdanläggning**
+  - Penningtvättsupplägg nära känslig infrastruktur
+  - [Dagens Industri](https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/)
+- **Case: Ryska kyrkan Västerås**
+  - Strategisk placering nära flygplats
+  - [Aftonbladet](https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna)
 
-// --- D3 MINDMAP LOGIC ---
-const width = window.innerWidth;
-const height = window.innerHeight;
+### Norden (Jämförelse)
+- **Finland**
+  - Tillståndskrav för köpare utanför EU
+  - Case: **Airiston Helmi** (Razzia, dom mot Melnikov)
+  - Beslag av ryska statliga tillgångar (Naftogaz-målet)
+- **Norge**
+  - Case: "Russerhytter" nära Bardufoss flygbas
+  - Planer på förhandsgodkännande vid köp
+- **Danmark**
+  - Strikt regelverk: Kräver hemvist/tillstånd för alla utlänningar
 
-// Create SVG container
-const svg = d3.select("#viz").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .call(d3.zoom().on("zoom", (event) => {
-       g.attr("transform", event.transform);
-    }))
-    .append("g")
-    .attr("transform", "translate(100, " + height / 2 + ")");
+## 2. Organiserad Brottslighet & Nätverk
+### Sverige: Byggsektorn & Penningtvätt
+- **EBM: Tillslag & Åtal (2024/2025)**
+  - [Pressmeddelande Tillslag](https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/)
+  - [Pressmeddelande Åtal](https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/)
+- **CASE: Södertörns tingsrätt (B 16726-24)**
+  - **Händelseförlopp**
+    - Systematisk struktur verksam sedan 2021
+    - Aktörer från Ryssland, Belarus, Ukraina, Baltikum
+    - Rubricering: *Grovt brott* (professionellt/organiserat)
+  - **Agerande i praktiken**
+    - *Fasadbolag:* Används som instrument, fiktiv bokföring.
+    - *Industriell skala:* 30-36 transaktioner/person, spritt över tid för att undvika "flaggor".
+    - *Rollfördelning:* Tydlig uppdelning (Huvudmän -> Operativa -> Målvakter).
+  - **Koppling till Ryska intressen**
+    - *Viktor Soloviev:* Rysk medborgare i kärnfunktion.
+    - *Språklig miljö:* Sluten ryskspråkig miljö (tolkbehov), tyder på extern aktör.
+    - *Syfte:* Kapitalflykt och kringgående av sanktioner.
+  - **Hybrid-indikatorer**
+    - *Uthållighet:* Verksamhet över lång tid.
+    - *Geografi:* Kluster i Bandhagen, Vårby, Farsta.
+    - *Centralstyrning:* Behov av hårda restriktioner i häktet.
+  - **Slutsats:** Gränsland mellan organiserad brottslighet och ekonomisk hybridkrigföring.
 
-const g = svg.append("g");
+### Internationellt
+- **Europa (Europol)**
+  - SOCTA 2025: Ryska nätverk driver sabotage och påverkan
+- **Spanien (Maffiamål)**
+  - Operation Troika (Frikännande men intressant struktur)
+  - Operation Oligarch
+- **USA**
+  - OFAC Sanktioner mot "Thieves-in-law"
 
-let i = 0,
-    duration = 500,
-    root;
+## 3. Moskvapatriarkatet (Kyrkan)
+- **Struktur i Sverige**
+  - Helige Sergij av Radonezh (Stockholm)
+  - Etablering 1990-talet
+- **Hotbild & Påverkan**
+  - Säpo: Används som plattform för underrättelseinhämtning
+  - FOI: Religion som militärt verktyg
+- **Finansiering**
+  - Kopplingar till **Rosatom** (Statligt kärnkraftsbolag betalade kyrkobygge i Västerås)
+- **Närliggande bolag**
+  - [NC Nordic Control AB](#) (Bokföringsbrott 2021)
+  - [InstrumentElectronics AB](#) (GRU-misstankar i media)
 
-// Declare a tree layout and assign the size
-const treemap = d3.tree().nodeSize([30, 250]); // [height-spacing, width-spacing]
+## 4. FOI-Listan: Ryskt ägande i Sv. Företag
+### Utvinning av mineral (B)
+- Kopy Goldfields AB (publ)
+- Krasny Gold Fields AB
+### Tillverkning (C)
+- Kubikenborg Aluminium AB (Deripaska/Vekselberg)
+- Sulzer Pumps Sweden AB (Vekselberg)
+- Eskaro Ukraine AB
+- Recore Industries AB
+- ARTBOARD Aktiebolag
+- Videre Rebus Coatings
+- Kristan Bygg AB
+### Energi/Vatten/Avfall (E)
+- GANSCA Deponi Aktiebolag
+### Byggverksamhet (F)
+- **STRABAG-koncernen (Deripaska)**
+  - STRABAG AB
+  - STRABAG Sverige AB
+  - STRABAG Rail AB
+  - STRABAG Projektutveckling AB
+  - NIMAB Entreprenad AB
+  - Züblin Scandinavia AB
+- **Övriga byggbolag**
+  - KV GROUP AB
+  - ATYX AB
+  - Beltrusbygg AB
+  - BMD GROUP AB
+  - Bärbalken 356 AB
+  - Elvins Bilexpert AB
+  - Fundamental Fastighetsservice
+  - Galaj Bygg AB
+  - Hellgrens Ventilation & Bygg
+  - Klinkersson&Kakelson AB
+  - Kvist Skandinavien AB
+  - NPN Bygg Sthlm AB
+  - NPP BYGG AB
+  - PSP Ventilation AB
+  - SAA BYGG AB
+  - SHS Gruppen AB
+  - Shtark Interiör AB
+  - Toseto Sweden AB
+  - VR ENTREPRENAD AB
+  - Sweden Bygg Kraft AB
+### Handel (G)
+- **Industri & Teknik**
+  - Nordic Water Holding AB (Vekselberg)
+  - Nordic Water Products AB
+  - Thermo Industri i Stockholm AB
+  - InstrumentElectronics i Stockholm AB
+  - Malmö Lumber Technology
+  - NC Nordic Control AB
+  - Steelmar Scandinavia AB
+- **Övrig handel**
+  - ATI Europe AB / ATI Nordic AB
+  - Baltresto AB
+  - Coffee Please Home AB
+  - Global Triangle AB
+  - WIRUD AB
+  - Woodrow Management AB
+  - CLEAN CAR PLUS AB
+  - GreenBjork AB
+  - KHJ Innovations AB
+  - R-G TRANSPORT AB
+  - Tasty America AB
+### Transport (H)
+- Cool Carriers AB
+- Sendify AB
+- Aveda flytt AB
+### Hotell & Restaurang (I)
+- Hotell Roslagen Nya AB
+- Evion Hotell & Restaurang AB
+- Slami AB
+### Info & Kommunikation (J)
+- **IT & System**
+  - IST Group AB / IST Sverige AB
+  - Reksoft AB
+  - RETN Nordic AB
+  - AmpTrack Technologies AB
+  - CMA Small Systems
+  - Highex AB
+  - Avionero AB
+  - deriStrat AB
+  - Gamersgate AB
+  - Ja Rocka Roll Studios
+  - NextCode AB
+- **Övriga**
+  - Alexey Kuznetsov AB
+  - Kabardin Media AB
+  - Limavi AB
+  - Max Logunov AB
+### Finans (K)
+- 4finance AB
+- 4spar Aktiebolag
+- RISE Capital AB
+- Tele2 Russia Holding AB (Likvidation/Konkurs)
+- Tele2 Russian Investments AB
+- Kubikenborg Aluminium i Sundsvall AB
+- Amitjugofem AB
+- Safetech International Holding
+- Stadsis AB
+- Teknicast Investment Group
+- UMWELTGREEN AB
+### Fastighetsverksamhet (L)
+- **Värmlands-klustret**
+  - Fastighets- och kapitalförvaltning i Värmland AB
+  - Solanz Skandinavien AB
+  - Kurlanda Gård AB
+  - Ellapac 11 AB
+  - Gayfullin Fastigheter AB
+- **Övriga**
+  - RISE Estate AB
+  - Tomten 2:179 AB
+  - Sigfridshäll i Växjö AB
+  - Lärandets Hus AB
+  - Rörvik Timber Höglandet AB
+  - Grand Arctic Sweden AB
+  - Resursbostäder i Spånga AB
+  - SFUP AB
+### Juridik, Ekonomi, Teknik (M)
+- Akersberg Development AB
+- CML Construction Services AB (Deripaska)
+- Eskaro Group AB
+- EVOPIPES RG AB
+- Meerwind AB
+- Rörvik Industri och Handel AB
+- PetroGrand AB
+- Petrosibir AB
+- STRABAG BRVZ AB
+- NCAB
+- Scandinavian M&T AB
+- The Barkas Collective AB
+### Uthyrning & Tjänster (N)
+- Voi Technologies (Minoritetspost)
+- Tui Sverige AB (Mordashov - engagemangsförändring)
+- GF Service och Installation AB
+- KRAG Solutions AB
+- The Books Sweden AB
+- ALLSERVICE AM AB
+- Hjälper SWE AB
+- Team77 Sweden AB
+### Utbildning (P)
+- Schoolido AB
+- Jasmine AB
+### Kultur & Nöje (R)
+- Questroom AB
+`;
 
-// Assign parent, children, height, depth
-root = d3.hierarchy(treeData, function(d) { return d.children; });
-root.x0 = 0;
-root.y0 = 0;
+// Initiera Markmap
+const transformer = new markmap.Transformer();
+const { root, features } = transformer.transform(rawData);
+const { styles, scripts } = transformer.getAssets();
 
-// Collapse after the second level
-root.children.forEach(collapse);
+// Ladda stilar och skript
+if (styles) markmap.loadCSS(styles);
+if (scripts) markmap.loadJS(scripts);
 
-update(root);
-
-function collapse(d) {
-  if(d.children) {
-    d._children = d.children;
-    d._children.forEach(collapse);
-    d.children = null;
-  }
-}
-
-function update(source) {
-  // Assign the x and y position for the nodes
-  const treeData = treemap(root);
-
-  // Compute the new tree layout
-  const nodes = treeData.descendants(),
-        links = treeData.descendants().slice(1);
-
-  // Normalize for fixed-depth
-  nodes.forEach(function(d){ d.y = d.depth * 280}); // Horizontal spacing
-
-  // ****************** Nodes section ******************
-
-  // Update the nodes...
-  const node = g.selectAll('g.node')
-      .data(nodes, function(d) {return d.id || (d.id = ++i); });
-
-  // Enter any new modes at the parent's previous position.
-  const nodeEnter = node.enter().append('g')
-      .attr('class', 'node')
-      .attr("transform", function(d) {
-        return "translate(" + source.y0 + "," + source.x0 + ")";
-    })
-    .on('click', click);
-
-  // Add Circle for the nodes
-  nodeEnter.append('circle')
-      .attr('class', 'node')
-      .attr('r', 1e-6)
-      .style("fill", function(d) {
-          return d._children ? "#lightsteelblue" : "#fff";
-      });
-
-  // Add labels for the nodes
-  nodeEnter.append('text')
-      .attr("dy", ".35em")
-      .attr("x", function(d) {
-          return d.children || d._children ? -13 : 13;
-      })
-      .attr("text-anchor", function(d) {
-          return d.children || d._children ? "end" : "start";
-      })
-      .text(function(d) { return d.data.name; })
-      .on("click", function(event, d) {
-          if (d.data.url) {
-              event.stopPropagation(); // Prevent folding when clicking link
-              window.open(d.data.url, '_blank');
-          }
-      });
-
-  // UPDATE
-  const nodeUpdate = nodeEnter.merge(node);
-
-  // Transition to the proper position for the node
-  nodeUpdate.transition()
-    .duration(duration)
-    .attr("transform", function(d) { 
-        return "translate(" + d.y + "," + d.x + ")";
-     });
-
-  // Update the node attributes and style
-  nodeUpdate.select('circle.node')
-    .attr('r', 6)
-    .style("fill", function(d) {
-        return d._children ? "#lightsteelblue" : "#fff";
-    })
-    .attr('cursor', 'pointer');
-
-  // Change text color if link exists
-  nodeUpdate.select('text')
-      .style("fill", d => d.data.url ? "#0066cc" : "black")
-      .style("font-weight", d => d.data.url ? "bold" : "normal");
-
-
-  // ****************** Links section ******************
-
-  // Update the links...
-  const link = g.selectAll('path.link')
-      .data(links, function(d) { return d.id; });
-
-  // Enter any new links at the parent's previous position.
-  const linkEnter = link.enter().insert('path', "g")
-      .attr("class", "link")
-      .attr('d', function(d){
-        const o = {x: source.x0, y: source.y0}
-        return diagonal(o, o)
-      });
-
-  // UPDATE
-  const linkUpdate = linkEnter.merge(link);
-
-  // Transition back to the parent element position
-  linkUpdate.transition()
-      .duration(duration)
-      .attr('d', function(d){ return diagonal(d, d.parent) });
-
-  // Remove any exiting links
-  const linkExit = link.exit().transition()
-      .duration(duration)
-      .attr('d', function(d) {
-        const o = {x: source.x, y: source.y}
-        return diagonal(o, o)
-      })
-      .remove();
-
-  // Store the old positions for transition.
-  nodes.forEach(function(d){
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
-
-  // Remove exiting nodes
-  const nodeExit = node.exit().transition()
-      .duration(duration)
-      .attr("transform", function(d) {
-          return "translate(" + source.y + "," + source.x + ")";
-      })
-      .remove();
-
-  nodeExit.select('circle')
-    .attr('r', 1e-6);
-
-  nodeExit.select('text')
-    .style('fill-opacity', 1e-6);
-
-  // Creates a curved (diagonal) path from parent to the child nodes
-  function diagonal(s, d) {
-    return `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`;
-  }
-
-  // Toggle children on click.
-  function click(event, d) {
-    if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
-      }
-    update(d);
-  }
-}
-
-// --- TABLE LOGIC ---
-const tableBody = document.getElementById('tableBody');
-const rowCount = document.getElementById('rowCount');
-
-function renderTable(data) {
-  tableBody.innerHTML = "";
-  data.forEach(item => {
-    let tagClass = "";
-    if(item.sni.startsWith("K")) tagClass = "tag-K";
-    else if(item.sni.startsWith("G")) tagClass = "tag-G";
-    else if(item.sni.startsWith("F")) tagClass = "tag-F";
-    
-    const row = `<tr>
-      <td class="num">${item.id}</td>
-      <td><b>${item.name}</b></td>
-      <td>${item.loc}</td>
-      <td><span class="tag ${tagClass}">${item.sni}</span></td>
-      <td>${item.info}</td>
-    </tr>`;
-    tableBody.insertAdjacentHTML('beforeend', row);
-  });
-  rowCount.innerText = data.length + " rader";
-}
-
-function filterTable() {
-  const q = document.getElementById('searchBox').value.toLowerCase();
-  const filtered = foiData.filter(d => 
-    d.name.toLowerCase().includes(q) || 
-    d.info.toLowerCase().includes(q) ||
-    d.sni.toLowerCase().includes(q)
-  );
-  renderTable(filtered);
-}
-
-// Initialize Table
-renderTable(foiData);
-
-// --- TAB SWITCHING ---
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('button').forEach(el => el.classList.remove('active'));
-  
-  document.getElementById('tab-' + tabId).classList.add('active');
-  document.getElementById('btn-' + tabId).classList.add('active');
-}
+// Skapa visualiseringen
+Markmap.create('#mindmap', {
+  autoFit: true,        // Passa in allt på skärmen vid start
+  duration: 500,        // Mjuk animation
+  colorFreezeLevel: 2,  // Färglägg grenar
+}, root);
 
 </script>
 </body>

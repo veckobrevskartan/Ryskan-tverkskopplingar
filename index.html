@@ -4,46 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rysk Intressesfär & FOI-register</title>
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
   <style>
     /* --- LAYOUT & BAS --- */
     body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 10; }
+    header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 20; }
     h1 { margin: 0; font-size: 18px; color: #2c3e50; font-weight: 600; }
-    .header-info { font-size: 12px; color: #666; }
+    
+    /* Knappar i header */
+    .view-btn { padding: 6px 12px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; margin-left: 10px; }
+    .view-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+    .view-btn:hover:not(.active) { background: #eee; }
 
     /* --- HUVUDCONTAINER (SPLIT VIEW) --- */
-    #main-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 50px); }
+    #main-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 50px); position: relative; }
     
-    /* VÄNSTER: MINDMAP */
-    #tree-panel { flex: 2; overflow-y: auto; padding: 20px; background: #f8f9fa; border-right: 1px solid #ddd; min-width: 300px; }
+    /* VÄNSTER: VY-CONTAINER (Mindmap + Karta) */
+    #left-panel { flex: 2; position: relative; border-right: 1px solid #ddd; min-width: 300px; display: flex; flex-direction: column; }
     
+    /* Vyer */
+    .view-section { flex: 1; display: none; width: 100%; height: 100%; overflow: hidden; }
+    .view-section.active { display: block; }
+    
+    /* Mindmap Scroll */
+    #tree-container { overflow-y: auto; padding: 20px; background: #f8f9fa; height: 100%; box-sizing: border-box; }
+
+    /* Karta */
+    #map-container { width: 100%; height: 100%; background: #e5e9ec; }
+
     /* HÖGER: FOI LISTA */
-    #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); }
+    #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 15; }
 
     /* --- TRÄD-STRUKTUR CSS --- */
     .tree { margin-left: 10px; }
     .node { position: relative; padding-left: 20px; margin: 8px 0; }
     .node::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; border-left: 2px solid #ccc; }
-    .node:last-child::before { height: 16px; } /* Sluta linjen snyggt */
+    .node:last-child::before { height: 16px; } 
     
     .content { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; transition: all 0.2s; }
     .content::before { content: ''; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 2px solid #ccc; }
     .content:hover { border-color: #aaa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-    /* Root node styling */
     .node.root > .content { background: #2c3e50; color: #fff; font-size: 16px; font-weight: bold; border: none; }
     .node.root > .content .info { color: #ccc; }
-    
-    /* Highlight box (för analysen) */
     .highlight-box { background-color: #fff8e1; border-left: 4px solid #f39c12; }
 
     .title { font-weight: 600; font-size: 14px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .info { display: block; font-size: 12px; color: #666; margin-top: 3px; line-height: 1.4; }
     .link { color: #0066cc; text-decoration: none; font-size: 11px; margin-left: 5px; font-weight: bold; background: #eef6fc; padding: 1px 4px; border-radius: 3px; }
-    .link:hover { text-decoration: underline; background: #dceefb; }
-
-    /* Toggle +/- knapp */
+    
     .toggle-btn { width: 14px; height: 14px; border-radius: 50%; background: #eee; border: 1px solid #ccc; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #555; margin-right: 5px; cursor: pointer; }
     .node.leaf .toggle-btn { visibility: hidden; }
     .children { margin-left: 20px; display: block; border-left: 1px dashed rgba(0,0,0,0.05); }
@@ -59,7 +71,7 @@
     th { position: sticky; top: 0; background: #fff; border-bottom: 2px solid #333; text-align: left; padding: 8px; z-index: 5; font-weight: 700; color: #333; }
     td { padding: 6px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
     tr:nth-child(even) { background-color: #f9f9f9; }
-    tr:hover { background-color: #eef6fc; }
+    tr:hover { background-color: #eef6fc; cursor: pointer; }
     
     .sni-tag { display: inline-block; padding: 1px 4px; border-radius: 3px; color: white; font-weight: bold; font-size: 10px; min-width: 15px; text-align: center; }
     .sni-F { background: #e67e22; } /* Bygg */
@@ -71,8 +83,9 @@
     /* RESPONSIVITET */
     @media (max-width: 768px) {
       #main-container { flex-direction: column; overflow-y: auto; }
-      #tree-panel, #foi-panel { flex: none; width: 100%; min-width: 0; overflow: visible; height: auto; }
-      #foi-panel { max-width: 100%; border-left: none; border-top: 2px solid #333; height: 500px; }
+      #left-panel, #foi-panel { flex: none; width: 100%; min-width: 0; }
+      #left-panel { height: 50vh; }
+      #foi-panel { height: 50vh; border-left: none; border-top: 2px solid #333; }
       body { overflow: auto; }
     }
   </style>
@@ -80,13 +93,29 @@
 <body>
 
 <header>
-  <h1>Analyskarta: Ryska Intressen & Brottslighet</h1>
-  <div class="header-info">Klicka på noder för att fälla ut/in • FOI-listan till höger</div>
+  <div style="display:flex; align-items:center;">
+    <h1>Ryska Intressen</h1>
+    <div style="margin-left:20px;">
+        <button class="view-btn active" onclick="setView('tree')">Mindmap (Analys)</button>
+        <button class="view-btn" onclick="setView('map')">Karta (Heatmap)</button>
+    </div>
+  </div>
+  <div style="font-size:12px; color:#666;">Totalt 128 bolag i registret</div>
 </header>
 
 <div id="main-container">
-  <div id="tree-panel">
-    <div id="tree-root" class="tree"></div>
+  <div id="left-panel">
+    
+    <div id="view-tree" class="view-section active">
+        <div id="tree-container">
+            <div id="tree-root" class="tree"></div>
+        </div>
+    </div>
+
+    <div id="view-map" class="view-section">
+        <div id="map-container"></div>
+    </div>
+
   </div>
 
   <div id="foi-panel">
@@ -112,16 +141,17 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 <script>
 // ==========================================
-// 1. DATA: TRÄDSTRUKTUR (MINDMAP)
+// 1. DATA: TRÄDSTRUKTUR (ANALYS)
 // ==========================================
 const treeData = {
   title: "Ryskt Fastighetsägande & Org. Brottslighet",
-  info: "Översikt av kopplingar, fastigheter och nätverk i Norden.",
+  info: "Klicka på noder för att se detaljer.",
   isRoot: true,
   children: [
-    // --- GREN 1: FASTIGHETER ---
     {
       title: "1. Fastigheter & Mark (Norden)",
       children: [
@@ -129,7 +159,7 @@ const treeData = {
           title: "Sverige",
           children: [
             { title: "FOI Kartläggning", info: "Ryska ekonomiska intressen.", link: "https://www.foi.se/rapportsammanfattning?reportNo=FOI-R--5377--SE" },
-            { title: "Säpo", info: "157 ryska medborgare / 247 fastigheter identifierade som risk.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
+            { title: "Säpo", info: "157 ryska medborgare / 247 fastigheter identifierade.", link: "https://www.svd.se/a/9zqnX9/sapo-vill-kunna-stoppa-fientliga-fastighetskop" },
             { title: "CASE: Muskö (Marinbas)", info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", link: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
             { title: "CASE: Skärgårdstomter", info: "Ryskt nätverk köper tomter (Aftonbladet).", link: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
             { title: "CASE: Vidja / Rymdanläggning", info: "Penningtvättsupplägg nära Swedish Space Corp.", link: "https://www.di.se/nyheter/penningtvattare-kopte-hus-vid-svensk-rymdanlaggning/" },
@@ -139,21 +169,19 @@ const treeData = {
         {
           title: "Finland",
           children: [
-            { title: "Lagstiftning", info: "Krav på tillstånd för icke-EU köpare (Försvarsministeriet)." },
+            { title: "Lagstiftning", info: "Krav på tillstånd för icke-EU köpare." },
             { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar 2025. Pavel Melnikov.", link: "https://yle.fi/a/7-10073103" },
             { title: "Beslag", info: "Ryska statliga tillgångar frysta (Naftogaz-målet)." }
           ]
         },
         {
-          title: "Norge & Danmark",
+          title: "Norge",
           children: [
-            { title: "Norge: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" },
-            { title: "Danmark", info: "Striktare regler kring hemvist för köp." }
+            { title: "Norge: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", link: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }
           ]
         }
       ]
     },
-    // --- GREN 2: BROTTSLIGHET (MED DJUPANALYS) ---
     {
       title: "2. Org. Brottslighet & Domar",
       children: [
@@ -209,21 +237,19 @@ const treeData = {
           title: "Internationellt",
           children: [
             { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage.", link: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" },
-            { title: "Spanien", info: "Operation Troika & Oligarch." },
-            { title: "USA", info: "OFAC-sanktioner (Thieves-in-law)." }
+            { title: "Spanien", info: "Operation Troika & Oligarch." }
           ]
         }
       ]
     },
-    // --- GREN 3: KYRKAN ---
     {
       title: "3. Moskvapatriarkatet",
       children: [
         { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform." },
         { title: "Västerås & Rosatom", info: "Uppgifter om att Rosatom finansierade kyrkbygget i Västerås." },
         { title: "Kopplade Bolag", children: [
-            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns i FOI-listan." },
-            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar i media." }
+            { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021)." },
+            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar." }
         ]}
       ]
     }
@@ -231,166 +257,216 @@ const treeData = {
 };
 
 // ==========================================
-// 2. DATA: FOI-REGISTER (HELA LISTAN - 128 BOLAG)
+// 2. DATA: FOI-REGISTER (KOMPLETT 1-128)
 // ==========================================
-// Jag har genererat hela listan baserat på din första prompt.
 const foiList = [
-  // FINANS (K)
-  {id:1, name:"4finance AB", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko RU"},
-  {id:2, name:"4spar Aktiebolag", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko RU"},
-  {id:5, name:"Amitjugofem AB", loc:"Stockholm", sni:"K", info:"Hydrys Investments Mikhail Prokhorov"},
-  {id:40, name:"Kubikenborg Al. i Sundsvall", loc:"Sundsvall", sni:"K", info:"En+/Sual (Deripaska/Vekselberg)"},
-  {id:61, name:"RISE Capital AB", loc:"Stockholm", sni:"K", info:"Igor Snegurov RU"},
-  {id:63, name:"Safetech International Holding", loc:"Stockholm", sni:"K", info:"Indigo Capital Petr Zhukov"},
-  {id:65, name:"Stadsis AB", loc:"Malmö", sni:"K", info:"Citadel Ltd Vagif Aliev"},
-  {id:75, name:"Teknicast Investment Group", loc:"Malmö", sni:"K", info:"Leonid Kiryakov RU"},
-  {id:76, name:"Tele2 Russia Holding AB", loc:"Kista", sni:"K", info:"VTB Bank Andrej Kostin RU"},
-  {id:77, name:"Tele2 Russian Investments", loc:"Stockholm", sni:"K", info:"VTB Bank Andrej Kostin RU"},
-  {id:80, name:"UMWELTGREEN AB", loc:"Stockholm", sni:"K", info:"Medinilla Holding Sergey Sokolov"},
-  
-  // GRUVOR (B)
-  {id:37, name:"Kopy Goldfields AB (publ)", loc:"Stockholm", sni:"B", info:"Hc Alliance Ltd Arsen Idrisov"},
-  {id:38, name:"Krasny Gold Fields AB", loc:"Stockholm", sni:"B", info:"Hc Alliance Ltd Arsen Idrisov"},
-
-  // TILLVERKNING (C)
-  {id:18, name:"Eskaro Ukraine AB", loc:"Göteborg", sni:"C", info:"Lassier Engineering Igor Chumakov"},
-  {id:41, name:"Kubikenborg Aluminium AB", loc:"Sundsvall", sni:"C", info:"En+/Sual (Deripaska/Vekselberg)"},
-  {id:57, name:"Recore Industries AB", loc:"Timrå", sni:"C", info:"Dimitry Zaytsev RU"},
-  {id:58, name:"ARTBOARD Aktiebolag", loc:"Timrå", sni:"C", info:"Recore / Dimitry Zaytsev RU"},
-  {id:73, name:"Sulzer Pumps Sweden AB", loc:"Vadstena", sni:"C", info:"Sulzer AG/Renova (Vekselberg)"},
-  {id:81, name:"Videre Rebus Coatings", loc:"Stockholm", sni:"C", info:"Nina Rodionova RU"},
-  {id:108, name:"Kristan Bygg AB", loc:"Hjärtum", sni:"C", info:"Kristina Solestrand"},
-
-  // BYGG (F) - Största gruppen
-  {id:43, name:"KV GROUP AB", loc:"Långshyttan", sni:"F", info:"Georgijs Kascejevs LV"},
-  {id:50, name:"Nimab Anläggning AB", loc:"Sjöbo", sni:"F", info:"Oleg Deripaska (Likviderat)"},
-  {id:51, name:"NIMAB Entreprenad AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:52, name:"Nimab Support AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:67, name:"STRABAG AB", loc:"Örebro", sni:"F", info:"STRABAG SE (Oleg Deripaska)"},
-  {id:68, name:"STRABAG Projektutveckling", loc:"Solna", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:69, name:"Vasagatan Op6 Holding AB", loc:"Örebro", sni:"F", info:"Oleg Deripaska"},
-  {id:71, name:"STRABAG Rail AB", loc:"Örebro", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:72, name:"STRABAG Sverige AB", loc:"Solna", sni:"F", info:"STRABAG (Oleg Deripaska)"},
-  {id:74, name:"Sweden Bygg Kraft AB", loc:"Hägersten", sni:"F", info:"Iman Sebieva RU"},
-  {id:84, name:"Züblin Scandinavia AB", loc:"Solna", sni:"F", info:"Züblin Spez (Oleg Deripaska)"},
-  {id:91, name:"ATYX AB", loc:"Stöde", sni:"F", info:"Alexey Molokov SE"},
-  {id:93, name:"Beltrusbygg AB", loc:"Uttran", sni:"F", info:"Nikolay Korzh SE"},
-  {id:94, name:"BMD GROUP AB", loc:"Tyresö", sni:"F", info:"Elena Kopteva SE"},
-  {id:95, name:"Bärbalken 356 AB", loc:"Järfälla", sni:"F", info:"Bashir Motaliev SE"},
-  {id:97, name:"Elvins Bilexpert AB", loc:"Skogås", sni:"F", info:"Elvin Nagizade SE"},
-  {id:98, name:"Fundamental Fastighetsservice", loc:"Enskede", sni:"F", info:"Elena Podolnaia SE"},
-  {id:99, name:"Galaj Bygg AB", loc:"Södertälje", sni:"F", info:"Lidia Galaeva SE"},
-  {id:102, name:"Hellgrens Ventilation & Bygg", loc:"Skarpnäck", sni:"F", info:"Sergey Matveev SE"},
-  {id:107, name:"Klinkersson&Kakelson AB", loc:"Nykvarn", sni:"F", info:"Bogdan Chuvachalov SE"},
-  {id:109, name:"Kvist Skandinavien AB", loc:"Vårby", sni:"F", info:"Veronika Kvist SE"},
-  {id:113, name:"NPN Bygg Sthlm AB", loc:"Bagarmossen", sni:"F", info:"Elena Kopteva SE"},
-  {id:114, name:"NPP BYGG AB", loc:"Partille", sni:"F", info:"Aslan Gogitidze SE"},
-  {id:115, name:"PSP Ventilation AB", loc:"Tyresö", sni:"F", info:"Andrei Kudrinskii SE"},
-  {id:119, name:"SAA BYGG AB", loc:"Gunnilse", sni:"F", info:"Alexey Sokolov SE"},
-  {id:122, name:"SHS Gruppen AB", loc:"Bromma", sni:"F", info:"Igor Boyko SE"},
-  {id:123, name:"Shtark Interiör AB", loc:"Arlandastad", sni:"F", info:"Svetlana Shtark SE"},
-  {id:127, name:"Toseto Sweden AB", loc:"Bromma", sni:"F", info:"Kirill Kuzhelko SE"},
-  {id:128, name:"VR ENTREPRENAD AB", loc:"Bålsta", sni:"F", info:"Victor Kersikov SE"},
-
-  // HANDEL (G)
-  {id:7, name:"ATI Europe AB", loc:"Stockholm", sni:"G", info:"Alengdar Ltd Grigory Shiyan"},
-  {id:8, name:"ATI Nordic AB", loc:"Stockholm", sni:"G", info:"Alengdar Ltd Grigory Shiyan"},
-  {id:12, name:"Baltresto AB", loc:"Kungälv", sni:"G", info:"Roman Lushnikov EE"},
-  {id:14, name:"Coffee Please Home AB", loc:"Norsborg", sni:"G", info:"Aleksey Kavtrev ES"},
-  {id:27, name:"Global Triangle AB", loc:"Bandhagen", sni:"G", info:"Nikolay Belov RU"},
-  {id:30, name:"InstrumentElectronics AB", loc:"Nacka", sni:"G", info:"Vladimir Kulemekov"},
-  {id:44, name:"Malmö Lumber Technology", loc:"Malmö", sni:"G", info:"Evgeny Superfin DE"},
-  {id:49, name:"NC Nordic Control AB", loc:"Lidingö", sni:"G", info:"Pavel Gerasimov RU"},
-  {id:53, name:"Nordic Water Holding AB", loc:"Mölndal", sni:"G", info:"Tiwel / Viktor Vekselberg"},
-  {id:54, name:"Nordic Water Products AB", loc:"Mölndal", sni:"G", info:"Tiwel / Viktor Vekselberg"},
-  {id:66, name:"Steelmar Scandinavia AB", loc:"Lidingö", sni:"G", info:"Alexandr Gazalov RU"},
-  {id:79, name:"Thermo Industri i Sthlm", loc:"Stockholm", sni:"G", info:"Vladimir Kilin RU"},
-  {id:82, name:"WIRUD AB", loc:"Tranås", sni:"G", info:"Elena Sotnikova RU"},
-  {id:83, name:"Woodrow Management AB", loc:"Enskede", sni:"G", info:"Sergey Tataurov RU"},
-  {id:96, name:"CLEAN CAR PLUS AB", loc:"Älvsjö", sni:"G", info:"Svetlana Mechouki SE"},
-  {id:101, name:"GreenBjork AB", loc:"Beddingestrand", sni:"G", info:"Sergei Dymov SE"},
-  {id:106, name:"KHJ Innovations AB", loc:"Stockholm", sni:"G", info:"Kristina Jakobsson SE"},
-  {id:118, name:"R-G TRANSPORT AB", loc:"Järfälla", sni:"G", info:"Artush Oganesyan SE"},
-  {id:124, name:"Tasty America AB", loc:"Johanneshov", sni:"G", info:"Irena Elanskaya SE"},
-
-  // TRANSPORT (H)
-  {id:15, name:"Cool Carriers AB", loc:"Stockholm", sni:"H", info:"Mikhail Ganyushin"},
-  {id:86, name:"Sendify AB", loc:"Göteborg", sni:"H", info:"Alexander Eliseev RU"},
-  {id:92, name:"Aveda flytt AB", loc:"Handen", sni:"H", info:"Zukhra Dzhalilova SE"},
-
-  // HOTELL (I)
-  {id:28, name:"Hotell Roslagen Nya AB", loc:"Norrtälje", sni:"I", info:"Yury Vasin RU"},
-  {id:29, name:"Evion Hotell & Restaurang", loc:"Göteborg", sni:"I", info:"Yury Vasin RU"},
-  {id:64, name:"Slami AB", loc:"Mariefred", sni:"I", info:"Viacheslav Mikhaylov"},
-
-  // IT & INFO (J)
+  {id:1, name:"4finance AB", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko"},
+  {id:2, name:"4spar Aktiebolag", loc:"Stockholm", sni:"K", info:"Tirona Ltd Vera Boiko"},
+  {id:3, name:"Akersberg Development AB", loc:"Stockholm", sni:"M", info:"Mikhail Mantrov"},
+  {id:4, name:"Tomten 2:179 AB", loc:"Stockholm", sni:"L", info:"Mikhail Mantrov"},
+  {id:5, name:"Amitjugofem AB", loc:"Stockholm", sni:"K", info:"Hydrys Inv. Mikhail Prokhorov"},
   {id:6, name:"AmpTrack Technologies AB", loc:"Örebro", sni:"J", info:"Vladimir Kalinin"},
-  {id:9, name:"CMA Small Systems AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan RU"},
-  {id:10, name:"Highex AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan RU"},
-  {id:11, name:"Avionero AB", loc:"Malmö", sni:"J", info:"Anton Tyulenev RU"},
-  {id:16, name:"deriStrat AB", loc:"Stockholm", sni:"J", info:"Alexey Zhigarev AT"},
-  {id:26, name:"Gamersgate AB", loc:"Stockholm", sni:"J", info:"Nikolay Trusov RU"},
-  {id:31, name:"IST Group AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby CH"},
-  {id:32, name:"IST Sverige AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby CH"},
-  {id:33, name:"Ja Rocka Roll Studios AB", loc:"Linköping", sni:"J", info:"Tatiana Sundeby CH"},
-  {id:59, name:"Reksoft AB", loc:"Upplands-Väsby", sni:"J", info:"Alexander Egorov RU"},
-  {id:60, name:"RETN Nordic AB", loc:"Solna", sni:"J", info:"Polina Maltseva AT"},
-  {id:89, name:"Alexey Kuznetsov AB", loc:"Stockholm", sni:"J", info:"Alexey Kuznetsov SE"},
-  {id:105, name:"Kabardin Media AB", loc:"Stockholm", sni:"J", info:"Tatiana Lytasova SE"},
-  {id:110, name:"Limavi AB", loc:"Skogås", sni:"J", info:"Andrey Kolpakov SE"},
-  {id:111, name:"Max Logunov AB", loc:"Kungsängen", sni:"J", info:"Maksim Logunov SE"},
-  {id:112, name:"NextCode AB", loc:"Stockholm", sni:"J", info:"Dmitry Vyalshin SE"},
-
-  // FASTIGHET (L)
-  {id:4, name:"Tomten 2:179 AB", loc:"Stockholm", sni:"L", info:"Mikhail Mantrov RU"},
-  {id:20, name:"Fastighetsförvalt. Värmland", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
-  {id:21, name:"Solanz Skandinavien AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
-  {id:22, name:"Kurlanda Gård Aktiebolag", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
-  {id:24, name:"Ellapac 11 AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
-  {id:25, name:"Gayfullin Fastigheter AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin RU"},
-  {id:35, name:"Sigfridshäll i Växjö AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby CH"},
-  {id:36, name:"Lärandets Hus AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby CH"},
-  {id:48, name:"Rörvik Timber Höglandet", loc:"Jönköping", sni:"L", info:"Natalia Törnqvist CH"},
-  {id:62, name:"RISE Estate AB", loc:"Stockholm", sni:"L", info:"Igor Snegurov RU"},
-  {id:100, name:"Grand Arctic Sweden AB", loc:"Älvsjö", sni:"L", info:"Iurii Kuzhelko SE"},
-  {id:117, name:"Resursbostäder Spånga AB", loc:"Spånga", sni:"L", info:"Dmitrij Simis SE"},
-  {id:121, name:"SFUP AB", loc:"Uppsala", sni:"L", info:"Konstantin Bryunin SE"},
-
-  // KONSULT/JURIDIK (M)
-  {id:3, name:"Akersberg Development AB", loc:"Stockholm", sni:"M", info:"Mikhail Mantrov RU"},
+  {id:7, name:"ATI Europe AB", loc:"Stockholm", sni:"G", info:"Grigory Shiyan"},
+  {id:8, name:"ATI Nordic AB", loc:"Stockholm", sni:"G", info:"Grigory Shiyan"},
+  {id:9, name:"CMA Small Systems AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan"},
+  {id:10, name:"Highex AB", loc:"Stockholm", sni:"J", info:"Grigory Shiyan"},
+  {id:11, name:"Avionero AB", loc:"Malmö", sni:"J", info:"Anton Tyulenev"},
+  {id:12, name:"Baltresto AB", loc:"Kungälv", sni:"G", info:"Roman Lushnikov"},
   {id:13, name:"CML Construction Services", loc:"Solna", sni:"M", info:"Oleg Deripaska"},
-  {id:17, name:"Eskaro Group AB", loc:"Göteborg", sni:"M", info:"Igor Chumakov EE"},
-  {id:19, name:"EVOPIPES RG AB", loc:"Ljungby", sni:"M", info:"Miron Gorilovskiy RU"},
-  {id:45, name:"Meerwind AB", loc:"Helsingborg", sni:"M", info:"Natalia Törnqvist CH"},
-  {id:46, name:"Rörvik Industri och Handel", loc:"Jönköping", sni:"M", info:"Natalia Törnqvist CH"},
-  {id:47, name:"Rörvik Swedfore AB", loc:"Stockaryd", sni:"M", info:"Natalia Törnqvist CH"},
-  {id:55, name:"PetroGrand AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov ES"},
-  {id:56, name:"Petrosibir AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov ES"},
-  {id:70, name:"STRABAG BRVZ AB", loc:"Örebro", sni:"M", info:"Oleg Deripaska"},
-  {id:85, name:"NCAB Group", loc:"Sundbyberg", sni:"M", info:"Vladimir Makarov RU"},
-  {id:120, name:"Scandinavian M&T AB", loc:"Uppsala", sni:"M", info:"Konstantin Bryunin SE"},
-  {id:126, name:"The Barkas Collective AB", loc:"Stockholm", sni:"M", info:"Vitaly Poluzhnikov"},
-
-  // TJÄNSTER (N)
-  {id:23, name:"GF Service och Installation", loc:"Kristinehamn", sni:"N", info:"Rais Gayfullin RU"},
-  {id:39, name:"KRAG Solutions AB", loc:"Stockholm", sni:"N", info:"Mikhail Peretyatko LV"},
-  {id:78, name:"The Books Sweden AB", loc:"Enskede", sni:"N", info:"Ekaterina Maliushenkova"},
-  {id:87, name:"Tui Sverige AB", loc:"Stockholm", sni:"N", info:"Alexei Mordashov (Severgroup)"},
-  {id:88, name:"Voi Technologies", loc:"Stockholm", sni:"N", info:"Alexander Eliseev (Minoritet)"},
-  {id:90, name:"ALLSERVICE AM AB", loc:"Upplands Väsby", sni:"N", info:"Alan Mamiev SE"},
-  {id:103, name:"Hjälper SWE AB", loc:"Farsta", sni:"N", info:"Konstantin Kantor SE"},
-  {id:125, name:"Team77 Sweden AB", loc:"Segeltorp", sni:"N", info:"Nikolay Korzh SE"},
-
-  // ÖVRIGT (E, P, R)
+  {id:14, name:"Coffee Please Home AB", loc:"Norsborg", sni:"G", info:"Aleksey Kavtrev"},
+  {id:15, name:"Cool Carriers AB", loc:"Stockholm", sni:"H", info:"Mikhail Ganyushin"},
+  {id:16, name:"deriStrat AB", loc:"Stockholm", sni:"J", info:"Alexey Zhigarev"},
+  {id:17, name:"Eskaro Group AB", loc:"Göteborg", sni:"M", info:"Igor Chumakov"},
+  {id:18, name:"Eskaro Ukraine AB", loc:"Göteborg", sni:"C", info:"Igor Chumakov"},
+  {id:19, name:"EVOPIPES RG AB", loc:"Ljungby", sni:"M", info:"Miron Gorilovskiy"},
+  {id:20, name:"Fastighetsförv. Värmland", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin"},
+  {id:21, name:"Solanz Skandinavien AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin"},
+  {id:22, name:"Kurlanda Gård Aktiebolag", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin"},
+  {id:23, name:"GF Service och Installation", loc:"Kristinehamn", sni:"N", info:"Rais Gayfullin"},
+  {id:24, name:"Ellapac 11 AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin"},
+  {id:25, name:"Gayfullin Fastigheter AB", loc:"Kristinehamn", sni:"L", info:"Rais Gayfullin"},
+  {id:26, name:"Gamersgate AB", loc:"Stockholm", sni:"J", info:"Nikolay Trusov"},
+  {id:27, name:"Global Triangle AB", loc:"Bandhagen", sni:"G", info:"Nikolay Belov"},
+  {id:28, name:"Hotell Roslagen Nya AB", loc:"Norrtälje", sni:"I", info:"Yury Vasin"},
+  {id:29, name:"Evion Hotell & Restaurang", loc:"Göteborg", sni:"I", info:"Yury Vasin"},
+  {id:30, name:"InstrumentElectronics AB", loc:"Nacka", sni:"G", info:"Vladimir Kulemekov"},
+  {id:31, name:"IST Group AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby"},
+  {id:32, name:"IST Sverige AB", loc:"Växjö", sni:"J", info:"Tatiana Sundeby"},
+  {id:33, name:"Ja Rocka Roll Studios AB", loc:"Linköping", sni:"J", info:"Tatiana Sundeby"},
+  {id:34, name:"Schoolido AB", loc:"Nacka", sni:"P", info:"Tatiana Sundeby"},
+  {id:35, name:"Sigfridshäll i Växjö AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby"},
+  {id:36, name:"Lärandets Hus AB", loc:"Växjö", sni:"L", info:"Tatiana Sundeby"},
+  {id:37, name:"Kopy Goldfields AB (publ)", loc:"Stockholm", sni:"B", info:"Arsen Idrisov"},
+  {id:38, name:"Krasny Gold Fields AB", loc:"Stockholm", sni:"B", info:"Arsen Idrisov"},
+  {id:39, name:"KRAG Solutions AB", loc:"Stockholm", sni:"N", info:"Mikhail Peretyatko"},
+  {id:40, name:"Kubikenborg Al. Sundsvall", loc:"Sundsvall", sni:"K", info:"En+/Sual (Deripaska)"},
+  {id:41, name:"Kubikenborg Aluminium AB", loc:"Sundsvall", sni:"C", info:"En+/Sual (Deripaska)"},
   {id:42, name:"GANSCA Deponi Aktiebolag", loc:"Sundsvall", sni:"E", info:"En+/Sual (Deripaska)"},
-  {id:34, name:"Schoolido AB", loc:"Nacka", sni:"P", info:"Tatiana Sundeby CH"},
-  {id:104, name:"Jasmine AB", loc:"Gävle", sni:"P", info:"Dzhennet Abasova SE"},
-  {id:116, name:"Questroom AB", loc:"Åkersberga", sni:"R", info:"Grigory Koshmak SE"}
+  {id:43, name:"KV GROUP AB", loc:"Långshyttan", sni:"F", info:"Georgijs Kascejevs"},
+  {id:44, name:"Malmö Lumber Technology", loc:"Malmö", sni:"G", info:"Evgeny Superfin"},
+  {id:45, name:"Meerwind AB", loc:"Helsingborg", sni:"M", info:"Natalia Törnqvist"},
+  {id:46, name:"Rörvik Industri och Handel", loc:"Jönköping", sni:"M", info:"Natalia Törnqvist"},
+  {id:47, name:"Rörvik Swedfore AB", loc:"Stockaryd", sni:"M", info:"Natalia Törnqvist"},
+  {id:48, name:"Rörvik Timber Höglandet", loc:"Jönköping", sni:"L", info:"Natalia Törnqvist"},
+  {id:49, name:"NC Nordic Control AB", loc:"Lidingö", sni:"G", info:"Pavel Gerasimov"},
+  {id:50, name:"Nimab Anläggning AB", loc:"Sjöbo", sni:"F", info:"Oleg Deripaska"},
+  {id:51, name:"NIMAB Entreprenad AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:52, name:"Nimab Support AB", loc:"Sjöbo", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:53, name:"Nordic Water Holding AB", loc:"Mölndal", sni:"G", info:"Viktor Vekselberg"},
+  {id:54, name:"Nordic Water Products AB", loc:"Mölndal", sni:"G", info:"Viktor Vekselberg"},
+  {id:55, name:"PetroGrand AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov"},
+  {id:56, name:"Petrosibir AB", loc:"Stockholm", sni:"M", info:"Maxim Korobov"},
+  {id:57, name:"Recore Industries AB", loc:"Timrå", sni:"C", info:"Dimitry Zaytsev"},
+  {id:58, name:"ARTBOARD Aktiebolag", loc:"Timrå", sni:"C", info:"Recore / Zaytsev"},
+  {id:59, name:"Reksoft AB", loc:"Upplands-Väsby", sni:"J", info:"Alexander Egorov"},
+  {id:60, name:"RETN Nordic AB", loc:"Solna", sni:"J", info:"Polina Maltseva"},
+  {id:61, name:"RISE Capital AB", loc:"Stockholm", sni:"K", info:"Igor Snegurov"},
+  {id:62, name:"RISE Estate AB", loc:"Stockholm", sni:"L", info:"Igor Snegurov"},
+  {id:63, name:"Safetech Int. Holding", loc:"Stockholm", sni:"K", info:"Petr Zhukov"},
+  {id:64, name:"Slami AB", loc:"Mariefred", sni:"I", info:"Viacheslav Mikhaylov"},
+  {id:65, name:"Stadsis AB", loc:"Malmö", sni:"K", info:"Vagif Aliev"},
+  {id:66, name:"Steelmar Scandinavia AB", loc:"Lidingö", sni:"G", info:"Alexandr Gazalov"},
+  {id:67, name:"STRABAG AB", loc:"Örebro", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:68, name:"STRABAG Projektutveckling", loc:"Solna", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:69, name:"Vasagatan Op6 Holding AB", loc:"Örebro", sni:"F", info:"Oleg Deripaska"},
+  {id:70, name:"STRABAG BRVZ AB", loc:"Örebro", sni:"M", info:"Oleg Deripaska"},
+  {id:71, name:"STRABAG Rail AB", loc:"Örebro", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:72, name:"STRABAG Sverige AB", loc:"Solna", sni:"F", info:"STRABAG (Deripaska)"},
+  {id:73, name:"Sulzer Pumps Sweden AB", loc:"Vadstena", sni:"C", info:"Sulzer (Vekselberg)"},
+  {id:74, name:"Sweden Bygg Kraft AB", loc:"Hägersten", sni:"F", info:"Iman Sebieva"},
+  {id:75, name:"Teknicast Investment Group", loc:"Malmö", sni:"K", info:"Leonid Kiryakov"},
+  {id:76, name:"Tele2 Russia Holding AB", loc:"Kista", sni:"K", info:"VTB Bank"},
+  {id:77, name:"Tele2 Russian Investments", loc:"Stockholm", sni:"K", info:"VTB Bank"},
+  {id:78, name:"The Books Sweden AB", loc:"Enskede", sni:"N", info:"Ekaterina Maliushenkova"},
+  {id:79, name:"Thermo Industri i Sthlm", loc:"Stockholm", sni:"G", info:"Vladimir Kilin"},
+  {id:80, name:"UMWELTGREEN AB", loc:"Stockholm", sni:"K", info:"Sergey Sokolov"},
+  {id:81, name:"Videre Rebus Coatings", loc:"Stockholm", sni:"C", info:"Nina Rodionova"},
+  {id:82, name:"WIRUD AB", loc:"Tranås", sni:"G", info:"Elena Sotnikova"},
+  {id:83, name:"Woodrow Management AB", loc:"Enskede", sni:"G", info:"Sergey Tataurov"},
+  {id:84, name:"Züblin Scandinavia AB", loc:"Solna", sni:"F", info:"Züblin (Deripaska)"},
+  {id:85, name:"NCAB Group", loc:"Sundbyberg", sni:"M", info:"Vladimir Makarov"},
+  {id:86, name:"Sendify AB", loc:"Göteborg", sni:"H", info:"Alexander Eliseev"},
+  {id:87, name:"Tui Sverige AB", loc:"Stockholm", sni:"N", info:"Alexei Mordashov"},
+  {id:88, name:"Voi Technologies", loc:"Stockholm", sni:"N", info:"Alexander Eliseev (Min.)"},
+  {id:89, name:"Alexey Kuznetsov AB", loc:"Stockholm", sni:"J", info:"Alexey Kuznetsov"},
+  {id:90, name:"ALLSERVICE AM AB", loc:"Upplands Väsby", sni:"N", info:"Alan Mamiev"},
+  {id:91, name:"ATYX AB", loc:"Stöde", sni:"F", info:"Alexey Molokov"},
+  {id:92, name:"Aveda flytt AB", loc:"Handen", sni:"H", info:"Zukhra Dzhalilova"},
+  {id:93, name:"Beltrusbygg AB", loc:"Uttran", sni:"F", info:"Nikolay Korzh"},
+  {id:94, name:"BMD GROUP AB", loc:"Tyresö", sni:"F", info:"Elena Kopteva"},
+  {id:95, name:"Bärbalken 356 AB", loc:"Järfälla", sni:"F", info:"Bashir Motaliev"},
+  {id:96, name:"CLEAN CAR PLUS AB", loc:"Älvsjö", sni:"G", info:"Svetlana Mechouki"},
+  {id:97, name:"Elvins Bilexpert AB", loc:"Skogås", sni:"F", info:"Elvin Nagizade"},
+  {id:98, name:"Fundamental Fastighets.", loc:"Enskede", sni:"F", info:"Elena Podolnaia"},
+  {id:99, name:"Galaj Bygg AB", loc:"Södertälje", sni:"F", info:"Lidia Galaeva"},
+  {id:100, name:"Grand Arctic Sweden AB", loc:"Älvsjö", sni:"L", info:"Iurii Kuzhelko"},
+  {id:101, name:"GreenBjork AB", loc:"Beddingestrand", sni:"G", info:"Sergei Dymov"},
+  {id:102, name:"Hellgrens Vent. & Bygg", loc:"Skarpnäck", sni:"F", info:"Sergey Matveev"},
+  {id:103, name:"Hjälper SWE AB", loc:"Farsta", sni:"N", info:"Konstantin Kantor"},
+  {id:104, name:"Jasmine AB", loc:"Gävle", sni:"P", info:"Dzhennet Abasova"},
+  {id:105, name:"Kabardin Media AB", loc:"Stockholm", sni:"J", info:"Tatiana Lytasova"},
+  {id:106, name:"KHJ Innovations AB", loc:"Stockholm", sni:"G", info:"Kristina Jakobsson"},
+  {id:107, name:"Klinkersson&Kakelson", loc:"Nykvarn", sni:"F", info:"Bogdan Chuvachalov"},
+  {id:108, name:"Kristan Bygg AB", loc:"Hjärtum", sni:"C", info:"Kristina Solestrand"},
+  {id:109, name:"Kvist Skandinavien AB", loc:"Vårby", sni:"F", info:"Veronika Kvist"},
+  {id:110, name:"Limavi AB", loc:"Skogås", sni:"J", info:"Andrey Kolpakov"},
+  {id:111, name:"Max Logunov AB", loc:"Kungsängen", sni:"J", info:"Maksim Logunov"},
+  {id:112, name:"NextCode AB", loc:"Stockholm", sni:"J", info:"Dmitry Vyalshin"},
+  {id:113, name:"NPN Bygg Sthlm AB", loc:"Bagarmossen", sni:"F", info:"Elena Kopteva"},
+  {id:114, name:"NPP BYGG AB", loc:"Partille", sni:"F", info:"Aslan Gogitidze"},
+  {id:115, name:"PSP Ventilation AB", loc:"Tyresö", sni:"F", info:"Andrei Kudrinskii"},
+  {id:116, name:"Questroom AB", loc:"Åkersberga", sni:"R", info:"Grigory Koshmak"},
+  {id:117, name:"Resursbostäder Spånga", loc:"Spånga", sni:"L", info:"Dmitrij Simis"},
+  {id:118, name:"R-G TRANSPORT AB", loc:"Järfälla", sni:"G", info:"Artush Oganesyan"},
+  {id:119, name:"SAA BYGG AB", loc:"Gunnilse", sni:"F", info:"Alexey Sokolov"},
+  {id:120, name:"Scandinavian M&T AB", loc:"Uppsala", sni:"M", info:"Konstantin Bryunin"},
+  {id:121, name:"SFUP AB", loc:"Uppsala", sni:"L", info:"Konstantin Bryunin"},
+  {id:122, name:"SHS Gruppen AB", loc:"Bromma", sni:"F", info:"Igor Boyko"},
+  {id:123, name:"Shtark Interiör AB", loc:"Arlandastad", sni:"F", info:"Svetlana Shtark"},
+  {id:124, name:"Tasty America AB", loc:"Johanneshov", sni:"G", info:"Irena Elanskaya"},
+  {id:125, name:"Team77 Sweden AB", loc:"Segeltorp", sni:"N", info:"Nikolay Korzh"},
+  {id:126, name:"The Barkas Collective", loc:"Stockholm", sni:"M", info:"Vitaly Poluzhnikov"},
+  {id:127, name:"Toseto Sweden AB", loc:"Bromma", sni:"F", info:"Kirill Kuzhelko"},
+  {id:128, name:"VR ENTREPRENAD AB", loc:"Bålsta", sni:"F", info:"Victor Kersikov"}
 ];
+
+// KOORDINATER FÖR ORTER (För Heatmap)
+const cityCoords = {
+  "Stockholm": [59.3293, 18.0686],
+  "Göteborg": [57.7089, 11.9746],
+  "Malmö": [55.6050, 13.0038],
+  "Sjöbo": [55.6333, 13.7000],
+  "Sundsvall": [62.3908, 17.3069],
+  "Örebro": [59.2753, 15.2134],
+  "Solna": [59.3689, 18.0083],
+  "Lidingö": [59.3633, 18.1333],
+  "Timrå": [62.4870, 17.3256],
+  "Växjö": [56.8777, 14.8091],
+  "Uppsala": [59.8586, 17.6389],
+  "Kristinehamn": [59.3094, 14.1086],
+  "Jönköping": [57.7826, 14.1618],
+  "Helsingborg": [56.0465, 12.6945],
+  "Gävle": [60.6749, 17.1413],
+  "Borlänge": [60.4843, 15.4340],
+  "Långshyttan": [60.5250, 16.0333],
+  "Nacka": [59.3110, 18.1650],
+  "Hägersten": [59.2833, 17.9833],
+  "Bromma": [59.3333, 17.9167],
+  "Tyresö": [59.2333, 18.2333],
+  "Södertälje": [59.1955, 17.6252],
+  "Enskede": [59.2833, 18.0833],
+  "Kista": [59.4022, 17.9422],
+  "Kungälv": [57.8697, 11.9819],
+  "Ljungby": [56.8322, 13.9372],
+  "Norrtälje": [59.7580, 18.7050],
+  "Linköping": [58.4109, 15.6216],
+  "Vadstena": [58.4483, 14.8894],
+  "Partille": [57.7400, 12.1000],
+  "Bålsta": [59.5667, 17.5333],
+  "Åkersberga": [59.4792, 18.2975],
+  "Upplands Väsby": [59.5167, 17.9167],
+  "Mariefred": [59.2594, 17.2222],
+  "Bandhagen": [59.2667, 18.0500],
+  "Bagarmossen": [59.2775, 18.1325],
+  "Skarpnäck": [59.2667, 18.1333],
+  "Vårby": [59.2594, 17.8822],
+  "Handen": [59.1667, 18.1333],
+  "Stöde": [62.4167, 16.8667],
+  "Skogås": [59.2167, 18.1667],
+  "Segeltorp": [59.2833, 17.9333],
+  "Järfälla": [59.4167, 17.8333],
+  "Spånga": [59.3833, 17.8833],
+  "Farsta": [59.2433, 18.0936],
+  "Johanneshov": [59.2936, 18.0825],
+  "Arlandastad": [59.6167, 17.9167],
+  "Nykvarn": [59.1783, 17.4322],
+  "Kungsängen": [59.4833, 17.7500],
+  "Upplands-Väsby": [59.5167, 17.9167],
+  "Stockaryd": [57.3167, 14.5833],
+  "Gunnilse": [57.8000, 12.0833],
+  "Beddingestrand": [55.3667, 13.4333],
+  "Uttran": [59.1833, 17.7833],
+  "Hjärtum": [58.1833, 12.1167],
+  "Norsborg": [59.2444, 17.8136],
+  "Sundbyberg": [59.3611, 17.9722]
+};
 
 // ==========================================
 // 3. LOGIK (JS)
 // ==========================================
+
+// --- VY-HANTERING ---
+function setView(viewName) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.view-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('view-' + viewName).classList.add('active');
+    document.querySelector(`button[onclick="setView('${viewName}')"]`).classList.add('active');
+
+    if (viewName === 'map') {
+        initMap(); // Rita kartan när den visas
+    }
+}
 
 // --- RITA TRÄDET ---
 const treeRoot = document.getElementById('tree-root');
@@ -409,17 +485,15 @@ function renderTree(node, container) {
   const titleEl = document.createElement('div');
   titleEl.className = 'title';
   
-  // Lägg till toggle-knapp om barn finns
   const hasChildren = node.children && node.children.length > 0;
   if(hasChildren) {
     const btn = document.createElement('span');
     btn.className = 'toggle-btn';
-    btn.innerText = '-'; // Standard: utfälld
+    btn.innerText = '-'; 
     titleEl.appendChild(btn);
     
-    // Klick-event för att fälla in/ut
     contentEl.onclick = function(e) {
-      if(e.target.classList.contains('link')) return; // Klicka ej på länkar
+      if(e.target.classList.contains('link')) return; 
       const childCont = nodeEl.querySelector('.children');
       if(childCont) {
         childCont.classList.toggle('hidden');
@@ -430,12 +504,10 @@ function renderTree(node, container) {
     nodeEl.classList.add('leaf');
   }
 
-  // Titeltext
   const textSpan = document.createElement('span');
   textSpan.innerText = node.title;
   titleEl.appendChild(textSpan);
 
-  // Länk?
   if(node.link) {
     const a = document.createElement('a');
     a.href = node.link;
@@ -447,7 +519,6 @@ function renderTree(node, container) {
 
   contentEl.appendChild(titleEl);
 
-  // Info-text
   if(node.info) {
     const infoEl = document.createElement('div');
     infoEl.className = 'info';
@@ -457,7 +528,6 @@ function renderTree(node, container) {
 
   nodeEl.appendChild(contentEl);
 
-  // Rendera barn rekursivt
   if(hasChildren) {
     const childContainer = document.createElement('div');
     childContainer.className = 'children';
@@ -468,10 +538,6 @@ function renderTree(node, container) {
   container.appendChild(nodeEl);
 }
 
-// Starta ritningen
-renderTree(treeData, treeRoot);
-
-
 // --- RITA FOI TABELLEN ---
 const foiBody = document.getElementById('foi-body');
 const foiCount = document.getElementById('foi-count');
@@ -479,7 +545,6 @@ const foiCount = document.getElementById('foi-count');
 function renderFOI(data) {
   foiBody.innerHTML = "";
   data.forEach(item => {
-    // Färga SNI-taggen
     let sniClass = "sni-def";
     if(item.sni === "F") sniClass = "sni-F";
     else if(item.sni === "G") sniClass = "sni-G";
@@ -501,7 +566,6 @@ function renderFOI(data) {
   foiCount.innerText = "Visar " + data.length + " av " + foiList.length + " bolag";
 }
 
-// Filterfunktion för tabellen
 function filterFOI() {
   const q = document.getElementById('searchFOI').value.toLowerCase();
   const filtered = foiList.filter(item => 
@@ -512,7 +576,65 @@ function filterFOI() {
   renderFOI(filtered);
 }
 
-// Starta tabellen
+// --- KARTA (HEATMAP/CLUSTERS) ---
+let map;
+function initMap() {
+    if(map) {
+        map.invalidateSize();
+        return; 
+    }
+
+    // Centrera på södra Sverige
+    map = L.map('map-container').setView([59.0, 16.0], 5);
+
+    // Gratis kartlager (OpenStreetMap)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Lägg till cirklar för varje bolag
+    let hits = 0;
+    foiList.forEach(company => {
+        let coords = cityCoords[company.loc];
+        
+        // Fallback: Försök matcha delar av namnet om exakt ort saknas (enkel logik)
+        if(!coords) {
+            // Om "Stockholm" finns i namnet, använd Stockholm
+            if(company.loc.includes("Stockholm")) coords = cityCoords["Stockholm"];
+        }
+
+        if (coords) {
+            // Slumpa lite offset så de inte ligger exakt på varandra (Heatmap-effekt)
+            const lat = coords[0] + (Math.random() - 0.5) * 0.02;
+            const lng = coords[1] + (Math.random() - 0.5) * 0.02;
+
+            // Färg baserat på SNI
+            let color = "#95a5a6";
+            if(company.sni === "F") color = "#e67e22"; // Bygg
+            if(company.sni === "K") color = "#8e44ad"; // Finans
+            if(company.sni === "G") color = "#27ae60"; // Handel
+
+            const circle = L.circleMarker([lat, lng], {
+                radius: 6,
+                fillColor: color,
+                color: "#fff",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.7
+            }).addTo(map);
+
+            circle.bindPopup(`<b>${company.name}</b><br>${company.loc}<br>${company.info}`);
+            hits++;
+        }
+    });
+    
+    console.log("Karta ritad med " + hits + " bolag.");
+}
+
+// Starta allt
+renderTree(treeData, treeRoot);
 renderFOI(foiList);
 
 </script>

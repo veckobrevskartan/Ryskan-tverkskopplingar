@@ -53,7 +53,7 @@
         position: relative; 
         transition: all 0.2s; 
         min-width: 180px;
-        max-width: 300px; /* Lite bredare för att rymma länkar */
+        max-width: 320px; /* Lite bredare för att rymma långa titlar */
         z-index: 2;
     }
     .content:hover { border-color: #999; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
@@ -266,55 +266,58 @@ const treeData = {
       title: "2) Domar & Org. Brottslighet",
       children: [
         {
-          title: "Sverige",
+          title: "Sverige: Byggsektorn",
           children: [
             { 
-              title: "Grov Näringspenningtvätt (Bygg)", 
-              info: "EBM-tillslag och åtal. Halv miljard kronor.", 
+              title: "Grov Näringspenningtvätt (Bygg) & Södertörns tingsrätt (B 16726-24)", 
+              info: "EBM-tillslag och åtal gällande halv miljard kr. Omfattande härva med ryska kopplingar.",
+              highlight: true, 
               links: [
                 { text: "EBM Tillslag", url: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
                 { text: "EBM Åtal", url: "https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/" }
-              ] 
-            },
-            {
-              title: "DJUPANALYS: Södertörns tingsrätt (B 16726-24)",
-              highlight: true,
+              ],
               children: [
                 {
-                  title: "Övergripande händelseförlopp",
+                  title: "DJUPANALYS (Struktur & Kopplingar)",
+                  info: "Klicka för att se detaljerad analys av målet.",
                   children: [
-                    { title: "Systematik", info: "Långvarig struktur verksam sedan minst 2021." },
-                    { title: "Aktörer", info: "Ryssland, Belarus, Ukraina, Baltikum." },
-                    { title: "Rubricering", info: "Grovt brott p.g.a. professionellt genomförande." }
+                    {
+                      title: "1. Övergripande händelseförlopp",
+                      children: [
+                        { title: "Systematik", info: "Långvarig struktur verksam sedan minst 2021." },
+                        { title: "Aktörer", info: "Ryssland, Belarus, Ukraina, Baltikum." },
+                        { title: "Rubricering", info: "Grovt brott p.g.a. professionellt genomförande." }
+                      ]
+                    },
+                    {
+                      title: "2. Agerande i praktiken",
+                      children: [
+                        { title: "Fasadbolag", info: "Instrument för tvätt, fiktiv bokföring. Syfte: Dölja ursprung." },
+                        { title: "Industriell skala", info: "30–36 transaktioner/person. Spritt över tid." },
+                        { title: "Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
+                      ]
+                    },
+                    {
+                      title: "3. Koppling till Ryska intressen",
+                      children: [
+                        { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
+                        { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
+                        { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
+                      ]
+                    },
+                    {
+                      title: "4. Hybridhot-indikatorer",
+                      children: [
+                        { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
+                        { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
+                        { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
+                      ]
+                    },
+                    {
+                      title: "5. Slutsats",
+                      info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
+                    }
                   ]
-                },
-                {
-                  title: "Agerande i praktiken",
-                  children: [
-                    { title: "1. Fasadbolag", info: "Instrument för tvätt, fiktiv bokföring. Syfte: Dölja ursprung." },
-                    { title: "2. Industriell skala", info: "30–36 transaktioner/person. Spritt över tid för att undvika bank-flaggor." },
-                    { title: "3. Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
-                  ]
-                },
-                {
-                  title: "Koppling till Ryska intressen",
-                  children: [
-                    { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
-                    { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
-                    { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
-                  ]
-                },
-                {
-                  title: "Hybridhot-indikatorer",
-                  children: [
-                    { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
-                    { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
-                    { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
-                  ]
-                },
-                {
-                  title: "Slutsats",
-                  info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
                 }
               ]
             }

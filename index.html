@@ -297,7 +297,7 @@ const treeData = {
                 { text: "Syre", url: "https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/" }
               ]
             },
-            // --- MUSKÖ ---
+            // --- CASE: MUSKÖ ---
             { 
               title: "CASE: Muskö (Marinbas)", 
               info: "Stanislav Aleshchenko, rysk affärsman, äger sjötomt vid inloppet till topphemlig bas.", 
@@ -325,7 +325,7 @@ const treeData = {
                 }
               ]
             },
-            // --- SKÄRGÅRDEN ---
+            // --- CASE: SKÄRGÅRDEN ---
             { 
               title: "CASE: Skärgårdstomter (Roslagen)", 
               info: "Ryskt nätverk köper tomter i strategiska inlopp (Norrtälje kommun).", 
@@ -340,7 +340,7 @@ const treeData = {
                   }
               ]
             },
-            // --- VIDJA ---
+            // --- CASE: VIDJA ---
             { 
               title: "CASE: Vidja / Rymdanläggning", 
               info: "Från fastighetsköp nära Swedish Space Corp till adressbank och ambassadkopplingar.", 
@@ -374,7 +374,7 @@ const treeData = {
                 }
               ] 
             },
-            // --- KYRKAN VÄSTERÅS ---
+            // --- CASE: KYRKAN VÄSTERÅS ---
             { 
               title: "CASE: Ryska Kyrkan Västerås", 
               info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", 
@@ -460,6 +460,50 @@ const treeData = {
               links: [
                 { text: "EBM Tillslag", url: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
                 { text: "EBM Åtal", url: "https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/" }
+              ],
+              children: [
+                {
+                  title: "Struktur & Kopplingar",
+                  info: "Klicka för att se detaljerad analys av målet.",
+                  children: [
+                    {
+                      title: "1. Övergripande händelseförlopp",
+                      children: [
+                        { title: "Systematik", info: "Långvarig struktur verksam sedan minst 2021." },
+                        { title: "Aktörer", info: "Ryssland, Belarus, Ukraina, Baltikum." },
+                        { title: "Rubricering", info: "Grovt brott p.g.a. professionellt genomförande." }
+                      ]
+                    },
+                    {
+                      title: "2. Agerande i praktiken",
+                      children: [
+                        { title: "Fasadbolag", info: "Instrument för tvätt, fiktiv bokföring. Syfte: Dölja ursprung." },
+                        { title: "Industriell skala", info: "30–36 transaktioner/person. Spritt över tid." },
+                        { title: "Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
+                      ]
+                    },
+                    {
+                      title: "3. Koppling till Ryska intressen",
+                      children: [
+                        { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
+                        { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
+                        { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
+                      ]
+                    },
+                    {
+                      title: "4. Hybridhot-indikatorer",
+                      children: [
+                        { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
+                        { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
+                        { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
+                      ]
+                    },
+                    {
+                      title: "5. Slutsats",
+                      info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
+                    }
+                  ]
+                }
               ]
             }
           ]
@@ -480,6 +524,20 @@ const treeData = {
           children: [
             { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage och påverkan.", links: [{ text: "Rapport (PDF)", url: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" }, { text: "Artikel", url: "https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol" }] }
           ]
+        },
+        {
+          title: "USA: Sanktioner",
+          children: [
+             { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
+          ]
+        },
+        {
+          title: "Spanien & Ryssland",
+          children: [
+            { title: "Operation Troika", info: "Stort maffiamål, frikännande 2018.", links: [{ text: "Jamestown", url: "https://jamestown.org/trial-decade-spain-declares-war-russian-organized-crime/" }] },
+            { title: "Operation Oligarch", info: "Tillslag mot ryska maffian 2017.", links: [{ text: "The Insider", url: "https://theins.ru/en/corruption/149860" }] },
+            { title: "Tambovskaya", info: "Vladimir Barsukov/Kumarin (domar).", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/archive/barsukov-handed-14-years-for-fraud" }] }
+          ]
         }
       ]
     },
@@ -488,7 +546,21 @@ const treeData = {
       title: "3) Moskvapatriarkatet",
       children: [
         { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] },
-        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] }
+        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] },
+        { 
+          title: "Kopplade Bolag", 
+          children: [
+            { 
+              title: "NC Nordic Control AB", 
+              info: "Bokföringsbrott (2021). Finns på FOI-listan.", 
+              links: [
+                { text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" },
+                { text: "VLT (2019)", url: "https://www.vlt.se/2019-03-20/prasten-makarenko-tillbakavisar-anklagelserna-vi-samarbetar-sjalvklart-inte-med-brottslingar/" }
+              ] 
+            },
+            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar.", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894" }] }
+          ]
+        }
       ]
     },
     // --- GREN 4: PRAVFOND ---
@@ -500,20 +572,58 @@ const treeData = {
         {
           title: "Grundläggande fakta",
           children: [
+            { title: "Formellt namn", info: "Fonden för stöd och skydd av rättigheterna för landsmän som bor utomlands." },
             { title: "Huvudman", info: "Ryska federationen / Ryska UD." },
             { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter." }
           ]
         },
         {
-          title: "Granskningar 2025 (OCCRP)",
+          title: "Granskningar 2025 (OCCRP/LRT)",
           children: [
             { 
-              title: "Sanktionsflykt", 
-              info: "Fortsatta utbetalningar trots EU-sanktioner.", 
+              title: "Sanktionsflykt (OCCRP)", 
+              info: "Fortsatta utbetalningar trots EU-sanktioner. Använder mellanhänder/kontanter.", 
               links: [
-                { text: "OCCRP - Spies & Criminals", url: "https://www.occrp.org/en/project/dear-compatriots/russian-foundation-aimed-at-helping-compatriots-abroad-supports-spies-criminals-and-propagandists" }
+                { text: "OCCRP - Spies & Criminals", url: "https://www.occrp.org/en/project/dear-compatriots/russian-foundation-aimed-at-helping-compatriots-abroad-supports-spies-criminals-and-propagandists" },
+                { text: "OCCRP - EU Payments", url: "https://www.occrp.org/en/project/dear-compatriots/russian-state-fund-paid-allies-in-the-eu-despite-sanctions" }
+              ] 
+            },
+            { 
+              title: "Litauen (LRT)", 
+              info: "Läckta filer visar finansiering av jurister och politiska aktörer.", 
+              links: [
+                { text: "LRT", url: "https://www.lrt.lt/en/news-in-english/19/2570212/leaked-files-reveal-lawyers-politicians-in-lithuania-on-kremlin-s-payroll-investigation" }
               ] 
             }
+          ]
+        },
+        {
+          title: "Strategisk roll",
+          children: [
+            { title: "Syfte", info: "Motverka 'russofobi', mobilisera diaspora." },
+            { title: "Nyckelpersoner", info: "Aleksandr Udaltsov (Chef), Vladimir Pozdorovkin (Norden/SVR-agent)." }
+          ]
+        },
+        {
+          title: "Finansiering & Juridik",
+          children: [
+            { title: "Finansiering", info: ">50 miljoner SEK till europeiska nätverk." },
+            { title: "Vadim Krasikov", info: "GRU-agent (mord i Berlin). Advokat betald av Pravfond." },
+            { title: "Viktor Bout", info: "Vapenhandlare. Fick juridiskt stöd." }
+          ]
+        },
+        {
+          title: "Sverige (Rurik)",
+          children: [
+            { title: "Ryska riksförbundet", info: "Fick ca 1 MSEK. Ordf Lioudmila Siegel spred propaganda." },
+            { title: "Konsekvenser", info: "MUCF krävde återbetalning. Rurik upplöstes 2024." }
+          ]
+        },
+        {
+          title: "Övriga Norden",
+          children: [
+            { title: "Finland", info: "Org 'Mosaiikki' fick ca 200 000 EUR." },
+            { title: "Danmark", info: "'Velinformeret' (Telegram) fick pengar." }
           ]
         }
       ]
@@ -725,7 +835,6 @@ const strategicProperties = [
     { name: "Muskö (Aleshchenko)", coords: [59.0800, 18.1300], info: "Sjötomt vid marinbasen. 220 Mkr skattetvist." },
     { name: "Furusund (Nätverk)", coords: [59.66056, 18.90694], info: "Ryskt nätverk köper tomter i strategiskt inlopp." },
     { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." },
-    // NYA HÄR:
     { name: "Vidja (Huddinge)", coords: [59.215, 18.110], info: "Fastighet nära Swedish Space Corp (Ågesta). Använd som adressbank." },
     { name: "Västerås (Hässlö)", coords: [59.589, 16.635], info: "Ryska Kyrkan. Ligger strategiskt nära Västerås Flygplats." },
     { name: "Airiston Helmi (Finland)", coords: [60.233, 22.133], info: "Pargas (Åbolands skärgård). Tillslag 2018 mot misstänkt penningtvätt/underrättelse." },

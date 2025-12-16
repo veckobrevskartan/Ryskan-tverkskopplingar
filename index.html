@@ -565,17 +565,57 @@ const treeData = {
             }
           ]
         },
+        // --- HÄR ÄR DEN ÅTERSTÄLLDA SEKTIONEN FÖR LÅNADE IDENTITETER ---
         {
           title: "Lånade Identiteter (B 16538-22)",
           info: "Södertörns tingsrätt. Modus: 'Importera – etablera – avveckla'.",
           highlight: true,
           children: [
             {
-              title: "Modus & Nyckelpersoner",
-              info: "Alim Pilov (huvudman). Identiteter används operativt i bolag trots att personerna lämnat landet."
+              title: "1. Grundmodell",
+              info: "Personer tas in -> Folkbokförs -> Lämnar landet. Identiteten lever kvar som verktyg.",
+              children: [
+                { title: "Metod", info: "Identiteten separeras från den fysiska personen." }
+              ]
+            },
+            {
+              title: "2. Etableringsfas",
+              children: [
+                { title: "Åtgärder", info: "ID-kort, BankID, Bolagsregistrering på 'målvaktsadresser'." },
+                { title: "Tecken", info: "Kort tid mellan ankomst och etablering. Minimal faktisk närvaro." }
+              ]
+            },
+            {
+              title: "3. Operativ Användning",
+              children: [
+                { title: "Funktion", info: "Öppna konton, driva bolag, fakturera. Styrs ofta via BankID från utlandet." },
+                { title: "Bevisning", info: "Samma IP-mönster för flera 'olika' individer." }
+              ]
+            },
+            {
+              title: "4. Avveckling & 'Lånade' IDn",
+              children: [
+                { title: "Mönster", info: "Personen utvandrar/slutar deklarera, men bolagen fortsätter omsätta pengar." },
+                { title: "Exempel", info: "Alim Pilov (utvandrad 2022) - identitet fortsatt aktiv." }
+              ]
+            },
+            {
+              title: "5. Central Styrning",
+              children: [
+                { title: "Kommunikation", info: "Ryskspråkig styrning via Signal. Ej självständiga företagare." },
+                { title: "Koppling Ryssland", info: "Möjliggör kapitalflykt och sanktionsundandragande. Gråzon kriminalitet/hybridhot." }
+              ]
+            },
+            {
+              title: "6. Nyckelpersoner (Misstänkta)",
+              children: [
+                { title: "Huvudman: Alim Pilov", info: "Central samordnare. Kontrollerar flödena." },
+                { title: "Identitetsbärare", info: "Stanislav Kääpa, Alexander Kosoruchkin, Tomas Mlodianovski, Julia Turova, m.fl." }
+              ]
             }
           ]
         },
+        // -------------------------------------------------------------
         {
           title: "EU / Europa",
           children: [

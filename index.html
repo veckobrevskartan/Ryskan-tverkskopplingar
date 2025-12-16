@@ -882,6 +882,19 @@ const treeData = {
                 {
                     title: "Bolagets svar",
                     info: "VD avfärdar kritiken som 'häxjakt' och tar avstånd från ryska regimen."
+                },
+                // --- NY NOD: VIDARE PROJEKT ---
+                {
+                    title: "Vidare projekt med Klar Svan",
+                    info: "Fler uppdrag åt kommuner och kritisk industri.",
+                    links: [
+                        { text: "Dagens Arbete", url: "https://da.se/2024/12/ryskagt-bolag-fick-3d-uppdrag-av-kommuner/" }
+                    ],
+                    children: [
+                        { title: "Boden (2020)", info: "Modellering av Bodens dagvattenanläggning." },
+                        { title: "LKAB Kiruna (2022–2023)", info: "Projekt för ventilationssystem och gruvområden." },
+                        { title: "Analys", info: "Pekar på bredare mönster av saknade bakgrundskontroller i upphandlingar." }
+                    ]
                 }
             ]
         }
@@ -1125,7 +1138,9 @@ const blockedProperties = [
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
     { name: "Nordion Energi (Malmö)", coords: [55.6139, 12.9945], info: "Huvudkontor för gasnätet. Chef med ryska kopplingar togs ur tjänst okt 2024." },
-    { name: "Klar Svan AB (Töre)", coords: [65.91576, 22.64969], info: "Ryskägt bolag. 3D-visualiserade Luleå Hamn (skyddsobjekt). Ingen säkerhetsprövning." }
+    { name: "Klar Svan AB (Töre)", coords: [65.91576, 22.64969], info: "Ryskägt bolag. 3D-visualiserade Luleå Hamn (skyddsobjekt). Ingen säkerhetsprövning." },
+    { name: "Luleå Hamn (Skyddsobjekt)", coords: [65.5500, 22.1833], info: "Kritisk infrastruktur som kartlades av ryskägt bolag (Klar Svan AB) 2017." },
+    { name: "LKAB (Kiruna)", coords: [67.8558, 20.2253], info: "Projekt för ventilationssystem och gruvområden (2022-23) av Klar Svan AB." }
 ];
 
 // --- VY-HANTERING ---

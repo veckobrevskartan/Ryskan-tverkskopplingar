@@ -859,6 +859,31 @@ const treeData = {
                     info: "Kritiken rör ledningsfunktion. Styrelsen är svensk (Ordf. Anders Sundström)."
                 }
             ]
+        },
+        // --- NYTT CASE: LULEÅ HAMN & KLAR SVAN ---
+        {
+            title: "CASE: Luleå Hamn & Klar Svan AB",
+            info: "Ryskägt bolag (säte Töre) anlitat för 3D-visualisering av skyddsobjekt.",
+            highlight: true,
+            links: [
+                { text: "Dagens Arbete (2024-12-17a)", url: "https://da.se/2024/12/ryskagt-bolag-fick-3d-uppdrag-av-kommuner/" },
+                { text: "Dagens Arbete (2024-12-17b)", url: "https://da.se/2024/12/anlitades-av-kommuner-utan-bakgrundskontroll/" },
+                { text: "Allabolag (Klar Svan AB)", url: "https://www.allabolag.se/foretag/klar-svan-ab/t%C3%B6re/fotografer/2K3EK9AI5YE4D" }
+            ],
+            children: [
+                {
+                    title: "Bakgrund",
+                    info: "Klar Svan AB (Töre) ägs av ryska medborgare. Utförde visualiseringar av Luleå Hamns utbyggnad 2017."
+                },
+                {
+                    title: "Säkerhetsbrist",
+                    info: "Ingen säkerhetsprövning gjordes trots hamnens status som skyddsobjekt. Sergei Knysh (rysk medborgare) i ledningen."
+                },
+                {
+                    title: "Bolagets svar",
+                    info: "VD avfärdar kritiken som 'häxjakt' och tar avstånd från ryska regimen."
+                }
+            ]
         }
       ]
     }
@@ -1099,7 +1124,9 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
-    { name: "Nordion Energi (Malmö)", coords: [55.6139, 12.9945], info: "Huvudkontor för gasnätet. Chef med ryska kopplingar togs ur tjänst okt 2024." }
+    { name: "Nordion Energi (Malmö)", coords: [55.6139, 12.9945], info: "Huvudkontor för gasnätet. Chef med ryska kopplingar togs ur tjänst okt 2024." },
+    { name: "Klar Svan AB (Töre)", coords: [65.91576, 22.64969], info: "Ryskägt bolag. 3D-visualiserade Luleå Hamn (skyddsobjekt). Ingen säkerhetsprövning." },
+    { name: "Luleå Hamn (Skyddsobjekt)", coords: [65.5500, 22.1833], info: "Kritisk infrastruktur som kartlades av ryskägt bolag (Klar Svan AB) 2017." }
 ];
 
 // --- VY-HANTERING ---

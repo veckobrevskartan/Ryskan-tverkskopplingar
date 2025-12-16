@@ -49,7 +49,7 @@
         box-shadow: 0 0 10px rgba(0,0,0,0.2);
         z-index: 1000;
         font-size: 12px;
-        width: 180px;
+        width: 190px;
         overflow: hidden;
     }
     .legend-header {
@@ -83,6 +83,34 @@
         display: inline-block; 
         margin-right: 6px; 
         box-sizing: border-box; 
+    }
+
+    /* X (Blockerade) */
+    .x-mark {
+        font-weight: 900;
+        color: #e74c3c;
+        margin-right: 8px;
+        font-size: 14px;
+        width: 12px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    /* Custom X Icon for Map */
+    .custom-x-icon {
+        background: none;
+        border: none;
+    }
+    .x-marker-symbol {
+        font-size: 18px;
+        font-weight: 900;
+        color: #e74c3c;
+        text-shadow: 0 0 2px white, 0 0 4px white;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        display: block;
     }
 
     /* --- HORISONTELL TRÄD-STRUKTUR --- */
@@ -198,6 +226,7 @@
                 </div>
                 <div id="legend-content">
                     <div class="legend-item"><span class="ring-red"></span> Köpta Fastigheter</div>
+                    <div class="legend-item"><span class="x-mark">X</span> Blockerade Köp/Områden</div>
                     <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
                     <div class="legend-item"><span class="dot sni-F"></span> Bygg & Anläggning (F)</div>
                     <div class="legend-item"><span class="dot sni-K"></span> Finans & Försäkring (K)</div>
@@ -268,7 +297,7 @@ const treeData = {
                 { text: "Syre", url: "https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/" }
               ]
             },
-            // --- UPPDATERAT: MUSKÖ ---
+            // --- MUSKÖ ---
             { 
               title: "CASE: Muskö (Marinbas)", 
               info: "Stanislav Aleshchenko, rysk affärsman, äger sjötomt vid inloppet till topphemlig bas.", 
@@ -296,32 +325,25 @@ const treeData = {
                 }
               ]
             },
-            // --- UPPDATERAT: SKÄRGÅRDEN ---
+            // --- SKÄRGÅRDEN ---
             { 
               title: "CASE: Skärgårdstomter (Roslagen)", 
               info: "Ryskt nätverk köper tomter i strategiska inlopp (Norrtälje kommun).", 
               children: [
                   {
-                      title: "Furusund",
-                      info: "Norra inloppet till skärgården (Furusundsleden).",
+                      title: "Furusund & Vettershaga",
+                      info: "Norra inloppet till skärgården. Kopplingar till underrättelsetjänst.",
                       links: [
                           { text: "Aftonbladet (2025)", url: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
-                          { text: "Wiki: Furusund", url: "https://sv.wikipedia.org/wiki/Furusund" }
-                      ]
-                  },
-                  {
-                      title: "Vettershaga",
-                      info: "Vid Bergshamravikens inlopp. Kopplingar till underrättelsetjänst.",
-                      links: [
                           { text: "Allt om Norrtälje", url: "https://alltomnorrtalje.se/uppgifter-ryskt-natverk-ager-mark-i-norrtalje-kommun-kopplingar-till-underrattelsetjansten/" }
                       ]
                   }
               ]
             },
-            // --- VIDJA (FRÅN FÖRRA VÄNDAN) ---
+            // --- VIDJA ---
             { 
               title: "CASE: Vidja / Rymdanläggning", 
-              info: "Från fastighetsköp till adressbank och ambassadkopplingar.", 
+              info: "Från fastighetsköp nära Swedish Space Corp till adressbank och ambassadkopplingar.", 
               highlight: true,
               children: [
                 {
@@ -339,21 +361,20 @@ const treeData = {
                   ]
                 },
                 {
-                  title: "3. Bolag & Målvakter",
-                  info: "Identiteter används som målvakter i bolag. Frikopplade ekonomiska konstruktioner."
-                },
-                {
-                  title: "4. Kopplingar: Ambassaden",
+                  title: "3. Kopplingar: Ambassaden",
                   info: "Huvudmän har besökt ambassaden, disponerat fordon och fakturerat ambassaden.",
                   alert: true
                 },
                 {
-                  title: "5. Rättslig status",
-                  info: "Gripanden misstänkta för grov penningtvätt. Systemfel i folkbokföringen."
+                  title: "4. Rättslig status",
+                  info: "Gripanden misstänkta för grov penningtvätt. Systemfel i folkbokföringen.",
+                  links: [
+                    { text: "Hem & Hyra (2025c)", url: "https://www.hemhyra.se/nyheter/polisen-stoppade-hemliga-adressforsaljaren-fick-kora-vidare/" }
+                  ]
                 }
               ] 
             },
-            // ---------------------------------
+            // --- KYRKAN VÄSTERÅS ---
             { 
               title: "CASE: Ryska Kyrkan Västerås", 
               info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", 
@@ -375,15 +396,15 @@ const treeData = {
               ]
             },
             {
-              title: "Estland: Strategiska objekt (2024)",
-              info: "Stopp för tredjelandsmedborgare att köpa mark nära kritisk infrastruktur.",
+              title: "Estland: Strategiska objekt",
+              info: "Stopp för tredjelandsmedborgare att köpa mark nära kritisk infrastruktur och gräns.",
               links: [
                 { text: "ERR News", url: "https://news.err.ee/1609364830/estonia-to-stop-third-country-nationals-from-buying-land-near-strategic-facilities" }
               ]
             },
             {
-              title: "Finland: Blockerade köp (2024)",
-              info: "Försvarsministeriet blockerar ryska affärer pga nationell säkerhet.",
+              title: "Finland: Blockerade köp",
+              info: "Försvarsministeriet blockerar ryska affärer (t.ex. Sysmä, Ruokolahti) pga nationell säkerhet.",
               links: [
                 { text: "Yle", url: "https://yle.fi/a/74-20130918" }
               ]
@@ -393,21 +414,28 @@ const treeData = {
         {
           title: "Finland (Övrigt)",
           children: [
-            { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES (Försvarsministeriet).", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
-            { title: "CASE: Airiston Helmi", info: "Razzia 2018, domar mot Pavel Melnikov 2025.", links: [{ text: "Yle", url: "https://yle.fi/a/7-10073103" }, { text: "HBL", url: "https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/" }] },
+            { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES.", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
+            { 
+              title: "CASE: Airiston Helmi", 
+              info: "Tillslag 2018 mot skärgårdsegendomar (Pargas). Domar 2025.", 
+              links: [{ text: "Yle", url: "https://yle.fi/a/7-10073103" }, { text: "HBL", url: "https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/" }] 
+            },
             { title: "Beslag", info: "Frysning av ryska statliga tillgångar (Naftogaz-målet).", links: [{ text: "Reuters", url: "https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/" }] }
           ]
         },
         {
           title: "Norge",
           children: [
-            { title: "CASE: 'Russerhytter'", info: "Stugor nära Bardufoss flygbas.", links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] },
+            { 
+              title: "CASE: 'Russerhytter' (Bardufoss)", 
+              info: "Stugor nära militär flygbas. Politikerkona ägare.", 
+              links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] 
+            },
             { 
               title: "CASE: Ryska Kyrkan (Haakonsvern)", 
               info: "Fastigheter med insyn mot marinbasen Haakonsvern (Bergen).", 
               links: [{ text: "Euromaidan Press", url: "https://euromaidanpress.com/2022/10/19/russian-church-owns-property-near-norways-main-naval-base-dagbladet/" }] 
-            },
-            { title: "Förhandsprövning", info: "Planerar nya regler.", links: [{ text: "Euronews", url: "https://www.euronews.com/my-europe/2024/07/09/norway-plans-new-measures-to-stop-russians-buying-property-unchecked" }] }
+            }
           ]
         },
         {
@@ -432,42 +460,6 @@ const treeData = {
               links: [
                 { text: "EBM Tillslag", url: "https://www.ekobrottsmyndigheten.se/naringspenningtvatt-for-nara-en-halv-miljard-kronor-atta-personer-greps-vid-stort-tillslag/" },
                 { text: "EBM Åtal", url: "https://www.ekobrottsmyndigheten.se/fem-atalade-for-grov-naringspenningtvatt/" }
-              ],
-              children: [
-                {
-                  title: "Struktur & Kopplingar",
-                  info: "Klicka för att se detaljerad analys av målet.",
-                  children: [
-                    {
-                      title: "1. Övergripande händelseförlopp",
-                      children: [
-                        { title: "Systematik", info: "Långvarig struktur verksam sedan minst 2021." },
-                        { title: "Aktörer", info: "Ryssland, Belarus, Ukraina, Baltikum." },
-                        { title: "Rubricering", info: "Grovt brott p.g.a. professionellt genomförande." }
-                      ]
-                    },
-                    {
-                      title: "2. Agerande i praktiken",
-                      children: [
-                        { title: "Fasadbolag", info: "Instrument för tvätt, fiktiv bokföring. Syfte: Dölja ursprung." },
-                        { title: "Industriell skala", info: "30–36 transaktioner/person. Spritt över tid." },
-                        { title: "Rollfördelning", info: "Tydlig hierarki: Huvudmän -> Operativa -> Målvakter." }
-                      ]
-                    },
-                    {
-                      title: "3. Koppling till Ryska intressen",
-                      children: [
-                        { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
-                        { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
-                        { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
-                      ]
-                    },
-                    {
-                      title: "5. Slutsats",
-                      info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
-                    }
-                  ]
-                }
               ]
             }
           ]
@@ -728,12 +720,25 @@ const cityCoords = {
 // 3. LOGIK (JS)
 // ==========================================
 
-// --- NYTT: KÖPTA FASTIGHETER (RÖDA RINGAR) ---
-// Innehåller Muskö (Aleshchenko), Furusund & Vettershaga (Nätverket)
+// --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
     { name: "Muskö (Aleshchenko)", coords: [59.0800, 18.1300], info: "Sjötomt vid marinbasen. 220 Mkr skattetvist." },
     { name: "Furusund (Nätverk)", coords: [59.66056, 18.90694], info: "Ryskt nätverk köper tomter i strategiskt inlopp." },
-    { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." }
+    { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." },
+    // NYA HÄR:
+    { name: "Vidja (Huddinge)", coords: [59.215, 18.110], info: "Fastighet nära Swedish Space Corp (Ågesta). Använd som adressbank." },
+    { name: "Västerås (Hässlö)", coords: [59.589, 16.635], info: "Ryska Kyrkan. Ligger strategiskt nära Västerås Flygplats." },
+    { name: "Airiston Helmi (Finland)", coords: [60.233, 22.133], info: "Pargas (Åbolands skärgård). Tillslag 2018 mot misstänkt penningtvätt/underrättelse." },
+    { name: "Bardufoss (Norge)", coords: [69.056, 18.530], info: "'Russerhyttene'. Stugor med utsikt över militär flygbas." }
+];
+
+// --- X-MARKERINGAR: BLOCKERADE KÖP/OMRÅDEN ---
+const blockedProperties = [
+    { name: "Finland: Sysmä", coords: [61.503, 25.684], info: "Försvarsministeriet blockerade fastighetsköp av säkerhetsskäl (Yle)." },
+    { name: "Finland: Ruokolahti", coords: [61.283, 28.816], info: "Stoppad affär nära kritisk infrastruktur (Yle)." },
+    { name: "Finland: Kankaanpää", coords: [61.800, 22.400], info: "Nära Niinisalo garnison. Köp stoppat." },
+    { name: "Estland: Narva (Ida-Viru)", coords: [59.379, 28.199], info: "Gränszon där tredjelandsmedborgare ej får köpa mark." },
+    { name: "Estland: Võru", coords: [57.844, 27.011], info: "Säkerhetszon mot ryska gränsen. Fastighetsköp begränsade." }
 ];
 
 // --- VY-HANTERING ---
@@ -912,7 +917,7 @@ function initMap() {
     }
 
     // Centrera på södra Sverige
-    map = L.map('map-container').setView([59.0, 16.0], 6);
+    map = L.map('map-container').setView([59.0, 16.0], 5);
 
     // Gratis kartlager (OpenStreetMap)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -954,7 +959,7 @@ function initMap() {
         }
     });
 
-    // 2. LÄGG TILL STRATEGISKA FASTIGHETER (Muskö, Furusund etc) - Röda ringar
+    // 2. LÄGG TILL KÖPTA FASTIGHETER (Röda ringar)
     strategicProperties.forEach(prop => {
         const ring = L.circleMarker(prop.coords, {
             radius: 10,
@@ -965,6 +970,19 @@ function initMap() {
         }).addTo(map);
         
         ring.bindPopup(`<b>FASTIGHET: ${prop.name}</b><br>${prop.info}`);
+    });
+
+    // 3. LÄGG TILL BLOCKERADE KÖP (X-Markeringar)
+    blockedProperties.forEach(prop => {
+        const xIcon = L.divIcon({
+            className: 'custom-x-icon',
+            html: '<span class="x-marker-symbol">X</span>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        const marker = L.marker(prop.coords, { icon: xIcon }).addTo(map);
+        marker.bindPopup(`<b>BLOCKERAT KÖP/OMRÅDE: ${prop.name}</b><br>${prop.info}`);
     });
 }
 

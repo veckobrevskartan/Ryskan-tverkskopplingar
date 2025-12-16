@@ -473,14 +473,34 @@ const treeData = {
             }
           ]
         },
-        {
-          title: "Danmark",
+       {
+          title: "Danmark (Spioncentraler)",
           children: [
-            { title: "Hybridhot", info: "Hög risk för sabotage och påverkansoperationer, särskilt mot kritisk infrastruktur.", links: [{ text: "DDIS 2025", url: "https://moderndiplomacy.eu/2025/10/03/denmark-warns-of-high-risk-of-sabotage-amid-hybrid-threats-from-russia/" }] }
+            { 
+              title: "Handelsrepresentationen (Hellerup)", 
+              info: "Ryska statens fastighet på Vestagervej. Utpekad av PET som spioncentral. 15 'diplomater' utvisades 2022.", 
+              highlight: true,
+              links: [
+                { text: "DR Nyheder", url: "https://www.dr.dk/nyheder/indland/russisk-spionrede-i-hellerup-bliver-ved-med-vaere-udgangspunkt-spionage" },
+                { text: "TV2", url: "https://nyheder.tv2.dk/krimi/2022-04-05-her-holder-de-russiske-spioner-til" }
+              ] 
+            },
+            { 
+              title: "Ruslands Hus (Köpenhamn)", 
+              info: "Ryskt kulturcenter (Rossotrudnichestvo). Sprider propaganda. Konkurs/Frysta tillgångar 2024.", 
+              links: [
+                { text: "Berlingske", url: "https://www.berlingske.dk/samfund/ruslands-hus-i-koebenhavn-er-beggaeret-konkurs" }
+              ] 
+            },
+            { 
+              title: "Alexander Nevsky Kirke", 
+              info: "Rysk-ortodox kyrka på Bredgade. Historisk koppling till tsar-familjen, samlingspunkt för 'Russkiy Mir'.", 
+              links: [
+                { text: "Kristeligt Dagblad", url: "https://www.kristeligt-dagblad.dk/danmark/russisk-kirke-i-koebenhavn-vi-beder-fred" }
+              ] 
+            }
           ]
-        }
-      ]
-    },
+        },
     // --- GREN 2: BROTTSLIGHET ---
     {
       title: "2) Domar & Org. Brottslighet",
@@ -859,6 +879,9 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Handelsrepresentationen (DK)", coords: [55.7276, 12.5638], info: "Vestagervej 7, Hellerup. Känd spioncentral (PET)." },
+    { name: "Ruslands Hus (DK)", coords: [55.6783, 12.5681], info: "Vester Voldgade 11. Ryskt kulturhus/Propagandacentral." },
+    { name: "Alexander Nevsky Kirke (DK)", coords: [55.6853, 12.5913], info: "Bredgade 53. Rysk-ortodox samlingspunkt." },
     { name: "Muskö (Aleshchenko)", coords: [59.0800, 18.1300], info: "Sjötomt vid marinbasen. 220 Mkr skattetvist." },
     { name: "Furusund (Nätverk)", coords: [59.66056, 18.90694], info: "Ryskt nätverk köper tomter i strategiskt inlopp." },
     { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." },

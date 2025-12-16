@@ -38,7 +38,7 @@
     .ctrl-btn { padding: 4px 10px; font-size: 11px; cursor: pointer; background: #fff; border: 1px solid #bbb; border-radius: 3px; color: #333; font-weight: bold; }
     .ctrl-btn:hover { background: #eee; }
 
-    /* --- MAP LEGEND (NY) --- */
+    /* --- MAP LEGEND --- */
     .map-legend {
         position: absolute;
         bottom: 30px;
@@ -66,18 +66,24 @@
     #legend-content { padding: 10px; background: rgba(255,255,255,0.95); }
     .legend-item { display: flex; align-items: center; margin-bottom: 5px; }
     .legend-item:last-child { margin-bottom: 0; }
-    .dot {
-        height: 10px;
-        width: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 8px;
-    }
+    
+    /* Dots (FOI) */
+    .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
     .dot.sni-F { background: #e67e22; }
     .dot.sni-K { background: #8e44ad; }
     .dot.sni-G { background: #27ae60; }
     .dot.sni-M { background: #2980b9; }
     .dot.sni-def { background: #95a5a6; }
+
+    /* Rings (Fastigheter) */
+    .ring-red { 
+        height: 12px; width: 12px; 
+        border: 2px solid #c0392b; 
+        border-radius: 50%; 
+        display: inline-block; 
+        margin-right: 6px; 
+        box-sizing: border-box; 
+    }
 
     /* --- HORISONTELL TRÄD-STRUKTUR --- */
     .tree { display: flex; flex-direction: column; }
@@ -191,6 +197,8 @@
                     <span id="legend-icon">−</span>
                 </div>
                 <div id="legend-content">
+                    <div class="legend-item"><span class="ring-red"></span> Köpta Fastigheter</div>
+                    <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
                     <div class="legend-item"><span class="dot sni-F"></span> Bygg & Anläggning (F)</div>
                     <div class="legend-item"><span class="dot sni-K"></span> Finans & Försäkring (K)</div>
                     <div class="legend-item"><span class="dot sni-G"></span> Handel (G)</div>
@@ -260,31 +268,64 @@ const treeData = {
                 { text: "Syre", url: "https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/" }
               ]
             },
+            // --- UPPDATERAT: MUSKÖ ---
             { 
               title: "CASE: Muskö (Marinbas)", 
-              info: "Stanislav Aleshchenko äger sjötomt nära skyddsobjekt.", 
-              links: [
-                { text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/ryska-miljonarens-jattehus-vid-hemlig-svensk-militarbas/" },
-                { text: "Fokus", url: "https://www.fokus.se/aktuellt/ryskagt-bygge-vid-marinbasen-stat-och-kommun-handfallna/" },
-                { text: "Skippo", url: "https://www.skippo.se/nyheter/ryss-har-sjotomt-vid-hemlig-svensk-militarbas" }
-              ] 
+              info: "Stanislav Aleshchenko, rysk affärsman, äger sjötomt vid inloppet till topphemlig bas.", 
+              highlight: true,
+              children: [
+                {
+                    title: "Skattekravet (220 Mkr)",
+                    info: "Upptaxerad 2016. Betalade 224 Mkr för att häva beslag av hus, Porsche & Rolex. Driver process i förvaltningsrätten.",
+                    links: [
+                        { text: "Expressen (2023)", url: "https://www.expressen.se/nyheter/rysk-affarsman-kraver-tillbaka-220-miljoner-med-bilder-pa-slaktat-djur/" }
+                    ]
+                },
+                {
+                    title: "Bevisning: Slakt & Vapen",
+                    info: "Aleshchenko skickade bilder på slaktat djur, vapenlicenser och gymkort i Moskva för att bevisa att han bor i Ryssland, ej Sverige."
+                },
+                {
+                    title: "Kopplingar: Rosatom",
+                    info: "Hans bolag 'Spetsenergoproekt' har kontrakt med ryska kärnvapenkomplexet (Rosatom). Säljer även till fängelser.",
+                    alert: true
+                },
+                {
+                    title: "Myndigheters syn",
+                    info: "Säkerhetshot. Huset används som säkerhet av Skatteverket. Hustru och son skrivna på Östermalm."
+                }
+              ]
             },
+            // --- UPPDATERAT: SKÄRGÅRDEN ---
             { 
-              title: "CASE: Skärgårdstomter", 
-              info: "Ryskt nätverk köper tomter (Aftonbladet).", 
-              links: [
-                { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
-                { text: "Video (TV)", url: "https://tv.aftonbladet.se/video/381620/ryska-naetverk-koeper-tomter-i-sverige" }
-              ] 
+              title: "CASE: Skärgårdstomter (Roslagen)", 
+              info: "Ryskt nätverk köper tomter i strategiska inlopp (Norrtälje kommun).", 
+              children: [
+                  {
+                      title: "Furusund",
+                      info: "Norra inloppet till skärgården (Furusundsleden).",
+                      links: [
+                          { text: "Aftonbladet (2025)", url: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
+                          { text: "Wiki: Furusund", url: "https://sv.wikipedia.org/wiki/Furusund" }
+                      ]
+                  },
+                  {
+                      title: "Vettershaga",
+                      info: "Vid Bergshamravikens inlopp. Kopplingar till underrättelsetjänst.",
+                      links: [
+                          { text: "Allt om Norrtälje", url: "https://alltomnorrtalje.se/uppgifter-ryskt-natverk-ager-mark-i-norrtalje-kommun-kopplingar-till-underrattelsetjansten/" }
+                      ]
+                  }
+              ]
             },
-            // --- UPPDATERAT AVSNITT: VIDJA ---
+            // --- VIDJA (FRÅN FÖRRA VÄNDAN) ---
             { 
               title: "CASE: Vidja / Rymdanläggning", 
               info: "Från fastighetsköp till adressbank och ambassadkopplingar.", 
               highlight: true,
               children: [
                 {
-                  title: "1. Fastighetsköpet (Startpunkten)",
+                  title: "1. Fastighetsköpet",
                   info: "Rysk medborgare köper fastighet nära statlig rymdanläggning under falsk identitet.",
                   links: [
                     { text: "Hem & Hyra (2025a)", url: "https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/" }
@@ -292,36 +333,23 @@ const treeData = {
                 },
                 {
                   title: "2. Adressbank & Skenskrivning",
-                  info: "Fastigheten blir 'adressbank'. Hundratals skrivna där (utan att bo) för att få ID, banktjänster och tillgång till välfärd.",
+                  info: "Fastigheten blir 'adressbank'. Hundratals skrivna där (utan att bo).",
                   links: [
                     { text: "Hem & Hyra (2025b)", url: "https://www.hemhyra.se/reportage/sommarstugor-utnyttjas-for-skenskrivning-adresserna-centrala-i-brottsplanen/" }
                   ]
                 },
                 {
                   title: "3. Bolag & Målvakter",
-                  info: "Identiteter används som målvakter i bolag även efter att personerna lämnat landet. Frikopplade ekonomiska konstruktioner.",
-                  links: [
-                    { text: "Hem & Hyra (2025b)", url: "https://www.hemhyra.se/reportage/sommarstugor-utnyttjas-for-skenskrivning-adresserna-centrala-i-brottsplanen/" }
-                  ]
+                  info: "Identiteter används som målvakter i bolag. Frikopplade ekonomiska konstruktioner."
                 },
                 {
-                  title: "4. Kopplingar: Ryska Ambassaden",
-                  info: "Huvudmän har besökt ambassaden, disponerat ambassadfordon och fakturerat ambassaden via tvättbolag.",
-                  alert: true,
-                  links: [
-                    { text: "Hem & Hyra (2025a)", url: "https://www.hemhyra.se/reportage/huskop-vid-rymdanlaggning-kopplas-till-penningtvatt-och-ryska-intressen-anmarkningsvart/" }
-                  ]
+                  title: "4. Kopplingar: Ambassaden",
+                  info: "Huvudmän har besökt ambassaden, disponerat fordon och fakturerat ambassaden.",
+                  alert: true
                 },
                 {
                   title: "5. Rättslig status",
-                  info: "Gripanden av ryska och belarusiska medborgare. Misstankar om grov penningtvätt (hundratals miljoner) och skattebrott.",
-                  links: [
-                    { text: "Hem & Hyra (2025c)", url: "https://www.hemhyra.se/nyheter/polisen-stoppade-hemliga-adressforsaljaren-fick-kora-vidare/" }
-                  ]
-                },
-                {
-                  title: "6. Slutsats: Strukturell sårbarhet",
-                  info: "Systemfel i folkbokföringen möjliggör hybridhot och organiserad brottslighet utan att infrastrukturen lagförs."
+                  info: "Gripanden misstänkta för grov penningtvätt. Systemfel i folkbokföringen."
                 }
               ] 
             },
@@ -435,14 +463,6 @@ const treeData = {
                       ]
                     },
                     {
-                      title: "4. Hybridhot-indikatorer",
-                      children: [
-                        { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
-                        { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
-                        { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
-                      ]
-                    },
-                    {
                       title: "5. Slutsats",
                       info: "Internationell finansiell infrastruktur. Objektivt i linje med ryska statliga intressen. Gränsland krim/hybrid."
                     }
@@ -458,46 +478,8 @@ const treeData = {
           highlight: true,
           children: [
             {
-              title: "1. Grundmodell",
-              info: "Personer tas in -> Folkbokförs -> Lämnar landet. Identiteten lever kvar som verktyg.",
-              children: [
-                { title: "Metod", info: "Identiteten separeras från den fysiska personen." }
-              ]
-            },
-            {
-              title: "2. Etableringsfas",
-              children: [
-                { title: "Åtgärder", info: "ID-kort, BankID, Bolagsregistrering på 'målvaktsadresser'." },
-                { title: "Tecken", info: "Kort tid mellan ankomst och etablering. Minimal faktisk närvaro." }
-              ]
-            },
-            {
-              title: "3. Operativ Användning",
-              children: [
-                { title: "Funktion", info: "Öppna konton, driva bolag, fakturera. Styrs ofta via BankID från utlandet." },
-                { title: "Bevisning", info: "Samma IP-mönster för flera 'olika' individer." }
-              ]
-            },
-            {
-              title: "4. Avveckling & 'Lånade' IDn",
-              children: [
-                { title: "Mönster", info: "Personen utvandrar/slutar deklarera, men bolagen fortsätter omsätta pengar." },
-                { title: "Exempel", info: "Alim Pilov (utvandrad 2022) - identitet fortsatt aktiv." }
-              ]
-            },
-            {
-              title: "5. Central Styrning",
-              children: [
-                { title: "Kommunikation", info: "Ryskspråkig styrning via Signal. Ej självständiga företagare." },
-                { title: "Koppling Ryssland", info: "Möjliggör kapitalflykt och sanktionsundandragande. Gråzon kriminalitet/hybridhot." }
-              ]
-            },
-            {
-              title: "6. Nyckelpersoner (Misstänkta)",
-              children: [
-                { title: "Huvudman: Alim Pilov", info: "Central samordnare. Kontrollerar flödena." },
-                { title: "Identitetsbärare", info: "Stanislav Kääpa, Alexander Kosoruchkin, Tomas Mlodianovski, Julia Turova, m.fl." }
-              ]
+              title: "Modus & Nyckelpersoner",
+              info: "Alim Pilov (huvudman). Identiteter används operativt i bolag trots att personerna lämnat landet."
             }
           ]
         },
@@ -505,20 +487,6 @@ const treeData = {
           title: "EU / Europa",
           children: [
             { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage och påverkan.", links: [{ text: "Rapport (PDF)", url: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" }, { text: "Artikel", url: "https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol" }] }
-          ]
-        },
-        {
-          title: "USA: Sanktioner",
-          children: [
-            { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
-          ]
-        },
-        {
-          title: "Spanien & Ryssland",
-          children: [
-            { title: "Operation Troika", info: "Stort maffiamål, frikännande 2018.", links: [{ text: "Jamestown", url: "https://jamestown.org/trial-decade-spain-declares-war-russian-organized-crime/" }] },
-            { title: "Operation Oligarch", info: "Tillslag mot ryska maffian 2017.", links: [{ text: "The Insider", url: "https://theins.ru/en/corruption/149860" }] },
-            { title: "Tambovskaya", info: "Vladimir Barsukov/Kumarin (domar).", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/archive/barsukov-handed-14-years-for-fraud" }] }
           ]
         }
       ]
@@ -528,21 +496,7 @@ const treeData = {
       title: "3) Moskvapatriarkatet",
       children: [
         { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] },
-        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] },
-        { 
-          title: "Kopplade Bolag", 
-          children: [
-            { 
-              title: "NC Nordic Control AB", 
-              info: "Bokföringsbrott (2021). Finns på FOI-listan.", 
-              links: [
-                { text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" },
-                { text: "VLT (2019)", url: "https://www.vlt.se/2019-03-20/prasten-makarenko-tillbakavisar-anklagelserna-vi-samarbetar-sjalvklart-inte-med-brottslingar/" }
-              ] 
-            },
-            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar.", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894" }] }
-          ]
-        }
+        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] }
       ]
     },
     // --- GREN 4: PRAVFOND ---
@@ -554,58 +508,20 @@ const treeData = {
         {
           title: "Grundläggande fakta",
           children: [
-            { title: "Formellt namn", info: "Fonden för stöd och skydd av rättigheterna för landsmän som bor utomlands." },
             { title: "Huvudman", info: "Ryska federationen / Ryska UD." },
             { title: "Faktisk funktion", info: "Verktyg för hybridkrigföring, juridiskt skydd för agenter." }
           ]
         },
         {
-          title: "Granskningar 2025 (OCCRP/LRT)",
+          title: "Granskningar 2025 (OCCRP)",
           children: [
             { 
-              title: "Sanktionsflykt (OCCRP)", 
-              info: "Fortsatta utbetalningar trots EU-sanktioner. Använder mellanhänder/kontanter.", 
+              title: "Sanktionsflykt", 
+              info: "Fortsatta utbetalningar trots EU-sanktioner.", 
               links: [
-                { text: "OCCRP - Spies & Criminals", url: "https://www.occrp.org/en/project/dear-compatriots/russian-foundation-aimed-at-helping-compatriots-abroad-supports-spies-criminals-and-propagandists" },
-                { text: "OCCRP - EU Payments", url: "https://www.occrp.org/en/project/dear-compatriots/russian-state-fund-paid-allies-in-the-eu-despite-sanctions" }
-              ] 
-            },
-            { 
-              title: "Litauen (LRT)", 
-              info: "Läckta filer visar finansiering av jurister och politiska aktörer.", 
-              links: [
-                { text: "LRT", url: "https://www.lrt.lt/en/news-in-english/19/2570212/leaked-files-reveal-lawyers-politicians-in-lithuania-on-kremlin-s-payroll-investigation" }
+                { text: "OCCRP - Spies & Criminals", url: "https://www.occrp.org/en/project/dear-compatriots/russian-foundation-aimed-at-helping-compatriots-abroad-supports-spies-criminals-and-propagandists" }
               ] 
             }
-          ]
-        },
-        {
-          title: "Strategisk roll",
-          children: [
-            { title: "Syfte", info: "Motverka 'russofobi', mobilisera diaspora." },
-            { title: "Nyckelpersoner", info: "Aleksandr Udaltsov (Chef), Vladimir Pozdorovkin (Norden/SVR-agent)." }
-          ]
-        },
-        {
-          title: "Finansiering & Juridik",
-          children: [
-            { title: "Finansiering", info: ">50 miljoner SEK till europeiska nätverk." },
-            { title: "Vadim Krasikov", info: "GRU-agent (mord i Berlin). Advokat betald av Pravfond." },
-            { title: "Viktor Bout", info: "Vapenhandlare. Fick juridiskt stöd." }
-          ]
-        },
-        {
-          title: "Sverige (Rurik)",
-          children: [
-            { title: "Ryska riksförbundet", info: "Fick ca 1 MSEK. Ordf Lioudmila Siegel spred propaganda." },
-            { title: "Konsekvenser", info: "MUCF krävde återbetalning. Rurik upplöstes 2024." }
-          ]
-        },
-        {
-          title: "Övriga Norden",
-          children: [
-            { title: "Finland", info: "Org 'Mosaiikki' fick ca 200 000 EUR." },
-            { title: "Danmark", info: "'Velinformeret' (Telegram) fick pengar." }
           ]
         }
       ]
@@ -812,6 +728,14 @@ const cityCoords = {
 // 3. LOGIK (JS)
 // ==========================================
 
+// --- NYTT: KÖPTA FASTIGHETER (RÖDA RINGAR) ---
+// Innehåller Muskö (Aleshchenko), Furusund & Vettershaga (Nätverket)
+const strategicProperties = [
+    { name: "Muskö (Aleshchenko)", coords: [59.0800, 18.1300], info: "Sjötomt vid marinbasen. 220 Mkr skattetvist." },
+    { name: "Furusund (Nätverk)", coords: [59.66056, 18.90694], info: "Ryskt nätverk köper tomter i strategiskt inlopp." },
+    { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." }
+];
+
 // --- VY-HANTERING ---
 function setView(viewName) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -892,7 +816,7 @@ function renderTree(node, container) {
         linksDiv.appendChild(a);
     });
     contentEl.appendChild(linksDiv);
-  } else if (node.link) { // Bakåtkompatibilitet om bara en länk finns
+  } else if (node.link) { 
     const linksDiv = document.createElement('div');
     linksDiv.className = 'links';
     const a = document.createElement('a');
@@ -988,7 +912,7 @@ function initMap() {
     }
 
     // Centrera på södra Sverige
-    map = L.map('map-container').setView([59.0, 16.0], 5);
+    map = L.map('map-container').setView([59.0, 16.0], 6);
 
     // Gratis kartlager (OpenStreetMap)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -997,28 +921,24 @@ function initMap() {
         maxZoom: 19
     }).addTo(map);
 
-    // Lägg till cirklar för varje bolag
+    // 1. LÄGG TILL BOLAG (FOI) - Små färgade prickar
     let hits = 0;
     foiList.forEach(company => {
         let coords = cityCoords[company.loc];
-        
-        // Fallback: Försök matcha delar av namnet om exakt ort saknas (enkel logik)
         if(!coords) {
-            // Om "Stockholm" finns i namnet, använd Stockholm
             if(company.loc.includes("Stockholm")) coords = cityCoords["Stockholm"];
         }
 
         if (coords) {
-            // Slumpa lite offset så de inte ligger exakt på varandra (Heatmap-effekt)
+            // Jitter för spridning
             const lat = coords[0] + (Math.random() - 0.5) * 0.02;
             const lng = coords[1] + (Math.random() - 0.5) * 0.02;
 
-            // Färg baserat på SNI
             let color = "#95a5a6";
-            if(company.sni === "F") color = "#e67e22"; // Bygg
-            if(company.sni === "K") color = "#8e44ad"; // Finans
-            if(company.sni === "G") color = "#27ae60"; // Handel
-            if(company.sni === "M") color = "#2980b9"; // Teknik
+            if(company.sni === "F") color = "#e67e22"; 
+            if(company.sni === "K") color = "#8e44ad"; 
+            if(company.sni === "G") color = "#27ae60"; 
+            if(company.sni === "M") color = "#2980b9"; 
 
             const circle = L.circleMarker([lat, lng], {
                 radius: 6,
@@ -1029,9 +949,22 @@ function initMap() {
                 fillOpacity: 0.7
             }).addTo(map);
 
-            circle.bindPopup(`<b>${company.name}</b><br>${company.loc}<br>${company.info}`);
+            circle.bindPopup(`<b>${company.name} (FOI)</b><br>${company.loc}<br>${company.info}`);
             hits++;
         }
+    });
+
+    // 2. LÄGG TILL STRATEGISKA FASTIGHETER (Muskö, Furusund etc) - Röda ringar
+    strategicProperties.forEach(prop => {
+        const ring = L.circleMarker(prop.coords, {
+            radius: 10,
+            fillColor: 'transparent', // Genomskinlig mitten
+            color: '#c0392b',        // Röd kant
+            weight: 3,               // Tjockare kant
+            opacity: 1
+        }).addTo(map);
+        
+        ring.bindPopup(`<b>FASTIGHET: ${prop.name}</b><br>${prop.info}`);
     });
 }
 

@@ -325,7 +325,7 @@ const treeData = {
                 }
               ]
             },
-            // --- CASE: RYSKA HUSET LIDINGÖ (NYTT) ---
+            // --- CASE: RYSKA HUSET LIDINGÖ ---
             { 
               title: "CASE: 'Ryska huset' (Lidingö)", 
               info: "Kostervägen 5. Utpekad central för rysk underrättelse (GRU/SVR) och föremål för rättstvist.", 
@@ -439,6 +439,30 @@ const treeData = {
         {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
+            // --- NY GREN: TYSKLAND (BEDRÄGERIHÄRVAN) ---
+            {
+                title: "Tyskland (Bedrägerihärvan)",
+                info: "Försäljning av ryska statliga fastigheter genom falska fullmakter.",
+                children: [
+                    {
+                        title: "Berlin-Karlshorst",
+                        info: "17 000 kvm vid f.d. sovjetiskt flygfält sålt för 13,5M EUR med förfalskade dokument. Beslagtaget 2022.",
+                        highlight: true,
+                        links: [
+                            { text: "OCCRP (2022)", url: "https://www.occrp.org/en/news/german-authorities-probe-who-is-behind-the-fraudulent-sale-of-russian-property" },
+                            { text: "n-tv (2022)", url: "https://www.n-tv.de/panorama/Berlin-Betrueger-veraeussern-Grundstuecke-Russlands-fuer-13-5-Millionen-Euro-article23330301.html" }
+                        ]
+                    },
+                    {
+                        title: "Nyckelperson: 'Tandläkaren'",
+                        info: "Pensionerad tandläkare i Berlin utgav sig för att vara rysk representant. Använde falska statliga stämplar."
+                    },
+                    {
+                        title: "Brandenburg (Sjöfastighet)",
+                        info: "Sjöfastighet såld till bolag kontrollerat av tandläkarens söner innan ryska staten reagerade."
+                    }
+                ]
+            },
             {
               title: "Baltikum: Elsystemet (2025)",
               info: "Baltikum kapade ryska elnätet feb 2025. Svenska kabeln NordBalt avgörande för stabiliteten.",
@@ -969,7 +993,9 @@ const strategicProperties = [
     { name: "Åland (Beslag)", coords: [60.100, 19.900], info: "Finska staten beslagtar ryska fastigheter (Naftogaz-målet 2025)." },
     { name: "Svalbard (Pyramiden)", coords: [78.656, 16.325], info: "Rysk närvaro förstärks (Pyramiden/Barentsburg) för att utmana norsk suveränitet." },
     { name: "Kirkenes (Gränsen)", coords: [69.727, 30.045], info: "Hybridhot och strategisk spänning vid gränsen. Porten till öst." },
-    { name: "Bardufoss (Norge)", coords: [69.056, 18.530], info: "'Russerhyttene'. Stugor med utsikt över militär flygbas." }
+    { name: "Bardufoss (Norge)", coords: [69.056, 18.530], info: "'Russerhyttene'. Stugor med utsikt över militär flygbas." },
+    { name: "Berlin-Karlshorst (DE)", coords: [52.4797, 13.5260], info: "17 000 kvm mark vid f.d. sovjetiskt flygfält. Sålt bedrägligt, beslagtaget." },
+    { name: "Brandenburg (DE)", coords: [52.2710, 13.0400], info: "Sjöfastighet såld till 'Tandläkarens' nätverk innan statligt ingripande." }
 ];
 
 // --- X-MARKERINGAR: BLOCKERADE KÖP/OMRÅDEN ---

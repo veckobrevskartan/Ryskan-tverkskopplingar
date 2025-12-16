@@ -225,7 +225,7 @@
                     <span id="legend-icon">−</span>
                 </div>
                 <div id="legend-content">
-                    <div class="legend-item"><span class="ring-red"></span> Köpta Fastigheter</div>
+                    <div class="legend-item"><span class="ring-red"></span> Köpta/Strategiska Fastigheter</div>
                     <div class="legend-item"><span class="x-mark">X</span> Blockerade Köp/Områden</div>
                     <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
                     <div class="legend-item"><span class="dot sni-F"></span> Bygg & Anläggning (F)</div>
@@ -325,14 +325,23 @@ const treeData = {
                 }
               ]
             },
-            // --- CASE: SKÄRGÅRDEN ---
+            // --- CASE: SKÄRGÅRDEN & KVICKSUND ---
             { 
-              title: "CASE: Skärgårdstomter (Roslagen)", 
-              info: "Ryskt nätverk köper tomter i strategiska inlopp (Norrtälje kommun).", 
+              title: "CASE: Skärgårdstomter & Kvicksund", 
+              info: "Ryskt nätverk köper tomter i strategiska inlopp och vid broar.", 
               children: [
                   {
+                      title: "Kvicksundsbron",
+                      info: "Tomt nära bron har kopplats till samma nätverk som den ryska kyrkan i Västerås.",
+                      highlight: true,
+                      links: [
+                          { text: "Liberalerna (2025)", url: "https://vasteras.liberalerna.se/blog/stoppa-ryska-fastighetskop-vasteras-och-sverige-ar-inte-till-salu/" },
+                          { text: "Aftonbladet", url: "https://tv.aftonbladet.se/video/381620/ryska-naetverk-koeper-tomter-i-sverige" }
+                      ]
+                  },
+                  {
                       title: "Furusund & Vettershaga",
-                      info: "Norra inloppet till skärgården. Kopplingar till underrättelsetjänst.",
+                      info: "Norra inloppet till skärgården (Roslagen). Kopplingar till underrättelsetjänst.",
                       links: [
                           { text: "Aftonbladet (2025)", url: "https://www.aftonbladet.se/nyheter/a/qPEzvw/ryskt-natverk-koper-tomter-i-stockholms-skargard" },
                           { text: "Allt om Norrtälje", url: "https://alltomnorrtalje.se/uppgifter-ryskt-natverk-ager-mark-i-norrtalje-kommun-kopplingar-till-underrattelsetjansten/" }
@@ -374,13 +383,28 @@ const treeData = {
                 }
               ] 
             },
-            // --- CASE: KYRKAN VÄSTERÅS ---
+            // --- CASE: KYRKOR & PÅVERKAN ---
             { 
-              title: "CASE: Ryska Kyrkan Västerås", 
-              info: "Strategisk placering nära flygplats. Hot om tvångsövertagande.", 
-              links: [
-                { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
-              ] 
+              title: "CASE: Kyrkor som plattformar", 
+              info: "Rysk-ortodoxa kyrkan pekas ut som säkerhetshot av Säpo och experter.", 
+              children: [
+                {
+                    title: "Ryska Kyrkan Västerås", 
+                    info: "Strategisk placering nära flygplats (Hässlö). Hot om tvångsövertagande (2025).", 
+                    links: [
+                        { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" },
+                        { text: "Politico (USA)", url: "https://marcusoscarsson.se/just-nu-svensk-byggnad-pekas-ut-i-usa-hotar-sveriges-sakerhet/" }
+                    ]
+                },
+                {
+                    title: "S:t Sigfrids Kyrka (Aspudden)", 
+                    info: "Kuppartat övertagandeförsök av rysk församling. Säkerhetsexpert varnar för kopplingar till Kreml.", 
+                    highlight: true,
+                    links: [
+                        { text: "Kyrkans Tidning (2025)", url: "https://www.kyrkanstidning.se/nyhet/sakerhetsexpert-varnar-ryssland-kan-anvanda-svenska-kyrkor/147849" }
+                    ]
+                }
+              ]
             }
           ]
         },
@@ -389,10 +413,17 @@ const treeData = {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
             {
-              title: "Lettland: Förbud (2025)",
-              info: "Lag som förbjuder ryska/belarusiska medborgare att köpa fastigheter.",
+              title: "Baltikum: Elsystemet (2025)",
+              info: "Baltikum kapade ryska elnätet feb 2025. Svenska kabeln NordBalt avgörande för stabiliteten.",
               links: [
-                { text: "Saeima", url: "https://www.saeima.lv/en/news/saeima-news/18719-/34874-russian-and-belarusian-citizens-banned-from-buying-real-estate-in-latvia" }
+                { text: "Svenska Kraftnät", url: "https://via.tt.se/pressmeddelande/3782539/svenska-sjokabeln-nordbalt-stottar-nar-baltikum-lamnar-det-ryska-elsystemet?publisherId=3235391&lang=sv" }
+              ]
+            },
+            {
+              title: "Lettland: Förbud & Statistik",
+              info: "Totalförbud mot ryska köp. 38 fall identifierade i början av 2025 innan förbudet.",
+              links: [
+                { text: "LSM.lv", url: "https://eng.lsm.lv/article/politics/saeima/11.02.2025-real-estate-purchase-ban-for-russians-belarusians-being-considered-in-latvia.a587351/" }
               ]
             },
             {
@@ -416,32 +447,36 @@ const treeData = {
           children: [
             { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES.", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
             { 
-              title: "CASE: Airiston Helmi", 
-              info: "Tillslag 2018 mot skärgårdsegendomar (Pargas). Domar 2025.", 
-              links: [{ text: "Yle", url: "https://yle.fi/a/7-10073103" }, { text: "HBL", url: "https://www.hbl.fi/2025-02-24/dom-villkorligt-fangelse-for-airiston-helmi-miljonar/" }] 
-            },
-            { title: "Beslag", info: "Frysning av ryska statliga tillgångar (Naftogaz-målet).", links: [{ text: "Reuters", url: "https://www.reuters.com/world/europe/finland-confiscating-425-bln-russian-assets-naftogaz-case-2024-10-30/" }] }
+              title: "CASE: Airiston Helmi & Beslag", 
+              info: "Tillslag 2018 (Pargas). Nya beslag 2025 av ryska statliga fastigheter i Helsingfors och Åland (Naftogaz-målet).", 
+              links: [{ text: "Ålands Radio", url: "https://alandsradio.ax/nyheter/yle-beslutet-att-beslagta-ryskagda-fastigheter-star-fast-trots-ryska-protester-ror-aven-fastigheter-pa-aland" }] 
+            }
           ]
         },
         {
-          title: "Norge",
+          title: "Norge & Arktis",
           children: [
+            { 
+              title: "Svalbard (Strategisk Press)", 
+              info: "Ryssland utmanar norsk suveränitet. Revitalisering av Pyramiden och Barentsburg som maktmedel.", 
+              links: [{ text: "ArcticToday", url: "https://www.arctictoday.com/we-need-to-talk-about-russias-new-tactics-on-svalbard-commentary/" }] 
+            },
+            { 
+              title: "Kirkenes & Gränsen", 
+              info: "Hybridhot och ökad spänning vid gränsen. Möten om arktisk säkerhet (2025).", 
+              links: [{ text: "High North News", url: "https://www.highnorthnews.com/en/arctic-military-leaders-met-near-norway-russia-border-discussed-hybrid-threats" }] 
+            },
             { 
               title: "CASE: 'Russerhytter' (Bardufoss)", 
               info: "Stugor nära militär flygbas. Politikerkona ägare.", 
               links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] 
-            },
-            { 
-              title: "CASE: Ryska Kyrkan (Haakonsvern)", 
-              info: "Fastigheter med insyn mot marinbasen Haakonsvern (Bergen).", 
-              links: [{ text: "Euromaidan Press", url: "https://euromaidanpress.com/2022/10/19/russian-church-owns-property-near-norways-main-naval-base-dagbladet/" }] 
             }
           ]
         },
         {
           title: "Danmark",
           children: [
-            { title: "Regelverk", info: "Striktare krav på hemvist/tillstånd.", links: [{ text: "UM.dk", url: "https://um.dk/en/travel-and-residence/family-abd-legal-issues/foreign-citizens-acquisition-of-property-in-denmark" }] }
+            { title: "Hybridhot", info: "Hög risk för sabotage och påverkansoperationer, särskilt mot kritisk infrastruktur.", links: [{ text: "DDIS 2025", url: "https://moderndiplomacy.eu/2025/10/03/denmark-warns-of-high-risk-of-sabotage-amid-hybrid-threats-from-russia/" }] }
           ]
         }
       ]
@@ -488,14 +523,6 @@ const treeData = {
                         { title: "Viktor Soloviev", info: "Rysk medborgare i central kärnfunktion." },
                         { title: "Språklig miljö", info: "Sluten miljö, tolkbehov. Tyder på externt nätverk." },
                         { title: "Sanktioner & Kapitalflykt", info: "Möjliggör kapitalrörelser inom EU. Minskar effekt av sanktioner." }
-                      ]
-                    },
-                    {
-                      title: "4. Hybridhot-indikatorer",
-                      children: [
-                        { title: "Uthållighet", info: "Verksamhet över åratal kräver disciplin/resurser." },
-                        { title: "Geografi", info: "Kluster i Bandhagen, Vårby, Farsta (logistik)." },
-                        { title: "Centralstyrning", info: "Åklagare kräver hårda restriktioner (bevisförstörelse)." }
                       ]
                     },
                     {
@@ -835,9 +862,14 @@ const strategicProperties = [
     { name: "Muskö (Aleshchenko)", coords: [59.0800, 18.1300], info: "Sjötomt vid marinbasen. 220 Mkr skattetvist." },
     { name: "Furusund (Nätverk)", coords: [59.66056, 18.90694], info: "Ryskt nätverk köper tomter i strategiskt inlopp." },
     { name: "Vettershaga (Nätverk)", coords: [59.60722, 18.68056], info: "Vid Bergshamravikens inlopp. Underrättelsekopplingar." },
+    { name: "Kvicksundsbron (Tomt)", coords: [59.4533, 16.3197], info: "Tomt nära strategisk bro. Kopplat till Västerås-nätverk (Liberalerna)." },
     { name: "Vidja (Huddinge)", coords: [59.215, 18.110], info: "Fastighet nära Swedish Space Corp (Ågesta). Använd som adressbank." },
     { name: "Västerås (Hässlö)", coords: [59.589, 16.635], info: "Ryska Kyrkan. Ligger strategiskt nära Västerås Flygplats." },
+    { name: "S:t Sigfrids Kyrka (Aspudden)", coords: [59.3061, 18.0005], info: "Kuppartat övertagandeförsök av rysk församling (Kyrkans Tidning 2025)." },
     { name: "Airiston Helmi (Finland)", coords: [60.233, 22.133], info: "Pargas (Åbolands skärgård). Tillslag 2018 mot misstänkt penningtvätt/underrättelse." },
+    { name: "Åland (Beslag)", coords: [60.100, 19.900], info: "Finska staten beslagtar ryska fastigheter (Naftogaz-målet 2025)." },
+    { name: "Svalbard (Pyramiden)", coords: [78.656, 16.325], info: "Rysk närvaro förstärks (Pyramiden/Barentsburg) för att utmana norsk suveränitet." },
+    { name: "Kirkenes (Gränsen)", coords: [69.727, 30.045], info: "Hybridhot och strategisk spänning vid gränsen. Porten till öst." },
     { name: "Bardufoss (Norge)", coords: [69.056, 18.530], info: "'Russerhyttene'. Stugor med utsikt över militär flygbas." }
 ];
 

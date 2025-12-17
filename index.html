@@ -735,7 +735,7 @@ const treeData = {
       
     }, // Här stänger vi Gren 2
 
-  // --- GREN 3: DOMAR & ORG. BROTTSLIGHET (SVERIGE & INT) ---
+ // --- GREN 3: DOMAR & ORG. BROTTSLIGHET (SVERIGE & INT) ---
     {
       title: "3) Domar & Org. Brottslighet",
       children: [
@@ -874,37 +874,76 @@ const treeData = {
               ]
             },
             {
-              title: "Platser & Spår (Uppsala)",
+              title: "Platser (Uppsala)",
               children: [
                 { title: "Bostäder", info: "Eksätravägen (Payam), Hörnbovägen (Peyman)." },
-                { title: "Webhallen (Uppsala)", info: "Kontantköp av hårdvara (Lenovo, Seagate)." },
+                { title: "Webhallen", info: "Kontantköp av hårdvara (Lenovo, Seagate)." },
                 { title: "Papperskorgen", info: "Sönderslagen hårddisk hittad i papperskorg i Uppsala efter gripandet." }
               ]
             }
-         // ... (Här slutar Spionmålet ovanför) ...
           ]
         },
-        { 
+        // --- CASE: INDUSTRISPIONAGE (DIMITRIEVSKI) ---
+        {
+          title: "CASE: Industrispionage (Dimitrievski)",
+          info: "Olovlig underrättelseverksamhet mot Scania/Volvo (2017-2019). Mål B 18657-20.",
+          highlight: true,
+          alert: true,
+          children: [
+            {
+              title: "Huvudpersoner",
+              children: [
+                { title: "Kristian Dimitrievski", info: "Konsult. Anskaffade hemliga uppgifter om fordonstillverkning." },
+                { title: "Jevgenij Umurenko", info: "Rysk underrättelseofficer. Greps vid möte med Kristian." },
+                { title: "Elena G. Kim", info: "Närstående. Kopplas till Moskva-adress och stora kontantuttag utomlands." }
+              ]
+            },
+            {
+              title: "Ryska Kopplingar & Rekrytering",
+              children: [
+                { title: "Slava Khmyrov (2016)", info: "SMS: 'Russian friend... a council from rus embassy in Stockholm'." },
+                { title: "Elena Kim-spåret", info: "Handskriven lapp hittad med Elena Kim + Moskva-adress + ryskt nummer." },
+                { title: "Manuel Matheus", info: "Kontakt i tidigt skede (2016) kopplad till PDF om skatter." }
+              ]
+            },
+            {
+              title: "Modus Operandi (Teknik)",
+              children: [
+                { title: "Fotografering", info: "Tog 240 bilder av skärmen (Scania/Volvo-dokument) vid ett tillfälle (feb 2019)." },
+                { title: "Bearbetning", info: "Minneskort -> Privat dator -> Tumnaglar -> PDF -> USB." },
+                { title: "Döljande", info: "Använde 'avgränsande bilder' (badrum/miljö) för att dölja mönster mellan dokument." }
+              ]
+            },
+            {
+              title: "Ekonomi & Finansiella Spår",
+              children: [
+                { title: "Avvikande uttag", info: "Stora kontantuttag utomlands (Elena Kim)." },
+                { title: "Platser", info: "Almaty, Kazakstan (ca 180 000 kr) och Moskva (ca 12 000 kr)." },
+                { title: "Analys", info: "Uttag gjordes via kreditkort (Norwegian) trots saknat saldo." }
+              ]
+            },
+            {
+              title: "Viktiga Händelser & Platser",
+              children: [
+                { title: "Restaurang Kristall (Sthlm)", info: "Gripandet 2019-02-26. Vinglas beslagtaget framför Umurenko (DNA)." },
+                { title: "Maskinkajen 15 (Gbg)", info: "Källarförråd där USB-minne (B038-19-1) med företagshemligheter hittades." },
+                { title: "Södertälje (Paradisgränd)", info: "Bostad. Badrummet matchade de 'avgränsande bilderna' i bevisningen." },
+                { title: "Sthlm Central (Box DC13)", info: "Förvaringsbox hyrd via Speed Services. Mobiltelefon hittad." },
+                { title: "Gamla Stan & Varberg", info: "Möten 2018 ('Mötet innan Varberg')." }
+              ]
+            }
+          ]
+        },
+        {
           title: "EU / Europa",
           children: [
-            { 
-              title: "Europol SOCTA 2025", 
-              info: "Ryska nätverk driver sabotage och påverkan.", 
-              links: [
-                { text: "Rapport (PDF)", url: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" }, 
-                { text: "Artikel", url: "https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol" }
-              ] 
-            }
+            { title: "Europol SOCTA 2025", info: "Ryska nätverk driver sabotage och påverkan.", links: [{ text: "Rapport (PDF)", url: "https://www.europol.europa.eu/cms/sites/default/files/documents/EU-SOCTA-2025.pdf" }, { text: "Artikel", url: "https://www.theguardian.com/technology/2025/mar/18/russia-criminal-networks-drive-increase-sabotage-europol" }] }
           ]
         },
         {
           title: "USA: Sanktioner",
           children: [
-              { 
-                title: "OFAC", 
-                info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", 
-                links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] 
-              }
+              { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
           ]
         },
         {

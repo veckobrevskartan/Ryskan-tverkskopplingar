@@ -796,10 +796,13 @@ const treeData = {
             }
           ]
         },
-        {
+       {
           title: "Lånade Identiteter (B 16538-22)",
           info: "Södertörns tingsrätt. Modus: 'Importera – etablera – avveckla'.",
           highlight: true,
+          links: [
+            { text: "EBM", url: "https://www.ekobrottsmyndigheten.se/atal-i-arende-om-utnyttjade-identiteter/" }
+          ], // <--- HÄR MÅSTE DU STÄNGA LÄNK-LISTAN
           children: [
             {
               title: "1. Grundmodell",
@@ -808,6 +811,7 @@ const treeData = {
                 { title: "Metod", info: "Identiteten separeras från den fysiska personen." }
               ]
             },
+            // ... resten av barnen ...
             {
               title: "2. Etableringsfas",
               children: [

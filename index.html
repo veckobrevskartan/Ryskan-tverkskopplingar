@@ -277,16 +277,64 @@
 
 <script>
 // ==========================================
-// 1. DATA: TRÄDSTRUKTUR (ANALYS)
+// ==========================================
+// 1. DATA: TRÄDSTRUKTUR (KOMPLETT MED ALLA LÄNKAR)
 // ==========================================
 const treeData = {
-  title: "Ryskt Fastighetsägande & Org. Brottslighet",
-  info: "Översikt av kopplingar, fastigheter och nätverk i Norden.",
+  title: "Ryska Intressen: Fastigheter, Terror & Brott",
+  info: "Totalbild över oligarker, spionagekyrkor, terrornätverk och organiserad brottslighet i Norden.",
   isRoot: true,
   children: [
-    // --- GREN 1: FASTIGHETER ---
+    // --- NY GREN: TERROR & EXTREMISM (RIM/NRM) ---
     {
-      title: "1) Fastigheter & Mark (Norden)",
+      title: "1) Terror & Extremism (RIM/NRM)",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "Russian Imperial Movement (RIM)",
+          info: "Terrorstämplad av USA, UK, Kanada. Bas i S:t Petersburg. Driver 'Partizan'-lägret.",
+          links: [
+             { text: "US Dept of State", url: "https://2017-2021.state.gov/terrorist-designation-of-the-russian-imperial-movement/" },
+             { text: "The Conversation (2025)", url: "https://theconversation.com/russian-imperial-movement-how-a-far-right-group-outlawed-by-the-uk-is-spreading-terror-across-europe-234799" }
+          ],
+          children: [
+            { title: "Stanislav Vorobyov", info: "Ledare. Terrorstämplad (SDGT)." },
+            { title: "Partizan-programmet", info: "Militär träning (bomb, gerilla) för europeiska nazister." },
+            { 
+              title: "Sverige-kopplingen (Udodov)", 
+              info: "Anatoly Udodov (RIM-repr) greps i Sverige 2020 med vapenlager. Rekryterare.",
+              links: [{ text: "ISAC", url: "https://www.iar-gwu.org/blog/iar-web/stopping-online-terrorism" }]
+            }
+          ]
+        },
+        {
+          title: "Nordiska Motståndsrörelsen (NRM)",
+          info: "Terrorstämplad av USA (2024). Stöder Rysslands krig i Ukraina.",
+          links: [
+            { text: "US Treasury (2024)", url: "https://home.treasury.gov/news/press-releases/jy2395" },
+            { text: "CTC West Point", url: "https://ctc.westpoint.edu/the-history-and-future-of-the-nordic-resistance-movement/" }
+          ],
+          children: [
+            {
+              title: "Göteborgsbombningarna (2016-17)",
+              info: "Utfördes av NRM-medlemmar (Viktor Melin m.fl.) tränade av RIM i Ryssland.",
+              highlight: true,
+              links: [{ text: "Wikipedia (Bombdåden)", url: "https://sv.wikipedia.org/wiki/Bombd%C3%A5den_i_G%C3%B6teborg_2016%E2%80%932017" }]
+            },
+            {
+              title: "Finland: Mordplaner (2023)",
+              info: "Fem gripna för plan att mörda Sanna Marin. Koppling RIM/Atomwaffen. Tränade i Ryssland.",
+              links: [{ text: "The Conversation", url: "https://theconversation.com/russian-imperial-movement-how-a-far-right-group-outlawed-by-the-uk-is-spreading-terror-across-europe-234799" }]
+            }
+          ]
+        }
+      ]
+    },
+
+    // --- GREN 2: FASTIGHETER & MARK (Inkluderar originaldata) ---
+    {
+      title: "2) Fastigheter & Mark (Norden)",
       children: [
         {
           title: "Sverige",
@@ -419,33 +467,71 @@ const treeData = {
                   ]
                 }
               ] 
-            },
-            // --- CASE: KYRKOR & PÅVERKAN ---
-            { 
-              title: "CASE: Kyrkor som plattformar", 
-              info: "Rysk-ortodoxa kyrkan pekas ut som säkerhetshot av Säpo och experter.", 
-              children: [
-                {
-                    title: "Ryska Kyrkan Västerås", 
-                    info: "Strategisk placering nära flygplats (Hässlö). Hot om tvångsövertagande (2025).", 
-                    links: [
-                        { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" },
-                        { text: "Politico (USA)", url: "https://marcusoscarsson.se/just-nu-svensk-byggnad-pekas-ut-i-usa-hotar-sveriges-sakerhet/" }
-                    ]
-                },
-                {
-                    title: "S:t Sigfrids Kyrka (Aspudden)", 
-                    info: "Kuppartat övertagandeförsök av rysk församling. Säkerhetsexpert varnar för kopplingar till Kreml.", 
-                    highlight: true,
-                    links: [
-                        { text: "Kyrkans Tidning (2025)", url: "https://www.kyrkanstidning.se/nyhet/sakerhetsexpert-varnar-ryssland-kan-anvanda-svenska-kyrkor/147849" }
-                    ]
-                }
-              ]
             }
           ]
         },
-        // --- GREN: Baltikum & Europa ---
+        // --- FINLAND (Oligarker & Förbud - UPPDATERAT) ---
+        {
+          title: "Finland (Oligarker & Förbud)",
+          children: [
+            {
+              title: "Hartwall Arena (Helsingfors)",
+              info: "Ägdes av Timchenko/Rotenberg. Såld feb 2025 till Trevian (64M €) efter år av sanktioner.",
+              links: [{ text: "The Insider", url: "https://theins.ru/en/society/275165" }]
+            },
+            {
+              title: "Hangö (Boris Rotenberg)",
+              info: "63 lägenheter i strategisk hamnstad. Beslagtagna/frysta. Säkerhetsrisk pga djuphamn.",
+              highlight: true,
+              links: [{ text: "The Insider", url: "https://theins.ru/en/society/275165" }]
+            },
+            {
+              title: "Naftogaz-beslaget ($4.25md)",
+              info: "Finland beslagtog 40+ ryska statliga fastigheter 2024 (inkl diplomatiska) för att täcka ukrainska krav.",
+              links: [
+                { text: "Eurointegration", url: "https://www.eurointegration.com.ua/eng/articles/2024/12/16/7200786/" },
+                { text: "The Moscow Times", url: "https://www.themoscowtimes.com/2024/10/30/moscow-summons-finnish-ambassador-over-property-seizures-a86859" }
+              ]
+            },
+            {
+              title: "Totalförbudet 2025",
+              info: "Totalförbud mot ryska köp trädde i kraft 15 juli 2025. 11 köp blockerade 2024 (Mikkeli, Parainen).",
+              links: [
+                { text: "United24", url: "https://united24media.com/latest-news/finland-blocks-real-estate-purchases-by-russian-and-non-eu-nationals-over-security-risks-1696" },
+                { text: "European Interest", url: "https://www.europeaninterest.eu/finland-blocks-russian-real-estate-transactions-on-national-security-grounds/" }
+              ]
+            },
+            { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES.", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
+            { 
+              title: "CASE: Airiston Helmi & Beslag", 
+              info: "Tillslag 2018 (Pargas). Nya beslag 2025 av ryska statliga fastigheter i Helsingfors och Åland (Naftogaz-målet).", 
+              links: [{ text: "Ålands Radio", url: "https://alandsradio.ax/nyheter/yle-beslutet-att-beslagta-ryskagda-fastigheter-star-fast-trots-ryska-protester-ror-aven-fastigheter-pa-aland" }] 
+            }
+          ]
+        },
+        // --- NORGE & ARKTIS (UPPDATERAT) ---
+        {
+          title: "Norge & Arktis",
+          children: [
+            { 
+              title: "Bardufoss (Atomflot & Militärbas)", 
+              info: "Stugor vid flygbasen ägda av Alexander Timofeev (Chef Atomflot) och Igor Morar (Borgmästare Murmansk).", 
+              highlight: true,
+              links: [{ text: "Odessa Journal", url: "https://odessa-journal.com/public/russian-officials-own-real-estate-near-a-norwegian-military-base" }] 
+            },
+            { 
+              title: "Svalbard (Strategisk Press)", 
+              info: "Ryssland utmanar norsk suveränitet. Revitalisering av Pyramiden och Barentsburg som maktmedel.", 
+              links: [{ text: "ArcticToday", url: "https://www.arctictoday.com/we-need-to-talk-about-russias-new-tactics-on-svalbard-commentary/" }] 
+            },
+            { 
+              title: "Kirkenes & Gränsen", 
+              info: "Hybridhot och ökad spänning vid gränsen. Möten om arktisk säkerhet (2025).", 
+              links: [{ text: "High North News", url: "https://www.highnorthnews.com/en/arctic-military-leaders-met-near-norway-russia-border-discussed-hybrid-threats" }] 
+            }
+          ]
+        },
+        // --- ÖVRIGA EUROPA (ORIGINALDATA) ---
         {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
@@ -537,7 +623,7 @@ const treeData = {
                   title: "Duivendrecht (Molenkade)",
                   info: "Mark beslagtagen maj 2023 från Jorrit Faassen (Putins f.d. svärson). Strategiskt läge nära infrastruktur.",
                   links: [
-                     { text: "The Guardian", url: "https://www.theguardian.com/world/2023/may/25/dutch-prosecutors-seize-land-owned-by-vladimir-putins-former-son-in-law" }
+                      { text: "The Guardian", url: "https://www.theguardian.com/world/2023/may/25/dutch-prosecutors-seize-land-owned-by-vladimir-putins-former-son-in-law" }
                   ]
                 }
               ]
@@ -562,44 +648,6 @@ const treeData = {
               links: [
                 { text: "ERR News", url: "https://news.err.ee/1609364830/estonia-to-stop-third-country-nationals-from-buying-land-near-strategic-facilities" }
               ]
-            },
-            {
-              title: "Finland: Blockerade köp",
-              info: "Försvarsministeriet blockerar ryska affärer (t.ex. Sysmä, Ruokolahti) pga nationell säkerhet.",
-              links: [
-                { text: "Yle", url: "https://yle.fi/a/74-20130918" }
-              ]
-            }
-          ]
-        },
-        {
-          title: "Finland (Övrigt)",
-          children: [
-            { title: "Tillståndskrav", info: "Krav på tillstånd för köpare utanför EU/EES.", links: [{ text: "DefMin", url: "https://defmin.fi/en/licences-and-services/authorisation-to-non-eu-and-non-eea-buyers-to-buy-real-estate" }] },
-            { 
-              title: "CASE: Airiston Helmi & Beslag", 
-              info: "Tillslag 2018 (Pargas). Nya beslag 2025 av ryska statliga fastigheter i Helsingfors och Åland (Naftogaz-målet).", 
-              links: [{ text: "Ålands Radio", url: "https://alandsradio.ax/nyheter/yle-beslutet-att-beslagta-ryskagda-fastigheter-star-fast-trots-ryska-protester-ror-aven-fastigheter-pa-aland" }] 
-            }
-          ]
-        },
-        {
-          title: "Norge & Arktis",
-          children: [
-            { 
-              title: "Svalbard (Strategisk Press)", 
-              info: "Ryssland utmanar norsk suveränitet. Revitalisering av Pyramiden och Barentsburg som maktmedel.", 
-              links: [{ text: "ArcticToday", url: "https://www.arctictoday.com/we-need-to-talk-about-russias-new-tactics-on-svalbard-commentary/" }] 
-            },
-            { 
-              title: "Kirkenes & Gränsen", 
-              info: "Hybridhot och ökad spänning vid gränsen. Möten om arktisk säkerhet (2025).", 
-              links: [{ text: "High North News", url: "https://www.highnorthnews.com/en/arctic-military-leaders-met-near-norway-russia-border-discussed-hybrid-threats" }] 
-            },
-            { 
-              title: "CASE: 'Russerhytter' (Bardufoss)", 
-              info: "Stugor nära militär flygbas. Politikerkona ägare.", 
-              links: [{ text: "Forsvarets Forum", url: "https://www.forsvaretsforum.no/bardufoss-bardufoss-flystasjon-russland/politikerkone-har-overtatt-russerhytte-i-bardufoss/372880" }] 
             }
           ]
         },
@@ -633,9 +681,10 @@ const treeData = {
         }
       ]
     },
-    // --- GREN 2: BROTTSLIGHET ---
+
+    // --- GREN 3: DOMAR & ORG. BROTTSLIGHET (SVERIGE & INT) ---
     {
-      title: "2) Domar & Org. Brottslighet",
+      title: "3) Domar & Org. Brottslighet",
       children: [
         {
           title: "Sverige: Byggsektorn",
@@ -753,7 +802,7 @@ const treeData = {
         {
           title: "USA: Sanktioner",
           children: [
-             { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
+              { title: "OFAC", info: "Sanktioner mot 'Thieves-in-law' (Tjuvar i lagen).", links: [{ text: "TG1811", url: "https://home.treasury.gov/news/press-releases/tg1811" }] }
           ]
         },
         {
@@ -766,31 +815,92 @@ const treeData = {
         }
       ]
     },
-    // --- GREN 3: MOSKVAPATRIARKATET ---
+
+    // --- GREN 4: MOSKVAPATRIARKATET & SPIONAGE (Inkl. nya uppgifter) ---
     {
-      title: "3) Moskvapatriarkatet",
+      title: "4) Moskvapatriarkatet & Spionage",
+      alert: true,
       children: [
-        { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo som plattform.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] },
-        { title: "Rosatom", info: "Uppgifter om finansiering av Västeråskyrkan.", links: [{ text: "SVT", url: "https://www.svt.se/nyheter/lokalt/vastmanland/ryska-statens-karnkraftsbolag-ska-ha-betalat-for-kyrkobygget-i-vasteras" }] },
-        { 
-          title: "Kopplade Bolag", 
+        {
+          title: "Strategiska Lägen: Sverige",
+          children: [
+            {
+              title: "Boliden (Västerbotten)",
+              info: "Kyrka 500m från Boliden AB (Guld/Koppar/Zink). Kritisk mineralutvinning.",
+              highlight: true,
+              links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
+            },
+            {
+              title: "Helsingborg (Hamnen)",
+              info: "Kyrka 1,4 km från hamnen (Militära transporter/Logistiknod).",
+              links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
+            },
+            {
+              title: "Västerås (Hässlö)",
+              info: "Vladimir Lyapin (GRU) vid invigning. Präst Makarenko flyttade Arboga->Gävle->Västerås (följde militären).",
+              links: [
+                  { text: "Belsat", url: "https://en.belsat.eu/83499387/an-orthodox-church-near-stockholm-under-fsb-patronage-could-pose-a-significant-threat-to-sweden-analysis/" },
+                  { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
+              ]
+            },
+            {
+              title: "S:t Sigfrids Kyrka (Aspudden)",
+              info: "Kuppartat övertagandeförsök. Säkerhetsrisk.",
+              links: [{ text: "Kyrkans Tidning (2025)", url: "https://www.kyrkanstidning.se/nyhet/sakerhetsexpert-varnar-ryssland-kan-anvanda-svenska-kyrkor/147849" }]
+            },
+            { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] }
+          ]
+        },
+        {
+          title: "Strategiska Lägen: Norge",
+          children: [
+            {
+              title: "Bryne (Rogaland)",
+              info: "650m till Nordic Steel (Försvarsind.), 586m till IXYS (Halvledare).",
+              highlight: true,
+              links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
+            },
+            {
+              title: "Haakonsvern (Bergen)",
+              info: "Kyrka i omedelbar närhet till Norges huvudmarinbas (Ubåtar/Fregatter).",
+              alert: true,
+              links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
+            },
+            {
+              title: "Trondheim",
+              info: "1,3 km från ubåtsbunkrar och marinhamn.",
+              links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
+            }
+          ]
+        },
+        {
+          title: "Underrättelsekopplingar",
           children: [
             { 
-              title: "NC Nordic Control AB", 
-              info: "Bokföringsbrott (2021). Finns på FOI-listan.", 
-              links: [
-                { text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" },
-                { text: "VLT (2019)", url: "https://www.vlt.se/2019-03-20/prasten-makarenko-tillbakavisar-anklagelserna-vi-samarbetar-sjalvklart-inte-med-brottslingar/" }
-              ] 
+              title: "Patriark Kirill", 
+              info: "f.d. KGB-agent 'Mikhailov'. Kyrkan under FSB-beskydd.",
+              links: [{ text: "Euronews", url: "https://www.euronews.com/2025/07/07/unorthodox-intelligence-operations-how-russia-is-using-its-churches-abroad" }]
             },
-            { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar.", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894" }] }
+            { 
+              title: "Diplomatspår (SVT)", 
+              info: "1/3 av ambassadpersonal i Norden är underrättelseofficerare (38 st identifierade).",
+              links: [{ text: "SVT (2023)", url: "https://www.svt.se/special/putins-spies/" }]
+            },
+            {
+              title: "Kopplade Bolag",
+              children: [
+                { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns på FOI-listan.", links: [{ text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" }] },
+                { title: "InstrumentElectronics AB", info: "Kopplat till GRU-misstankar.", links: [{ text: "Moscow Times", url: "https://www.themoscowtimes.com/2023/10/26/swedish-court-acquits-alleged-russian-agent-a82894" }] }
+              ]
+            }
           ]
         }
       ]
     },
-    // --- GREN 4: PRAVFOND ---
+
+    // --- GREN 5: PRAVFOND (Rysk påverkan) - Fullständig gren ---
     {
-      title: "4) Pravfond (Rysk påverkan)",
+      title: "5) Pravfond (Rysk påverkan)",
       highlight: true,
       alert: true,
       children: [
@@ -992,30 +1102,6 @@ const treeData = {
               links: [
                 { text: "DR/Information (2024-06-02)", url: "https://www.dr.dk/nyheder/indland" },
                 { text: "NRK (2024-06-02)", url: "https://www.nrk.no/tromsogfinnmark/lekkasje-fra-russiske-pravfond-avslorer-_spionfond_-med-millioner-til-propaganda-og-sanksjonsbrudd-1.16899274" }
-              ]
-            }
-          ]
-        },
-
-        {
-          title: "Metoder",
-          children: [
-            {
-              title: "Alternativa kanaler för finansiering",
-              info: "OCCRP/Le Monde beskriver fortsatta betalningar i EU trots sanktioner via mellanhänder och indirekta upplägg.",
-              alert: true,
-              links: [
-                { text: "OCCRP (2025-05-21)", url: "https://www.occrp.org/en/project/dear-compatriots/russian-state-fund-paid-allies-in-the-eu-despite-sanctions" },
-                { text: "Le Monde (2025-05-22)", url: "https://www.lemonde.fr/en/pixels/article/2025/05/22/how-russian-public-fund-pravfond-continued-to-subsidize-its-allies-in-europe-despite-sanctions_6741523_13.html" }
-              ]
-            },
-            {
-              title: "Koppling projekt–säkerhetsapparat",
-              info: "Granskningar beskriver personella/operativa kopplingar till ryska underrättelsemiljöer.",
-              alert: true,
-              links: [
-                { text: "The Guardian (2024-06-02)", url: "https://www.theguardian.com/world/2024/jun/02/revealed-russian-legal-defence-foundation-pravfond-europe" },
-                { text: "SVT (2024-06-02)", url: "https://www.svt.se/nyheter/inrikes/ryska-spionfonden-betalade-miljoner-for-att-forsvara-mordare-och-agenter" }
               ]
             }
           ]
@@ -1286,9 +1372,10 @@ const treeData = {
         }
       ]
     },
-    // --- NY GREN 5: MÖJLIG RYSK PÅVERKAN ---
+
+    // --- GREN 6: MÖJLIG RYSK PÅVERKAN (INFRASTRUKTUR & NYA CASE) ---
     {
-      title: "5) Möjlig rysk påverkan (Energi & Infrastruktur)",
+      title: "6) Infrastruktur & Möjlig påverkan",
       highlight: true,
       children: [
         {
@@ -1351,12 +1438,16 @@ const treeData = {
                     ]
                 }
             ]
+        },
+        {
+          title: "Cyber (Fancy Bear)",
+          info: "Hackade svenska idrottare 2017-18. Kopplad till GRU Unit 26165.",
+          links: [{ text: "SCEEUS (2024)", url: "https://sceeus.se/en/publications/russian-information-influence-operations-towards-sweden/" }]
         }
       ]
     }
   ]
 };
-
 // ==========================================
 // 2. DATA: FOI-REGISTER (KOMPLETT 1-128)
 // ==========================================
@@ -1558,6 +1649,10 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Hangö (Rotenberg)", coords: [59.8231, 22.9691], info: "63 lägenheter ägda av Boris Rotenberg. Strategisk djuphamn. Frysta tillgångar." },
+    { name: "Hartwall Arena (Helsingfors)", coords: [60.2057, 24.9288], info: "Tidigare Rotenberg/Timchenko. Såld till Trevian 2025." },
+    { name: "Bardufoss (Atomflot/Murmansk)", coords: [69.0636, 18.5255], info: "Stugor ägda av Chef Atomflot och Murmansks borgmästare nära flygbasen." },
+    { name: "Naftogaz Beslag (Helsingfors)", coords: [60.1699, 24.9384], info: "40+ fastigheter beslagtagna av Finland för att täcka rysk skuld till Naftogaz." },
     { name: "Handelsrepresentationen (DK)", coords: [55.7276, 12.5638], info: "Vestagervej 7, Hellerup. Känd spioncentral (PET)." },
     { name: "Ruslands Hus (DK)", coords: [55.6783, 12.5681], info: "Vester Voldgade 11. Ryskt kulturhus/Propagandacentral." },
     { name: "Alexander Nevsky Kirke (DK)", coords: [55.6853, 12.5913], info: "Bredgade 53. Rysk-ortodox samlingspunkt." },
@@ -1584,6 +1679,8 @@ const strategicProperties = [
 
 // --- X-MARKERINGAR: BLOCKERADE KÖP/OMRÅDEN ---
 const blockedProperties = [
+    { name: "Finland: Mikkeli", coords: [61.6886, 27.2723], info: "Köp blockerat 2024. Nära arméns huvudkvarter/övningsområden." },
+    { name: "Finland: Parainen", coords: [60.3019, 22.3015], info: "Köp blockerat 2024. Strategisk skärgårdsposition nära farleder." },
     { name: "Finland: Sysmä", coords: [61.503, 25.684], info: "Försvarsministeriet blockerade fastighetsköp av säkerhetsskäl (Yle)." },
     { name: "Finland: Ruokolahti", coords: [61.283, 28.816], info: "Stoppad affär nära kritisk infrastruktur (Yle)." },
     { name: "Finland: Kankaanpää", coords: [61.800, 22.400], info: "Nära Niinisalo garnison. Köp stoppat." },
@@ -1593,6 +1690,12 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "ROC Bryne (Norge)", coords: [58.7354, 5.6477], info: "650m från Nordic Steel (Försvarsind.), 586m från IXYS." },
+    { name: "ROC Trondheim (Norge)", coords: [63.4305, 10.3951], info: "1.3 km från ubåtsbunkrar och marinbas." },
+    { name: "ROC Haakonsvern (Bergen)", coords: [60.3392, 5.2217], info: "Omedelbar närhet till Norges huvudmarinbas." },
+    { name: "ROC Boliden", coords: [64.8708, 20.3954], info: "500m från gruvkomplex (Guld/Koppar/Zink). Strategiska mineraler." },
+    { name: "ROC Helsingborg", coords: [56.0467, 12.6945], info: "1.4 km från hamnen (Militära transporter/Logistik)." },
+    { name: "ROC Västerås", coords: [59.589, 16.635], info: "Vladimir Lyapin (GRU) vid invigning. Nära flygplats." },
     { name: "Nordion Energi (Malmö)", coords: [55.6139, 12.9945], info: "Huvudkontor för gasnätet. Chef med ryska kopplingar togs ur tjänst okt 2024." },
     { name: "Klar Svan AB (Töre)", coords: [65.91576, 22.64969], info: "Ryskägt bolag. 3D-visualiserade Luleå Hamn (skyddsobjekt). Ingen säkerhetsprövning." },
     { name: "Luleå Hamn (Skyddsobjekt)", coords: [65.5500, 22.1833], info: "Kritisk infrastruktur som kartlades av ryskägt bolag (Klar Svan AB) 2017." },

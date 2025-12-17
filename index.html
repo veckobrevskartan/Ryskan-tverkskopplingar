@@ -652,7 +652,7 @@ const treeData = {
           ]
         },
         {
-          title: "Danmark (Spioncentraler)",
+         title: "Danmark (Spioncentraler)",
           children: [
             { 
               title: "Handelsrepresentationen (Hellerup)", 
@@ -678,9 +678,59 @@ const treeData = {
               ] 
             }
           ]
+        }, // Här slutar Danmark
+        // --- NY GREN: STORBRITANNIEN ---
+        {
+          title: "Storbritannien (London & Säkerhet)",
+          children: [
+            {
+              title: "St George Wharf Tower (Vauxhall)",
+              info: "Omedelbar närhet till SIS/MI6 högkvarter (Vauxhall Cross). Känd som 'Vauxhall Tower'.",
+              highlight: true,
+              children: [
+                { 
+                  title: "Ägare: Andrei Guriev (Familj)", 
+                  info: "Femvånings-penthouse kopplat till den f.d. ryska senatorns familj.",
+                  links: [{ text: "The Guardian (2016)", url: "https://www.theguardian.com/money/2016/may/24/revealed-foreign-buyers-own-two-thirds-tower-st-george-wharf-london" }]
+                },
+                { 
+                  title: "Ägarstruktur", 
+                  info: "Utländska köpare äger 2/3 av tornet. Säkerhetsrisk p.g.a. anonymt ägande nära känslig verksamhet." 
+                }
+              ]
+            },
+            {
+              title: "Whitehall Court (Westminster)",
+              info: "Belägen i hjärtat av regeringskvarteren. Historiskt MI6-högkvarter (fram till WWI).",
+              highlight: true,
+              children: [
+                { 
+                  title: "Objektet", 
+                  info: "Treplans-penthouse med rapporterad rysk ägare (ca 2020).",
+                  links: [{ text: "Mansion Global", url: "https://www.mansionglobal.com" }]
+                },
+                { 
+                  title: "Säkerhetsaspekt", 
+                  info: "Känslighet både p.g.a. nutida geografisk närhet till Whitehall och byggnadens historia." 
+                }
+              ]
+            },
+            {
+              title: "Strukturellt problem: Offshore & Truster",
+              info: "Minst £64 miljarder i fastigheter döljs via otransparenta strukturer (truster/offshore).",
+              alert: true,
+              links: [
+                { text: "The Guardian (2025)", url: "https://www.theguardian.com" },
+                { text: "Financial Times (2024)", url: "https://www.ft.com" }
+              ],
+              children: [
+                { title: "Konsekvens", info: "Omöjligt att identifiera ägare nära skyddsobjekt utan läckor eller visselblåsare." }
+              ]
+            }
+          ]
         }
-      ]
-    },
+      ] // Här slutar listan för Gren 2 (Fastigheter)
+    }, // Här stänger vi Gren 2
 
     // --- GREN 3: DOMAR & ORG. BROTTSLIGHET (SVERIGE & INT) ---
     {
@@ -1649,6 +1699,8 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "St George Wharf (Guriev)", coords: [51.48500, -0.12722], info: "5-vånings penthouse kopplat till ex-senator Andrei Guriev. Granne med MI6." },
+    { name: "Whitehall Court", coords: [51.505244, -0.124488], info: "Ryskkopplat 3-plans penthouse. Historiskt MI6-högkvarter i Westminster." },
     { name: "Hangö (Rotenberg)", coords: [59.8231, 22.9691], info: "63 lägenheter ägda av Boris Rotenberg. Strategisk djuphamn. Frysta tillgångar." },
     { name: "Hartwall Arena (Helsingfors)", coords: [60.2057, 24.9288], info: "Tidigare Rotenberg/Timchenko. Såld till Trevian 2025." },
     { name: "Bardufoss (Atomflot/Murmansk)", coords: [69.0636, 18.5255], info: "Stugor ägda av Chef Atomflot och Murmansks borgmästare nära flygbasen." },

@@ -2382,6 +2382,42 @@ function initMap() {
         const marker = L.marker(prop.coords, { icon: warnIcon }).addTo(map);
         marker.bindPopup(`<b>VARNING: ${prop.name}</b><br>${prop.info}`);
     });
+  // ==========================================
+    // 5. NYTT: RITA KOPPLINGAR (LINJER)
+    // ==========================================
+    const connections = [
+        {
+            from: [59.3560, 18.1400], // NC Nordic Control (Lidingö)
+            to: [59.589, 16.635],     // Ryska Kyrkan (Västerås)
+            color: '#c0392b',         // Röd linje (Koppling kyrka/bolag)
+            text: "<b>Koppling:</b> Bolaget betalade hyra & brandskydd åt kyrkan."
+        },
+        {
+            from: [35.1600, 33.3600], // MeritServus (Cypern)
+            to: [59.3560, 18.1400],   // NC Nordic Control (Lidingö)
+            color: '#2980b9',         // Blå linje (Finansiellt flöde)
+            text: "<b>Finansiellt flöde:</b> Pengatvätt & Ägarstruktur via Cypern."
+        },
+        {
+            from: [51.5074, -0.1278], // Markom Management (London)
+            to: [35.1600, 33.3600],   // MeritServus (Cypern)
+            color: '#8e44ad',         // Lila linje (Oligark-nätverk)
+            text: "<b>Rotenberg-nätverket:</b> Flytt av bolag för att undgå sanktioner."
+        }
+    ];
+
+    connections.forEach(conn => {
+        // Rita en streckad linje
+        const line = L.polyline([conn.from, conn.to], {
+            color: conn.color,
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '10, 10' // Gör linjen streckad
+        }).addTo(map);
+
+        // Lägg till en popup på linjen
+        line.bindPopup(conn.text);
+    });
 }
 
 // --- LEGEND TOGGLE ---

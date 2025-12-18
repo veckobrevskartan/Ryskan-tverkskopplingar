@@ -226,23 +226,80 @@
         </div>
     </div>
 
-    <div id="view-map" class="view-section">
+<div id="view-map" class="view-section">
         <div id="map-container">
             <div id="map-legend" class="map-legend">
                 <div class="legend-header" onclick="toggleLegend()">
-                    <span>Teckenförklaring</span>
+                    <span>Kategorier</span>
                     <span id="legend-icon">−</span>
                 </div>
+                
                 <div id="legend-content">
-                    <div class="legend-item"><span class="ring-red"></span> Köpta/Strategiska Fastigheter</div>
-                    <div class="legend-item"><span class="x-mark">X</span> Blockerade Köp/Områden</div>
-                    <div class="legend-item"><span class="warn-mark">⚠️</span> Möjlig påverkan/Säkerhetsrisk</div>
+                    <div style="padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #eee; font-weight:bold;">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleAllLayers(this)" style="margin-right:8px;"> 
+                            Visa allt
+                        </label>
+                    </div>
+
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('fastigheter')" style="margin-right:6px;">
+                            <span class="ring-red"></span> Köpta Fastigheter
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('blockerade')" style="margin-right:6px;">
+                            <span class="x-mark">X</span> Blockerade Köp
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('varningar')" style="margin-right:6px;">
+                            <span class="warn-mark">⚠️</span> Varning/Risk
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('kopplingar')" style="margin-right:6px;">
+                            <span style="display:inline-block; width:15px; height:3px; background:#c0392b; margin-right:6px;"></span> Kopplingar/Linjer
+                        </label>
+                    </div>
+
                     <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
-                    <div class="legend-item"><span class="dot sni-F"></span> Bygg & Anläggning (F)</div>
-                    <div class="legend-item"><span class="dot sni-K"></span> Finans & Försäkring (K)</div>
-                    <div class="legend-item"><span class="dot sni-G"></span> Handel (G)</div>
-                    <div class="legend-item"><span class="dot sni-M"></span> Juridik/Teknik/Konsult (M)</div>
-                    <div class="legend-item"><span class="dot sni-def"></span> Övrigt / Okänt</div>
+                    <div style="font-size:10px; color:#888; margin-bottom:4px;">FOI-BOLAG (SNI)</div>
+
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniF')" style="margin-right:6px;">
+                            <span class="dot sni-F"></span> Bygg (F)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniK')" style="margin-right:6px;">
+                            <span class="dot sni-K"></span> Finans (K)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniG')" style="margin-right:6px;">
+                            <span class="dot sni-G"></span> Handel (G)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniM')" style="margin-right:6px;">
+                            <span class="dot sni-M"></span> Konsult (M)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniOvr')" style="margin-right:6px;">
+                            <span class="dot sni-def"></span> Övrigt
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,25 +314,6 @@
       <div style="margin-top:5px; font-size:11px; color:#666;" id="foi-count">Visar alla rader</div>
     </div>
     <div class="table-wrapper">
-      <table id="foi-table">
-        <thead>
-          <tr>
-            <th width="30">Nr</th>
-            <th>Bolag & Säte</th>
-            <th width="30">SNI</th>
-            <th>Ägare / Info</th>
-          </tr>
-        </thead>
-        <tbody id="foi-body">
-          </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-<script>
 // ==========================================
 // ==========================================
 // 1. DATA: TRÄDSTRUKTUR (KOMPLETT MED ALLA LÄNKAR)

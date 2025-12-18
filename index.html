@@ -2294,7 +2294,23 @@ function filterFOI() {
 }
 
 // --- KARTA (HEATMAP/CLUSTERS) ---
-let map;
+
+// 1. GLOBALA VARIABLER FÖR LAGERGRUPPER
+// Dessa ligger utanför funktionen så att kryssrutorna hittar dem
+let layerGroups = {
+    fastigheter: null,
+    blockerade: null,
+    varningar: null,
+    kopplingar: null,
+    sniF: null,
+    sniK: null,
+    sniG: null,
+    sniM: null,
+    sniOvr: null
+};
+
+let map; // Kart-variabeln
+
 function initMap() {
     if(map) {
         setTimeout(() => map.invalidateSize(), 100);
@@ -2311,7 +2327,20 @@ function initMap() {
         maxZoom: 19
     }).addTo(map);
 
-    // 1. LÄGG TILL BOLAG (FOI) - Små färgade prickar
+    // --- SKAPA LAGERGRUPPER & LÄGG TILL PÅ KARTAN ---
+    // Vi lägger till alla lager direkt så de syns när sidan laddas
+    layerGroups.fastigheter = L.layerGroup().addTo(map);
+    layerGroups.blockerade = L.layerGroup().addTo(map);
+    layerGroups.varningar = L.layerGroup().addTo(map);
+    layerGroups.kopplingar = L.layerGroup().addTo(map);
+    
+    layerGroups.sniF = L.layerGroup().addTo(map);
+    layerGroups.sniK = L.layerGroup().addTo(map);
+    layerGroups.sniG = L.layerGroup().addTo(map);
+    layerGroups.sniM = L.layerGroup().addTo(map);
+    layerGroups.sniOvr = L.layerGroup().addTo(map);
+
+    // 1. LÄGG TILL BOLAG (FOI) - Sortera in i rätt grupp
     let hits = 0;
     foiList.forEach(company => {
         let coords = cityCoords[company.loc];
@@ -2320,15 +2349,18 @@ function initMap() {
         }
 
         if (coords) {
-            // Jitter för spridning
+            // Jitter för spridning (så punkter inte ligger exakt på varandra)
             const lat = coords[0] + (Math.random() - 0.5) * 0.02;
             const lng = coords[1] + (Math.random() - 0.5) * 0.02;
 
             let color = "#95a5a6";
-            if(company.sni === "F") color = "#e67e22"; 
-            if(company.sni === "K") color = "#8e44ad"; 
-            if(company.sni === "G") color = "#27ae60"; 
-            if(company.sni === "M") color = "#2980b9"; 
+            let targetGroup = layerGroups.sniOvr; // Standardgrupp
+
+            // Välj färg och grupp baserat på SNI-kod
+            if(company.sni === "F") { color = "#e67e22"; targetGroup = layerGroups.sniF; }
+            if(company.sni === "K") { color = "#8e44ad"; targetGroup = layerGroups.sniK; }
+            if(company.sni === "G") { color = "#27ae60"; targetGroup = layerGroups.sniG; }
+            if(company.sni === "M") { color = "#2980b9"; targetGroup = layerGroups.sniM; }
 
             const circle = L.circleMarker([lat, lng], {
                 radius: 6,
@@ -2337,9 +2369,12 @@ function initMap() {
                 weight: 1,
                 opacity: 1,
                 fillOpacity: 0.7
-            }).addTo(map);
+            });
 
             circle.bindPopup(`<b>${company.name} (FOI)</b><br>${company.loc}<br>${company.info}`);
+            
+            // VIKTIGT: Lägg till i gruppen istället för direkt på kartan
+            circle.addTo(targetGroup);
             hits++;
         }
     });
@@ -2348,13 +2383,14 @@ function initMap() {
     strategicProperties.forEach(prop => {
         const ring = L.circleMarker(prop.coords, {
             radius: 10,
-            fillColor: 'transparent', // Genomskinlig mitten
-            color: '#c0392b',        // Röd kant
-            weight: 3,               // Tjockare kant
+            fillColor: 'transparent',
+            color: '#c0392b',
+            weight: 3,
             opacity: 1
-        }).addTo(map);
+        });
         
         ring.bindPopup(`<b>FASTIGHET: ${prop.name}</b><br>${prop.info}`);
+        ring.addTo(layerGroups.fastigheter);
     });
 
     // 3. LÄGG TILL BLOCKERADE KÖP (X-Markeringar)
@@ -2366,8 +2402,9 @@ function initMap() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker(prop.coords, { icon: xIcon }).addTo(map);
+        const marker = L.marker(prop.coords, { icon: xIcon });
         marker.bindPopup(`<b>BLOCKERAT KÖP/OMRÅDE: ${prop.name}</b><br>${prop.info}`);
+        marker.addTo(layerGroups.blockerade);
     });
 
     // 4. LÄGG TILL VARNINGAR (Trianglar)
@@ -2379,12 +2416,12 @@ function initMap() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker(prop.coords, { icon: warnIcon }).addTo(map);
+        const marker = L.marker(prop.coords, { icon: warnIcon });
         marker.bindPopup(`<b>VARNING: ${prop.name}</b><br>${prop.info}`);
+        marker.addTo(layerGroups.varningar);
     });
-  // ==========================================
-    // 5. NYTT: RITA KOPPLINGAR (LINJER)
-    // ==========================================
+
+    // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
         {
             from: [59.3560, 18.1400], // NC Nordic Control (Lidingö)
@@ -2407,17 +2444,49 @@ function initMap() {
     ];
 
     connections.forEach(conn => {
-        // Rita en streckad linje
         const line = L.polyline([conn.from, conn.to], {
             color: conn.color,
             weight: 3,
             opacity: 0.7,
             dashArray: '10, 10' // Gör linjen streckad
-        }).addTo(map);
+        });
 
-        // Lägg till en popup på linjen
         line.bindPopup(conn.text);
+        line.addTo(layerGroups.kopplingar);
     });
+}
+
+// --- FUNKTIONER FÖR ATT STYRA LAGREN (CHECKBOXAR) ---
+
+function toggleLayer(groupName) {
+    const group = layerGroups[groupName];
+    if (map.hasLayer(group)) {
+        map.removeLayer(group);
+    } else {
+        map.addLayer(group);
+    }
+}
+
+function toggleAllLayers(checkbox) {
+    const shouldShow = checkbox.checked;
+    
+    // Hitta alla andra kryssrutor i legenden och sätt dem till samma som "Visa allt"
+    const allCheckboxes = document.querySelectorAll('#legend-content input[type="checkbox"]');
+    allCheckboxes.forEach(box => {
+        if(box !== checkbox) {
+            box.checked = shouldShow;
+        }
+    });
+
+    // Loopa igenom alla grupper och visa/dölj
+    for (const key in layerGroups) {
+        const group = layerGroups[key];
+        if (shouldShow) {
+            if (!map.hasLayer(group)) map.addLayer(group);
+        } else {
+            if (map.hasLayer(group)) map.removeLayer(group);
+        }
+    }
 }
 
 // --- LEGEND TOGGLE ---

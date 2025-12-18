@@ -474,10 +474,13 @@ const treeData = {
         {
           title: "Finland (Oligarker & Förbud)",
           children: [
-            {
+           {
               title: "Hartwall Arena (Helsingfors)",
-              info: "Ägdes av Timchenko/Rotenberg. Såld feb 2025 till Trevian (64M €) efter år av sanktioner.",
-              links: [{ text: "The Insider", url: "https://theins.ru/en/society/275165" }]
+              info: "Ägdes av Timchenko/Rotenberg. Såld feb 2025 (64M €). Finansierades ursprungligen via Pravfond/Rosatom-strukturer.",
+              links: [
+                { text: "The Insider (2024)", url: "https://theins.ru/en/society/275165" },
+                { text: "Defence Matters (2025)", url: "https://defencematters.eu/russian-orthodox-church-rosatom/" }
+              ]
             },
             {
               title: "Hangö (Boris Rotenberg)",
@@ -1721,6 +1724,116 @@ const treeData = {
     }
   ]
 };
+  // --- NY GREN 7: FINANSIELLA NÄTVERK & PENNINGTVÄTT ---
+    {
+      title: "7) Finansiella Nätverk (Cypern, Malta & Oligarker)",
+      info: "Det dolda nätverket av shell-bolag och truster som finansierar rysk påverkan.",
+      highlight: true,
+      children: [
+        {
+          title: "Cypern: Den Primära Hubben",
+          children: [
+            {
+              title: "Strukturen",
+              info: "64% av utländska direktinvesteringar i Ryssland kom via Cypern (2021). Skattetraktatet 1998 möjliggjorde 5% skatt på utdelningar.",
+              links: [
+                { text: "Banking News Greece (2025)", url: "https://www.bankingnews.gr/en/index.php?id=844564" },
+                { text: "Le Monde (2023)", url: "https://www.lemonde.fr/en/les-decodeurs/article/2023/11/14/dirty-money-and-russian-riches-flow-through-cyprus-a-gateway-to-the-eu_6261643_8.html" }
+              ]
+            },
+            {
+              title: "BVI-kedjan",
+              info: "Ryska bolag -> Cypern (Shell) -> BVI/Bermuda -> Åter till Ryssland som 'Europeisk Investering'.",
+              links: [{ text: "Sayari (2024)", url: "https://sayari.com/resources/tracking-complex-european-corporate-structures-russian-oligarchs/" }]
+            },
+            {
+              title: "Facilitator: MeritServus & Demetris Ioannides",
+              info: "Administrerade 100+ bolag åt Abramovich och Malofeyev. Sanktionerad av UK 2023.",
+              alert: true,
+              links: [
+                { text: "ICIJ (2024)", url: "https://www.icij.org/investigations/cyprus-confidential/about-cyprus-confidential-investigation/" },
+                { text: "UK Sanctions List", url: "https://search-uk-sanctions-list.service.gov.uk/designations/RUS1815/Individual" }
+              ]
+            },
+            {
+              title: "Facilitator: Deloitte Cyprus",
+              info: "Gav legitimitet åt shell-strukturer. Samarbetade intimt med MeritServus för Abramovichs nätverk.",
+              links: [{ text: "ICIJ (2024c)", url: "https://www.icij.org/investigations/cyprus-confidential/deloitte-held-close-ties-to-a-now-sanctioned-cyprus-firm-accused-of-shielding-assets-of-oligarch-roman-abramovich/" }]
+            }
+          ]
+        },
+        {
+          title: "Nyckeloligarker & Deras Nätverk",
+          children: [
+            {
+              title: "Roman Abramovich",
+              info: "14 cypriotiska truster. Sålde reklambolag till Putins vän Roldugin. Överförde truster till barnen feb 2022.",
+              links: [{ text: "ICIJ (2024a)", url: "https://www.icij.org/investigations/cyprus-confidential/about-cyprus-confidential-investigation/" }]
+            },
+            {
+              title: "Familjen Rotenberg",
+              info: "Använde Markom Management (London) och flyttade BVI-bolag till Cypern för att undgå sanktioner.",
+              links: [{ text: "Financial Transparency Initiative (2023)", url: "https://financialtransparency.org/rotenberg-files-guide-russian-kleptocrats-dodge-sanctions/" }]
+            },
+            {
+              title: "Alexey Mordashov (Severstal)",
+              info: "64 shell-bolag. Överförde aktier till BVI-bolaget Ondero Ltd minuter innan sanktioner 2022.",
+              links: [{ text: "CBN (2023)", url: "https://www.cbn.com.cy/article/2023/11/15/743142/the-six-russian-oligarchs-mentioned-in-icijs-cyprus-confidential-report/" }]
+            },
+            {
+              title: "Konstantin Malofeyev",
+              info: "Kremlin-propagandist. 100+ cypriotiska bolag administrerade av MeritServus trots sanktioner.",
+              links: [{ text: "ICIJ (2024a)", url: "https://www.icij.org/investigations/cyprus-confidential/about-cyprus-confidential-investigation/" }]
+            }
+          ]
+        },
+        {
+          title: "Malta & 'Golden Visas'",
+          children: [
+            {
+              title: "Sekundär Jurisdiktion",
+              info: "Erbjöd medborgarskap via investeringar. Svagare AML-genomdrivning än övriga EU.",
+              links: [{ text: "Le Monde (2023)", url: "https://www.lemonde.fr/en/les-decodeurs/article/2023/11/14/dirty-money-and-russian-riches-flow-through-cyprus-a-gateway-to-the-eu_6261643_8.html" }]
+            }
+          ]
+        },
+        {
+          title: "Nordisk Tillämpning: NC Nordic Control AB",
+          highlight: true,
+          alert: true,
+          info: "Exempel på hur systemet används i Sverige. Import/Export-bolag kopplat till ryska kyrkan i Västerås.",
+          links: [{ text: "Frivärlden (2019)", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" }],
+          children: [
+            {
+              title: "Skatteverkets Granskning",
+              info: "Krav på 13,8 MSEK. Misstänkt penningtvätt och transfer pricing. Omsatte 40 MSEK utan lager.",
+              children: [
+                { title: "Metod", info: "Accepterade och betalade fakturor med höga belopp utan kontroll. Personliga lyxkostnader för ägaren (Monaco/Nice)." }
+              ]
+            },
+            {
+              title: "Koppling Västerås Kyrka",
+              info: "Bolaget betalade hyra för församlingen (45 000 kr) och fakturor för brandskydd/bygglov ('larmlåda').",
+              children: [
+                { title: "Nikita Makarenko", info: "Bolagets VD blev präst i Västerås. Lämnade VD-posten efter skattekravet." }
+              ]
+            },
+            {
+              title: "Ägare: Vladimir Gerasimov",
+              info: "Rysk affärsman kopplad till Gerda-gruppen. Använde bolaget för att täcka privata kostnader."
+            }
+          ]
+        },
+        {
+          title: "Motåtgärder & Sanktioner (2024-2025)",
+          children: [
+            { title: "UK targets Intermediaries", info: "Strategiskifte: Sanktioner mot möjliggörarna (t.ex. Ioannides) istället för bara oligarkerna.", links: [{ text: "UK Gov Sanctions", url: "https://search-uk-sanctions-list.service.gov.uk/designations/RUS1815/Individual" }] },
+            { title: "FinCEN SARs", info: "454 rapporter om misstänkta transaktioner och överföringar till släktingar post-invasion.", links: [{ text: "Money Laundering News", url: "https://www.moneylaunderingnews.com/2023/01/russian-oligarchs-and-suspicious-financial-flows-a-fincen-analysis/" }] },
+            { title: "Rysslands reaktion", info: "Klassade Cypern/Malta som 'icke-kooperativa' 2023 då kontrollen minskade.", links: [{ text: "Denuo Legal", url: "https://denuo.legal/en/insights/news/230721/" }] }
+          ]
+        }
+      ]
+    },
 // ==========================================
 // 2. DATA: FOI-REGISTER (KOMPLETT 1-128)
 // ==========================================
@@ -1922,6 +2035,11 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    // --- FINANSIELLA HUBBAR ---
+    { name: "MeritServus (Cypern)", coords: [35.1600, 33.3600], info: "Limassol/Nicosia. Central hubb för Abramovichs & Malofeyevs finanser." },
+    { name: "NC Nordic Control (Lidingö)", coords: [59.3560, 18.1400], info: "Affärshotell. Täckmantel för penningtvätt/kyrkofinansiering (Västerås)." },
+    { name: "Malta (Golden Visas)", coords: [35.9375, 14.3754], info: "Jurisdiktion för köpt medborgarskap och svag AML-kontroll." },
+    { name: "Markom Management (London)", coords: [51.5074, -0.1278], info: "Hanterade Rotenberg-familjens tillgångar." },
     { name: "St George Wharf (Guriev)", coords: [51.48500, -0.12722], info: "5-vånings penthouse kopplat till ex-senator Andrei Guriev. Granne med MI6." },
     { name: "Whitehall Court", coords: [51.505244, -0.124488], info: "Ryskkopplat 3-plans penthouse. Historiskt MI6-högkvarter i Westminster." },
     { name: "Hangö (Rotenberg)", coords: [59.8231, 22.9691], info: "63 lägenheter ägda av Boris Rotenberg. Strategisk djuphamn. Frysta tillgångar." },

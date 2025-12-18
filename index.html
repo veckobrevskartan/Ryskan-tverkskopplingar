@@ -231,19 +231,76 @@
         <div id="map-container">
             <div id="map-legend" class="map-legend">
                 <div class="legend-header" onclick="toggleLegend()">
-                    <span>Teckenförklaring</span>
+                    <span>Kategorier</span>
                     <span id="legend-icon">−</span>
                 </div>
+                
                 <div id="legend-content">
-                    <div class="legend-item"><span class="ring-red"></span> Köpta/Strategiska Fastigheter</div>
-                    <div class="legend-item"><span class="x-mark">X</span> Blockerade Köp/Områden</div>
-                    <div class="legend-item"><span class="warn-mark">⚠️</span> Möjlig påverkan/Säkerhetsrisk</div>
+                    <div style="padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #eee; font-weight:bold;">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleAllLayers(this)" style="margin-right:8px;"> 
+                            Visa allt
+                        </label>
+                    </div>
+
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('fastigheter')" style="margin-right:6px;">
+                            <span class="ring-red"></span> Köpta Fastigheter
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('blockerade')" style="margin-right:6px;">
+                            <span class="x-mark">X</span> Blockerade Köp
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('varningar')" style="margin-right:6px;">
+                            <span class="warn-mark">⚠️</span> Varning/Risk
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('kopplingar')" style="margin-right:6px;">
+                            <span style="display:inline-block; width:15px; height:3px; background:#c0392b; margin-right:6px;"></span> Kopplingar/Linjer
+                        </label>
+                    </div>
+
                     <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
-                    <div class="legend-item"><span class="dot sni-F"></span> Bygg & Anläggning (F)</div>
-                    <div class="legend-item"><span class="dot sni-K"></span> Finans & Försäkring (K)</div>
-                    <div class="legend-item"><span class="dot sni-G"></span> Handel (G)</div>
-                    <div class="legend-item"><span class="dot sni-M"></span> Juridik/Teknik/Konsult (M)</div>
-                    <div class="legend-item"><span class="dot sni-def"></span> Övrigt / Okänt</div>
+                    <div style="font-size:10px; color:#888; margin-bottom:4px;">FOI-BOLAG (SNI)</div>
+
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniF')" style="margin-right:6px;">
+                            <span class="dot sni-F"></span> Bygg (F)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniK')" style="margin-right:6px;">
+                            <span class="dot sni-K"></span> Finans (K)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniG')" style="margin-right:6px;">
+                            <span class="dot sni-G"></span> Handel (G)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniM')" style="margin-right:6px;">
+                            <span class="dot sni-M"></span> Konsult (M)
+                        </label>
+                    </div>
+                    <div class="legend-item">
+                        <label style="cursor:pointer; display:flex; align-items:center;">
+                            <input type="checkbox" checked onchange="toggleLayer('sniOvr')" style="margin-right:6px;">
+                            <span class="dot sni-def"></span> Övrigt
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -258,13 +315,13 @@
       <div style="margin-top:5px; font-size:11px; color:#666;" id="foi-count">Visar alla rader</div>
     </div>
     <div class="table-wrapper">
-      <table id="foi-table">
+      <table>
         <thead>
           <tr>
-            <th width="30">Nr</th>
-            <th>Bolag & Säte</th>
-            <th width="30">SNI</th>
-            <th>Ägare / Info</th>
+            <th style="width:30px;">ID</th>
+            <th>Bolag / Ort</th>
+            <th>SNI</th>
+            <th>Info / Koppling</th>
           </tr>
         </thead>
         <tbody id="foi-body">
@@ -2148,32 +2205,27 @@ function renderTree(node, container) {
   nodeEl.className = 'node';
   if(node.isRoot) nodeEl.classList.add('root');
 
-  // Skapa Content-boxen
   const contentEl = document.createElement('div');
   contentEl.className = 'content';
   if(node.highlight) contentEl.classList.add('highlight-box');
   if(node.alert) contentEl.classList.add('alert-box');
 
-  // Titel-raden
   const titleEl = document.createElement('div');
   titleEl.className = 'title';
   
-  // Titeltext
   const textSpan = document.createElement('span');
   textSpan.innerText = node.title;
   titleEl.appendChild(textSpan);
 
-  // Toggle +/- knapp (Ligger till höger nu)
   const hasChildren = node.children && node.children.length > 0;
   if(hasChildren) {
     const btn = document.createElement('span');
     btn.className = 'toggle-icon';
-    btn.innerText = '-'; // Standard: utfälld
+    btn.innerText = '-'; 
     titleEl.appendChild(btn);
     
-    // Klick-event för att fälla in/ut
     contentEl.onclick = function(e) {
-      if(e.target.classList.contains('link')) return; // Klicka ej på länkar
+      if(e.target.classList.contains('link')) return; 
       const childCont = nodeEl.querySelector('.children');
       if(childCont) {
         childCont.classList.toggle('hidden');
@@ -2186,7 +2238,6 @@ function renderTree(node, container) {
 
   contentEl.appendChild(titleEl);
 
-  // Info-text
   if(node.info) {
     const infoEl = document.createElement('div');
     infoEl.className = 'info';
@@ -2194,7 +2245,6 @@ function renderTree(node, container) {
     contentEl.appendChild(infoEl);
   }
 
-  // Länkar (Knappar)
   if(node.links && node.links.length > 0) {
     const linksDiv = document.createElement('div');
     linksDiv.className = 'links';
@@ -2207,21 +2257,10 @@ function renderTree(node, container) {
         linksDiv.appendChild(a);
     });
     contentEl.appendChild(linksDiv);
-  } else if (node.link) { 
-    const linksDiv = document.createElement('div');
-    linksDiv.className = 'links';
-    const a = document.createElement('a');
-    a.href = node.link;
-    a.target = "_blank";
-    a.className = 'link';
-    a.innerText = "LÄNK ↗";
-    linksDiv.appendChild(a);
-    contentEl.appendChild(linksDiv);
   }
 
   nodeEl.appendChild(contentEl);
 
-  // Rendera barn rekursivt
   if(hasChildren) {
     const childContainer = document.createElement('div');
     childContainer.className = 'children';
@@ -2232,7 +2271,6 @@ function renderTree(node, container) {
   container.appendChild(nodeEl);
 }
 
-// Globala funktioner för knapparna
 function expandAll() {
     document.querySelectorAll('.children').forEach(el => {
         el.classList.remove('hidden');
@@ -2247,7 +2285,6 @@ function collapseAll() {
         const btn = el.parentElement.querySelector('.toggle-icon');
         if(btn) btn.innerText = '+';
     });
-    // Håll roten öppen
     const root = document.querySelector('.children'); 
     if(root) {
         root.classList.remove('hidden');
@@ -2294,8 +2331,26 @@ function filterFOI() {
   renderFOI(filtered);
 }
 
-// --- KARTA (HEATMAP/CLUSTERS) ---
-let map;
+// ==========================================
+// 4. KARTA (Lager & Checkbox-logik)
+// ==========================================
+
+// 1. GLOBALA VARIABLER FÖR LAGERGRUPPER
+// Dessa ligger utanför funktionen så att kryssrutorna hittar dem
+let layerGroups = {
+    fastigheter: null,
+    blockerade: null,
+    varningar: null,
+    kopplingar: null,
+    sniF: null,
+    sniK: null,
+    sniG: null,
+    sniM: null,
+    sniOvr: null
+};
+
+let map; // Kart-variabeln
+
 function initMap() {
     if(map) {
         setTimeout(() => map.invalidateSize(), 100);
@@ -2312,7 +2367,20 @@ function initMap() {
         maxZoom: 19
     }).addTo(map);
 
-    // 1. LÄGG TILL BOLAG (FOI) - Små färgade prickar
+    // --- SKAPA LAGERGRUPPER & LÄGG TILL PÅ KARTAN ---
+    // Vi lägger till alla lager direkt så de syns när sidan laddas
+    layerGroups.fastigheter = L.layerGroup().addTo(map);
+    layerGroups.blockerade = L.layerGroup().addTo(map);
+    layerGroups.varningar = L.layerGroup().addTo(map);
+    layerGroups.kopplingar = L.layerGroup().addTo(map);
+    
+    layerGroups.sniF = L.layerGroup().addTo(map);
+    layerGroups.sniK = L.layerGroup().addTo(map);
+    layerGroups.sniG = L.layerGroup().addTo(map);
+    layerGroups.sniM = L.layerGroup().addTo(map);
+    layerGroups.sniOvr = L.layerGroup().addTo(map);
+
+    // 1. LÄGG TILL BOLAG (FOI) - Sortera in i rätt grupp
     let hits = 0;
     foiList.forEach(company => {
         let coords = cityCoords[company.loc];
@@ -2321,15 +2389,18 @@ function initMap() {
         }
 
         if (coords) {
-            // Jitter för spridning
+            // Jitter för spridning (så punkter inte ligger exakt på varandra)
             const lat = coords[0] + (Math.random() - 0.5) * 0.02;
             const lng = coords[1] + (Math.random() - 0.5) * 0.02;
 
             let color = "#95a5a6";
-            if(company.sni === "F") color = "#e67e22"; 
-            if(company.sni === "K") color = "#8e44ad"; 
-            if(company.sni === "G") color = "#27ae60"; 
-            if(company.sni === "M") color = "#2980b9"; 
+            let targetGroup = layerGroups.sniOvr; // Standardgrupp
+
+            // Välj färg och grupp baserat på SNI-kod
+            if(company.sni === "F") { color = "#e67e22"; targetGroup = layerGroups.sniF; }
+            if(company.sni === "K") { color = "#8e44ad"; targetGroup = layerGroups.sniK; }
+            if(company.sni === "G") { color = "#27ae60"; targetGroup = layerGroups.sniG; }
+            if(company.sni === "M") { color = "#2980b9"; targetGroup = layerGroups.sniM; }
 
             const circle = L.circleMarker([lat, lng], {
                 radius: 6,
@@ -2338,9 +2409,12 @@ function initMap() {
                 weight: 1,
                 opacity: 1,
                 fillOpacity: 0.7
-            }).addTo(map);
+            });
 
             circle.bindPopup(`<b>${company.name} (FOI)</b><br>${company.loc}<br>${company.info}`);
+            
+            // VIKTIGT: Lägg till i gruppen istället för direkt på kartan
+            circle.addTo(targetGroup);
             hits++;
         }
     });
@@ -2349,13 +2423,14 @@ function initMap() {
     strategicProperties.forEach(prop => {
         const ring = L.circleMarker(prop.coords, {
             radius: 10,
-            fillColor: 'transparent', // Genomskinlig mitten
-            color: '#c0392b',        // Röd kant
-            weight: 3,               // Tjockare kant
+            fillColor: 'transparent',
+            color: '#c0392b',
+            weight: 3,
             opacity: 1
-        }).addTo(map);
+        });
         
         ring.bindPopup(`<b>FASTIGHET: ${prop.name}</b><br>${prop.info}`);
+        ring.addTo(layerGroups.fastigheter);
     });
 
     // 3. LÄGG TILL BLOCKERADE KÖP (X-Markeringar)
@@ -2367,8 +2442,9 @@ function initMap() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker(prop.coords, { icon: xIcon }).addTo(map);
+        const marker = L.marker(prop.coords, { icon: xIcon });
         marker.bindPopup(`<b>BLOCKERAT KÖP/OMRÅDE: ${prop.name}</b><br>${prop.info}`);
+        marker.addTo(layerGroups.blockerade);
     });
 
     // 4. LÄGG TILL VARNINGAR (Trianglar)
@@ -2380,12 +2456,12 @@ function initMap() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker(prop.coords, { icon: warnIcon }).addTo(map);
+        const marker = L.marker(prop.coords, { icon: warnIcon });
         marker.bindPopup(`<b>VARNING: ${prop.name}</b><br>${prop.info}`);
+        marker.addTo(layerGroups.varningar);
     });
-  // ==========================================
-    // 5. NYTT: RITA KOPPLINGAR (LINJER)
-    // ==========================================
+
+    // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
         {
             from: [59.3560, 18.1400], // NC Nordic Control (Lidingö)
@@ -2408,17 +2484,49 @@ function initMap() {
     ];
 
     connections.forEach(conn => {
-        // Rita en streckad linje
         const line = L.polyline([conn.from, conn.to], {
             color: conn.color,
             weight: 3,
             opacity: 0.7,
             dashArray: '10, 10' // Gör linjen streckad
-        }).addTo(map);
+        });
 
-        // Lägg till en popup på linjen
         line.bindPopup(conn.text);
+        line.addTo(layerGroups.kopplingar);
     });
+}
+
+// --- FUNKTIONER FÖR ATT STYRA LAGREN (CHECKBOXAR) ---
+
+function toggleLayer(groupName) {
+    const group = layerGroups[groupName];
+    if (map.hasLayer(group)) {
+        map.removeLayer(group);
+    } else {
+        map.addLayer(group);
+    }
+}
+
+function toggleAllLayers(checkbox) {
+    const shouldShow = checkbox.checked;
+    
+    // Hitta alla andra kryssrutor i legenden och sätt dem till samma som "Visa allt"
+    const allCheckboxes = document.querySelectorAll('#legend-content input[type="checkbox"]');
+    allCheckboxes.forEach(box => {
+        if(box !== checkbox) {
+            box.checked = shouldShow;
+        }
+    });
+
+    // Loopa igenom alla grupper och visa/dölj
+    for (const key in layerGroups) {
+        const group = layerGroups[key];
+        if (shouldShow) {
+            if (!map.hasLayer(group)) map.addLayer(group);
+        } else {
+            if (map.hasLayer(group)) map.removeLayer(group);
+        }
+    }
 }
 
 // --- LEGEND TOGGLE ---

@@ -589,13 +589,51 @@ const treeData = {
               info: "Ryssland utmanar norsk suveränitet. Revitalisering av Pyramiden och Barentsburg som maktmedel.", 
               links: [{ text: "ArcticToday", url: "https://www.arctictoday.com/we-need-to-talk-about-russias-new-tactics-on-svalbard-commentary/" }] 
             },
-            { 
+          { 
               title: "Kirkenes & Gränsen", 
               info: "Hybridhot och ökad spänning vid gränsen. Möten om arktisk säkerhet (2025).", 
               links: [{ text: "High North News", url: "https://www.highnorthnews.com/en/arctic-military-leaders-met-near-norway-russia-border-discussed-hybrid-threats" }] 
+            },
+            // Här lägger vi in Ro Marine INNAN vi stänger hakparentesen ]
+            {
+              title: "CASE: Ro Marine (Skuggflottan)",
+              info: "Norskägt bolag kontrollerat av Andrej Mochalin (S:t Petersburg). Har utfärdat ogiltiga försäkringar till över 200 fartyg i den ryska skuggflottan.",
+              alert: true,
+              children: [
+                {
+                  title: "Huvudman: Andrej Mochalin",
+                  info: "Rysk affärsman bosatt i S:t Petersburg. Tidigare underwriter på norska Hydor AS. Utnyttjar kunskap om europeisk försäkringsbransch för att skapa trovärdighet.",
+                  links: [
+                    { text: "The Insider (2025)", url: "https://theins.ru/en/news/280140" },
+                    { text: "Reuters (2025)", url: "https://www.reuters.com/business/energy/firm-issued-fake-insurance-russian-oil-tankers-norways-fsa-says-2025-04-02/" }
+                  ]
+                },
+                {
+                  title: "Metod: Systematisk Förfalskning",
+                  info: "Använde ett förfalskat godkännandebrev som påstods komma från Finanstilsynet. Saknar helt tillstånd att bedriva försäkringsverksamhet.",
+                  highlight: true,
+                  links: [
+                    { text: "Finanstilsynet (2025)", url: "https://www.finanstilsynet.no/en/news-archive/news/2025/the-financial-supervisory-authority-warns-against-insurance-and-insurance-brokerage-services-from/" },
+                    { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/posts/svensk-osint_norskt-bolag-bakom-falska-intyg-%C3%A5t-ryska-activity-7372616462907097088-UIsb" }
+                  ]
+                },
+                {
+                  title: "Omfattning & Risker",
+                  info: "Över 200 fartyg globalt (skuggflottan) har seglat med ogiltiga papper. Utgör stor miljö- och ansvarsrisk i europeiska vatten.",
+                  links: [
+                    { text: "Danwatch (2025)", url: "https://danwatch.dk/en/forged-papers-and-a-fake-company-how-russian-businessman-cheats-danish-authorities/" }
+                  ]
+                },
+                {
+                  title: "Polisutredning & Konsekvenser",
+                  info: "Oslo-polisen utreder dokumentförfalskning. Flaggstater har ogiltigförklarat dokumenten. Illustrerar hur skuggflottan vilar på administrativ manipulation.",
+                  alert: true
+                }
+              ]
             }
-          ]
-        },
+          ] // Här stänger vi listan för "Norge & Arktis"
+        }, // Här stänger vi objektet "Norge & Arktis"
+
         // --- ÖVRIGA EUROPA (ORIGINALDATA) ---
         {
           title: "Baltikum & Europa (Säkerhet)",
@@ -2218,6 +2256,7 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "Ro Marine (Oslo)", coords: [59.9139, 10.7522], info: "Utfärdar falska försäkringar till ryska skuggflottan. Kärnpersoner i S:t Petersburg." },
     { name: "London (Sanktioner FIMI)", coords: [51.5019, -0.1275], info: "Dec 2025: UK sanktionerar Dugin, Rybar och Pravfond för informationspåverkan." },
     { name: "Ryska Skolan (Göteborg)", coords: [57.7126, 11.7686], info: "Azbuka Lyceum. Utpekad plattform för påverkan. Rektor kopplad till rysk underrättelse (Pravfond)." },
     { name: "Spetsvägen 3 (Skvortsov)", coords: [59.3298, 18.2675], info: "Navet för verksamheten. Husrannsakan 2022. USB-minnen och komponenter beslagtagna." },

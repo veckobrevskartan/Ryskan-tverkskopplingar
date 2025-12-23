@@ -617,7 +617,39 @@ const treeData = {
                 }
               ]
             },
-
+// --- NYTT CASE: FSB-INFILTRATION (NORD UNIVERSITET) ---
+            {
+              title: "CASE: Infiltration Nord universitet (Artem Kuréjev)",
+              info: "FSB-kopplad aktör agerade under falsk identitet ('Artem Palmetti') vid universitetet i Bodø.",
+              highlight: true,
+              alert: true,
+              links: [
+                 { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/posts/svensk-osint_i-kontakt-med-nord-universitet-under-falskt-activity-7402741402570244096-Y4Vw" }
+              ],
+              children: [
+                {
+                  title: "Verksamhet: High North Dialogue",
+                  info: "Deltog i konferensen 2021 ('Arctic 2050'). Syfte: Knyta utländska forskare närmare Ryssland.",
+                  highlight: true
+                },
+                {
+                  title: "Bakgrund & Identitet",
+                  info: "Identifierad som Artjóm Kuréjev. FSB-bakgrund (2005-2015). Pekad ut som 'agent' av estnisk domstol. Sanktionerad av EU/UK 2024.",
+                  alert: true
+                },
+                {
+                  title: "Norska Nätverket & Krim",
+                  info: "Kopplingar till Kristian Kahrs och Steigan.no. Finansierade resa till ockuperade Krim 2023 för Hendrik Weber, Bjørn Ditlef Nistad m.fl."
+                },
+                {
+                  title: "Jämförelse: Mikhail Mikushin",
+                  info: "Liknar fallet med GRU-agenten vid UiT (Tromsø). Systematisk infiltration av nordnorsk akademi.",
+                  links: [
+                     { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/pulse/underr%25C3%25A4ttelseverksamheten-mot-europeiska-universitet-svensk-osint-r0xgf/" }
+                  ]
+                }
+              ]
+            },
             // --- NYTT CASE: KONGSBERG AUTOMOTIVE (Sanktionsbrott) ---
             {
                 title: "CASE: Kongsberg Automotive (Läckage till Ryssland)",
@@ -2318,11 +2350,10 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
-    // --- NYTT: KONGSBERG CASE ---
+  
     { name: "Kongsberg Automotive (HK)", coords: [59.6689, 9.6502], info: "Bildelar härifrån nådde rysk militärindustri via Turkiet (Hidirusta) trots sanktioner." },
     { name: "Hidirusta Otomotiv (Istanbul)", coords: [41.0082, 28.9784], info: "Turkisk mellanhand som slussade 126 sändningar norska bildelar till Ryssland." },
-
-    // --- UPPDATERAT: ORAHHOU CASE ---
+    { name: "Nord universitet (Bodø)", coords: [67.2916, 14.4183], info: "FSB-agenten Artjóm Kuréjev infiltrerade verksamheten under falsk flagg ('Artem Palmetti')." },
     { name: "USA:s Ambassad (Oslo)", coords: [59.9390, 10.6660], info: "BROTTSPLATS: Vakt dömd till 3 år 7 mån fängelse för spioneri (Ryssland/Iran). Lämnade ut ritningar och personalinfo." },
     { name: "UiT (Tromsø)", coords: [69.6815, 18.9760], info: "Spiondömde Orahhou studerade 'Säkerhet och beredskap' här samtidigt som han spionerade." },
     { name: "Ro Marine (Oslo)", coords: [59.9139, 10.7522], info: "Utfärdar falska försäkringar till ryska skuggflottan. Kärnpersoner i S:t Petersburg." },

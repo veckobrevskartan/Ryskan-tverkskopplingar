@@ -574,7 +574,7 @@ const treeData = {
             }
           ]
         },
-        // --- NORGE & ARKTIS (UPPDATERAT) ---
+       // --- NORGE & ARKTIS (UPPDATERAT & KOMPLETT) ---
         {
           title: "Norge & Arktis",
           children: [
@@ -583,6 +583,68 @@ const treeData = {
               info: "Stugor vid flygbasen ägda av Alexander Timofeev (Chef Atomflot) och Igor Morar (Borgmästare Murmansk).", 
               highlight: true,
               links: [{ text: "Odessa Journal", url: "https://odessa-journal.com/public/russian-officials-own-real-estate-near-a-norwegian-military-base" }] 
+            },
+
+            // --- CASE: AMBASSADSPIONERI (ORAHHOU) - UPPDATERAD MED DOM ---
+            {
+              title: "CASE: Spioneri US Ambassad (Mohamed Orahhou) - DÖMD",
+              info: "28-årig vakt dömd till 3 år och 7 månaders fängelse för spioneri åt Ryssland och Iran.",
+              highlight: true,
+              alert: true,
+              links: [
+                 { text: "LinkedIn (Svensk OSINT)", url: "https://www.linkedin.com/posts/svensk-osint_a-former-security-guard-at-the-us-embassy-activity-7384632080132927488-o8nP" },
+                  { text: "LinkedIn (Svensk OSINT)", url: "https://www.linkedin.com/posts/svensk-osint_us-embassy-security-guard-arrested-in-norway-activity-7266399280716804097-iCWk" },
+                 { text: "AP News (2025)", url: "https://apnews.com/article/us-russia-espionage-arrest-embassy-norway-arctic-ff3ad20cf726a54bb5d7cb6812120c22" }
+              ],
+              children: [
+                {
+                  title: "Domen (Feb 2025)",
+                  info: "Fälld för grov underrättelseverksamhet. Friades från korruption. Åklagaren yrkade på 6 år.",
+                  highlight: true
+                },
+                {
+                  title: "Informationen",
+                  info: "Delade ritningar, kartor, personalnamn och en hemlig kurirlista kopplad till norsk underrättelsetjänst.",
+                  alert: true
+                },
+                {
+                  title: "Motiv & Betalning",
+                  info: "Motiv: Politisk protest mot USA/Israel (Gaza). Betalning: ca €10 000 (Ryssland) och 100 000 NOK i Bitcoin (Iran). Försökte vitvättas via anhöriga."
+                },
+                {
+                  title: "Bakgrund",
+                  info: "Studerade 'Säkerhet och beredskap' vid UiT (Tromsø) parallellt med brotten."
+                }
+              ]
+            },
+
+            // --- NYTT CASE: KONGSBERG AUTOMOTIVE (Sanktionsbrott) ---
+            {
+                title: "CASE: Kongsberg Automotive (Läckage till Ryssland)",
+                info: "Norskt industrigods ($2.8M) nådde Ryssland 2022-2024 via Turkiet trots säljstopp.",
+                highlight: true,
+                links: [
+                    { text: "RFE/RL & NRK Granskning", url: "https://www.rferl.org/a/norway-russia-auto-parts-sanctions-ukraine-war-kongsberg-turkey/33321368.html" } // Lägg in exakt länk om du har
+                ],
+                children: [
+                    {
+                        title: "Mellanhanden: Hidirusta (Turkiet)",
+                        info: "Hidirusta Otomotiv i Istanbul agerade transit. 126 sändningar exporterades vidare till Ryssland.",
+                        highlight: true
+                    },
+                    {
+                        title: "Militära Slutanvändare (Ryssland)",
+                        alert: true,
+                        children: [
+                            { title: "A.P.R.", info: "Kopplad till Kirovsky Zavod (Sanktionerad militärindustri)." },
+                            { title: "Gruzavtozapchast-36", info: "Kopplad till maskinleveranser vid ryska militära träningsanläggningar." }
+                        ]
+                    },
+                    {
+                        title: "Bolagets åtgärder",
+                        info: "Kongsberg bekräftar kännedom. Har avslutat samarbetet med Hidirusta och skärpt rutinerna."
+                    }
+                ]
             },
             { 
               title: "Svalbard (Strategisk Press)", 
@@ -2256,6 +2318,13 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    // --- NYTT: KONGSBERG CASE ---
+    { name: "Kongsberg Automotive (HK)", coords: [59.6689, 9.6502], info: "Bildelar härifrån nådde rysk militärindustri via Turkiet (Hidirusta) trots sanktioner." },
+    { name: "Hidirusta Otomotiv (Istanbul)", coords: [41.0082, 28.9784], info: "Turkisk mellanhand som slussade 126 sändningar norska bildelar till Ryssland." },
+
+    // --- UPPDATERAT: ORAHHOU CASE ---
+    { name: "USA:s Ambassad (Oslo)", coords: [59.9390, 10.6660], info: "BROTTSPLATS: Vakt dömd till 3 år 7 mån fängelse för spioneri (Ryssland/Iran). Lämnade ut ritningar och personalinfo." },
+    { name: "UiT (Tromsø)", coords: [69.6815, 18.9760], info: "Spiondömde Orahhou studerade 'Säkerhet och beredskap' här samtidigt som han spionerade." },
     { name: "Ro Marine (Oslo)", coords: [59.9139, 10.7522], info: "Utfärdar falska försäkringar till ryska skuggflottan. Kärnpersoner i S:t Petersburg." },
     { name: "London (Sanktioner FIMI)", coords: [51.5019, -0.1275], info: "Dec 2025: UK sanktionerar Dugin, Rybar och Pravfond för informationspåverkan." },
     { name: "Ryska Skolan (Göteborg)", coords: [57.7126, 11.7686], info: "Azbuka Lyceum. Utpekad plattform för påverkan. Rektor kopplad till rysk underrättelse (Pravfond)." },

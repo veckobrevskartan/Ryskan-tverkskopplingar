@@ -2099,8 +2099,71 @@ const treeData = {
           ]
         }
       ]
+  }, // <--- OBS: Kommatecken här för att separera gren 7 och 8
+
+    // --- NY GREN 8: KÄRNTEKNIK & ISOTOPHANDEL (ROSATOM) ---
+    {
+      title: "8) Kärnteknik & Isotophandel (Rosatom)",
+      highlight: true,
+      alert: true,
+      info: "Import av radioaktiva isotoper från ryska kärnvapenprogrammet till Sverige.",
+      links: [
+        { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/feed/update/urn:li:activity:7409958549340028930" }
+      ],
+      children: [
+        {
+          title: "Kombinat Elektrokhimpribor (Lesnoj)",
+          info: "Grundad 1947 i den stängda staden Lesnoj. Montering/demontering av kärnstridsspetsar + civil isotopproduktion.",
+          highlight: true,
+          links: [
+            { text: "Nuclear Threat Initiative (2021)", url: "https://www.nti.org/education-center/facilities/elektrokhimpribor-combine/" },
+            { text: "RBC-Ukraine (2023)", url: "https://newsukraine.rbc.ua/news/sweden-purchases-rare-isotopes-from-russian-1702311884.html" },
+            { text: "The Gaze (2023)", url: "https://thegaze.media/news/sweden-purchases-isotopes-from-the-manufacturer-of-russian-nuclear-warheads-media" }
+          ],
+          children: [
+            {
+              title: "Koppling till Kärnvapen",
+              info: "Central del av ryska kärnvapenprogrammet sedan 1950-talet (anrikning & stridsspetsar).",
+              alert: true
+            },
+            {
+              title: "Exportökning (2022-2023)",
+              info: "Exporten ökade kraftigt efter invasionen. Totalt 47,5 miljoner dollar globalt (feb 22 - mars 23)."
+            }
+          ]
+        },
+        {
+          title: "Svenska Spåret: Neonest AB",
+          info: "Bolag i Sundbyberg (buyisotopes.com). Importerat isotoper i ca 110 försändelser (värde >5,5 Mkr maj-juni 2023).",
+          highlight: true,
+          links: [
+             { text: "Expressen (Carlsson, 2023)", url: "https://www.expressen.se/nyheter/sverige/ryska-karnvapenfabrikens-miljonexport-till-sverige/" },
+             { text: "Omni (2023)", url: "https://omni.se/svenskt-bolag-har-koppling-till-rysk-karnvapenindustri/a/bg0lmd" }
+          ],
+          children: [
+            {
+              title: "Petr Vasiliev (Ägare)",
+              info: "Bekräftar ursprung från Elektrokhimpribor men nekar till kännedom om kärnvapenkopplingen."
+            },
+            {
+              title: "Tallium-exporten",
+              info: "Nov 2019: 25g Tallium-203 exporterat till villa i Stockholm. Extremt giftigt (1g dödligt).",
+              alert: true
+            },
+            {
+              title: "Transportvägar",
+              info: "Planerade transporter av giftiga (klass 6.1) och radioaktiva (klass 7) ämnen Jekaterinburg–Stockholm."
+            },
+            {
+              title: "Big Science Sweden",
+              info: "Neonest har deltagit i statligt initiativ finansierat av Vinnova/Vetenskapsrådet.",
+              highlight: true
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ] // <--- HÄR stängs hela listan med grenar (hakparentesen)
 };
 // 2. DATA: FOI-REGISTER (KOMPLETT 1-128)
 // ==========================================

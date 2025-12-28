@@ -1289,11 +1289,130 @@ const treeData = {
     },
     // (Här efter kommer Gren 4: Moskvapatriarkatet...)
 
-    // --- GREN 4: MOSKVAPATRIARKATET & SPIONAGE (Inkl. nya uppgifter) ---
+// --- GREN 4: MOSKVAPATRIARKATET & SPIONAGE ---
     {
       title: "4) Moskvapatriarkatet & Spionage",
       alert: true,
       children: [
+        // 1. UNDERRÄTTELSEKOPPLINGAR (SVT/SKUGGKRIGET)
+        {
+          title: "Underrättelsekopplingar & 'Skuggkriget'",
+          highlight: true,
+          alert: true,
+          info: "SVT:s kartläggning av 21 ryska officerare under diplomatisk täckmantel. 1/3 av personalen är underrättelseofficerare.",
+          links: [{ text: "SVT Special: Putins Spioner", url: "https://www.svt.se/special/putins-spioner/" }],
+          children: [
+            { 
+              title: "Överblick: Diplomatisk Täckmantel", 
+              info: "1/3 av ambassadpersonalen är underrättelseofficerare (SVR, GRU, FSB) med diplomatisk immunitet.",
+              children: [
+                { title: "Metod", info: "Missbrukar Wienkonventionen för att bedriva spionage." },
+                { title: "Åtgärd", info: "5 officerare utvisades 25 april 2023 efter att Säpo delgivits listan." }
+              ]
+            },
+            // --- DE TRE HUVUDPROFILERNA ---
+            {
+                title: "PROFIL: Andrei Gurov (FSB)",
+                info: "Född 1972. Ambassadråd. Chef för FSB i Rostovregionen. Använder olika entréer för att undvika mönster.",
+                highlight: true,
+                links: [{ text: "Dossier Center", url: "https://dossier.center/" }]
+            },
+            {
+                title: "PROFIL: Dmitry Abdulin (SVR)",
+                info: "Född 1981. Attaché (Kryptering). Bakgrund i enhet 70855 (Kemiska vapen) & 8:e direktoratet.",
+                alert: true
+            },
+            {
+                title: "PROFIL: Nikolai Banatov (GRU)",
+                info: "Född 1982. Tekniker. Missil-expert. Pendlar frekvent till 'Ryska Huset' på Lidingö.",
+                highlight: true
+            },
+            // --- LISTOR PÅ TILLHÖRIGHET ---
+            {
+                title: "SVR (Civil Underrättelse) - 14 st",
+                children: [
+                    { title: "Anton Konovalenko", info: "SVR-officer" },
+                    { title: "Evgeny Umerenko", info: "SVR-officer" },
+                    { title: "Mikhail Kiselev", info: "SVR-officer" },
+                    { title: "Lev Yefimov", info: "SVR-officer" },
+                    { title: "Sergei Mikhalev", info: "SVR-officer" },
+                    { title: "Tatiana Umerenko", info: "SVR-officer" },
+                    { title: "Kirill Ioskevich", info: "SVR-officer" },
+                    { title: "Dmitry Abdulin", info: "SVR (Se profil ovan)" },
+                    { title: "Evgeny Zenikov", info: "SVR-officer" },
+                    { title: "Alexander Khramov", info: "SVR-officer" },
+                    { title: "Konstantin Chentsov", info: "SVR-officer" },
+                    { title: "Mikhail Dubrovskiy", info: "SVR-officer" },
+                    { title: "Pavel Mavrin", info: "SVR-officer" },
+                    { title: "Vladimir Komarov", info: "SVR-officer" }
+                ]
+            },
+            {
+                title: "GRU (Militär Underrättelse) - 5 st",
+                children: [
+                    { title: "Alexander Alekseenkov", info: "GRU-officer" },
+                    { title: "Nikolai Aleshchenko", info: "GRU-officer" },
+                    { title: "Andrei Prokopiev", info: "GRU-officer" },
+                    { title: "Vitaly Stanevka", info: "GRU-officer" },
+                    { title: "Nikolai Banatov", info: "GRU (Se profil ovan)" }
+                ]
+            },
+            {
+                title: "FSB (Säkerhetstjänst) - 1 st",
+                children: [
+                    { title: "Andrei Gurov", info: "FSB (Se profil ovan)" }
+                ]
+            },
+            {
+                title: "Okänd Tjänst / Kyrk-koppling - 1 st",
+                children: [
+                    { 
+                        title: "Vladimir Lyapin", 
+                        highlight: true,
+                        info: "Närvarade vid invigningen av ryska kyrkan i Västerås. Länken mellan ambassad och kyrka.",
+                        links: [{ text: "France24 (2025)", url: "https://www.france24.com/en/europe/20250704-the-church-by-the-airport-inside-russia-s-suspected-spy-activities-in-sweden" }]
+                    }
+                ]
+            },
+            { 
+              title: "Patriark Kirill", 
+              info: "F.d. KGB-agent 'Mikhailov'. Kyrkan opererar under FSB-beskydd.",
+              links: [{ text: "Euronews", url: "https://www.euronews.com/2025/07/07/unorthodox-intelligence-operations-how-russia-is-using-its-churches-abroad" }]
+            }
+          ]
+        },
+
+        // 2. KOPPLADE BOLAG (NORDIC CONTROL)
+        {
+          title: "Kopplade Bolag & Finansiering",
+          highlight: true,
+          children: [
+            { 
+              title: "NC Nordic Control AB (Täckmanteln)", 
+              info: "Finansiell motor för kyrkan i Västerås. Omsatte 40 MSEK utan lager/verksamhet.", 
+              alert: true,
+              children: [
+                {
+                  title: "Kopplingen till 'De 21'",
+                  info: "Som nämnts ovan: Agenten Vladimir Lyapin övervakade/stöttade kyrkprojektet, vilket visar hur ambassadspionerna styr de 'civila' bolagen.",
+                  highlight: true
+                },
+                {
+                  title: "Pavel Makarenko (Präst & VD)",
+                  info: "Kyrkans präst var samtidigt VD för bolaget. Dömdes för bokföringsbrott 2021. Fick medalj av SVR (Samma tjänst som agenterna).",
+                  alert: true
+                },
+                {
+                  title: "Pavel Gerasimov (Ägare)",
+                  info: "Rysk affärsman. Använde bolaget för att slussa pengar till kyrkan (hyra/brandskydd) och privat lyxkonsumtion.",
+                  links: [{ text: "Frivärlden", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" }]
+                }
+              ]
+            } 
+          ]
+        },
+
+        // 3. STRATEGISKA LÄGEN (SVERIGE)
         {
           title: "Strategiska Lägen: Sverige",
           children: [
@@ -1310,7 +1429,7 @@ const treeData = {
             },
             {
               title: "Västerås (Hässlö)",
-              info: "Vladimir Lyapin (GRU) vid invigning. Präst Makarenko flyttade Arboga->Gävle->Västerås (följde militären).",
+              info: "Strategisk placering nära flygplats. Kopplingar till SVR/GRU (se ovan).",
               links: [
                   { text: "Belsat", url: "https://en.belsat.eu/83499387/an-orthodox-church-near-stockholm-under-fsb-patronage-could-pose-a-significant-threat-to-sweden-analysis/" },
                   { text: "Aftonbladet", url: "https://www.aftonbladet.se/nyheter/a/9358Vp/ryska-kyrkan-i-vasteras-kommunen-forsoker-tvangsoverta-lokalerna" }
@@ -1324,6 +1443,8 @@ const treeData = {
             { title: "Helige Sergij (Sthlm)", info: "Etablerad 1990-tal. Utpekad av Säpo.", links: [{ text: "Expressen", url: "https://www.expressen.se/nyheter/sverige/efter-sapovarning-ryska-statskyrkan-utan-stod/" }] }
           ]
         },
+
+        // 4. STRATEGISKA LÄGEN (NORGE)
         {
           title: "Strategiska Lägen: Norge",
           children: [
@@ -1345,31 +1466,9 @@ const treeData = {
               links: [{ text: "Nordic Defence Review", url: "https://nordicdefencereview.com/russian-orthodox-churches-in-europe-espionage-outposts-under-the-guise-of-faith/" }]
             }
           ]
-        },
-        {
-          title: "Underrättelsekopplingar",
-          children: [
-            { 
-              title: "Patriark Kirill", 
-              info: "f.d. KGB-agent 'Mikhailov'. Kyrkan under FSB-beskydd.",
-              links: [{ text: "Euronews", url: "https://www.euronews.com/2025/07/07/unorthodox-intelligence-operations-how-russia-is-using-its-churches-abroad" }]
-            },
-            { 
-              title: "Diplomatspår (SVT)", 
-              info: "1/3 av ambassadpersonal i Norden är underrättelseofficerare (38 st identifierade).",
-              links: [{ text: "SVT (2023)", url: "https://www.svt.se/special/putins-spies/" }]
-            },
-            {
-              title: "Kopplade Bolag",
-              children: [
-                { title: "NC Nordic Control AB", info: "Bokföringsbrott (2021). Finns på FOI-listan.", links: [{ text: "Dagen", url: "https://www.dagen.se/nyheter/2021/04/10/rysk-ortodox-prast-domd-for-grovt-bokforingsbrott/" }] } 
-              
-              ]
-            }
-          ]
         }
       ]
-    },
+    },,
 
     // --- GREN 5: PRAVFOND (Rysk påverkan) - Fullständig gren ---
     {

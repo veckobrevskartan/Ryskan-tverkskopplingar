@@ -574,7 +574,7 @@ const treeData = {
             }
           ]
         },
-       // --- NORGE & ARKTIS (UPPDATERAT & KOMPLETT) ---
+       // --- NORGE & ARKTIS  ---
         {
           title: "Norge & Arktis",
           children: [
@@ -1803,7 +1803,37 @@ const treeData = {
             }
           ]
         },
-{
+        {
+          title: "Aktivitet i Tjeckien (Prague Telegraph & GRU)",
+          highlight: true,
+          alert: true,
+          info: "Sanktioner mot journalisten Sudliankova och hennes GRU-handläggare Shavrov (April 2025).",
+          links: [{ text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/feed/update/urn:li:activity:7411015713731153920" }],
+          children: [
+            {
+              title: "Natallia Sudliankova (Journalist/Agent)",
+              info: "Fick asyl som 'dissident' från Belarus. Arbetade för Radio Free Europe samtidigt som hon bedrev PR för Rosatom och Ryska Järnvägarna.",
+              highlight: true,
+              children: [
+                 { title: "Dubbelspelet", info: "Framställdes som oppositionell men agerade i praktiken påverkansagent åt Kreml." }
+              ]
+            },
+            {
+              title: "Aleksey Shavrov (GRU-handläggare)",
+              info: "Rysk officer som fungerade som Sudliankovas handläggare. Samordnade påverkan mot tjeckisk opinion.",
+              alert: true,
+              children: [
+                 { title: "Enhet 74455", info: "Shavrov kopplas till denna ökända GRU-enhet (Cyber/Info-ops) som utfört sabotage och valpåverkan i väst." }
+              ]
+            },
+            {
+              title: "Pravfond-kopplingen (Prague Telegraph)",
+              info: "Tidningen 'Prague Telegraph' (ledd av Sudliankova) mottog finansiering från Pravfond. Bekräftat av EU:s sanktionsbeslut 2025.",
+              highlight: true
+            }
+          ]
+        },
+        {
           title: "NYTT: UK-sanktioner (Dec 2025)",
           info: "Storbritannien sanktionerar Dugin, Rybar och Pravfond för informationspåverkan (FIMI). Tillgångsfrysning och begränsningar införs.",
           highlight: true,
@@ -2521,7 +2551,7 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
-  
+    { name: "Prag (Prague Telegraph)", coords: [50.0755, 14.4378], info: "Redaktionen för Prague Telegraph. Finansierad av Pravfond. Styrd av agenten Natallia Sudliankova och GRU." },
     { name: "Neonest AB (Sundbyberg)", coords: [59.3611, 17.9722], info: "Bolag kopplat till import av 110 försändelser från rysk kärnvapenindustri." },
     { name: "Arlanda (Logistiknod)", coords: [59.6444, 17.9294], info: "Företagsadress vid Arlanda användes för mottagande av ryska isotoper." },
     { name: "Kongsberg Automotive (HK)", coords: [59.6689, 9.6502], info: "Bildelar härifrån nådde rysk militärindustri via Turkiet (Hidirusta) trots sanktioner." },

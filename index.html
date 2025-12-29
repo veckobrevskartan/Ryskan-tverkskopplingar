@@ -3105,7 +3105,7 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
-    { name: "Celona Café (Frankfurt)", coords: [50.1109, 8.6821], info: "Gripande juni 2024. Ryska agenter/kriminella (Vardges Ispiryan) väntade på måltavlan Khizanishvili." },
+    { name: "Celona Café (Frankfurt)", coords: [50.1135, 8.6780], info: "BROTTSPLATS: Ryska agenter/kriminella greps här när de jagade Khizanishvili (juni 2024)." },
     { name: "Dmitrovka (Ukraina)", coords: [50.4851, 30.2246], info: "Platsen för videon där Khizanishvili deltog vid avrättning av ryska fångar (mars 2022)." },
     { name: "Tiergarten (Berlin)", coords: [52.5145, 13.3501], info: "Platsen för mordet på Khangoshvili (2019). Tyska polisen ser kopplingar i modus operandi." },
     { name: "Farnborough Airport", coords: [51.2758, -0.7763], info: "Avgångsplats för Bombardier Global 5000 till Angola med Gemcorps VD (4 dec 2018)." },
@@ -3438,17 +3438,17 @@ function initMap() {
 
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
-       {
+      {
             from: [50.4851, 30.2246], // Dmitrovka (Ukraina)
-            to: [50.1109, 8.6821],    // Frankfurt (Tyskland)
+            to: [50.1135, 8.6780],    // Celona Café (Frankfurt) - NYA KOORDINATER
             color: '#e74c3c',
-            text: "<b>Jakten på måltavlan:</b> Khizanishvili flydde till Tyskland efter anklagelser. Ryska 'hit squad' följde efter."
+            text: "<b>Jakten på måltavlan:</b> Khizanishvili flydde till Tyskland. Ryska agenter följde efter."
         },
         {
             from: [52.5145, 13.3501], // Berlin (Tiergarten)
-            to: [50.1109, 8.6821],    // Frankfurt
+            to: [50.1135, 8.6780],    // Celona Café (Frankfurt) - NYA KOORDINATER
             color: '#8e44ad',
-            text: "<b>Seriemönster:</b> FSB använder kriminella proxies för att likvidera fiender på tysk mark."
+            text: "<b>Seriemönster:</b> Tyska polisen ser likheter med Tiergarten-mordet (FSB/Kriminella proxies)."
         },
       // --- GEMCORP RÖRELSER ---
         {

@@ -888,6 +888,90 @@ const treeData = {
         {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
+            // --- CASE: FRANKRIKE (BARDELLA & MALOFEEV) - KOMPLETT ---
+            {
+              title: "CASE: Jordan Bardella (Malofeev-kopplingen)",
+              info: "RN:s ledare och potentiell premiärminister. Avslöjad med djupa band till oligarken Konstantin Malofeevs nätverk.",
+              highlight: true,
+              alert: true,
+              links: [
+                { text: "Dossier Center (2024-07-05)", url: "https://dossier.center/bardella/" },
+                { text: "Mediapart (Bildbevis)", url: "https://www.mediapart.fr/journal/international/170124/gian-luigi-ferretti-le-trait-d-union-entre-le-rn-et-l-extreme-droite-italienne" }
+              ],
+              children: [
+                {
+                  title: "1. Det Hemliga Mötet i Rom (29 mars 2019)",
+                  info: "Bardella organiserade möte för 'ungdomsrörelser'. På plats fanns en tung delegation från oligarken Malofeev.",
+                  highlight: true,
+                  alert: true,
+                  children: [
+                    { 
+                      title: "Bildbeviset", 
+                      info: "Bardella fotograferades omgiven av nyckelpersoner i Kremls påverkansnätverk." 
+                    },
+                    { 
+                      title: "Närvarande: Malofeevs Inre Krets", 
+                      children: [
+                        { title: "Kirill Malofeev", info: "Son till oligarken Konstantin Malofeev (sanktionerad finansiär av separatister)." },
+                        { title: "Mikhail Yakushev", info: "Direktör för Tsargrad/Katehon. Ansvarig för oligarkens kontakter med Salvini och extremhögern. Sanktionerad av USA." },
+                        { title: "Andrei Afanasyev", info: "Programledare på Tsargrad TV (Malofeevs propagandakanal)." },
+                        { title: "Rebecca Bettarini", info: "Fru till storfurst Georgy Romanov (Tsarens ättling). Malofeev är gudfar till deras son." },
+                        { title: "Fabrice Sorlin", info: "Se nedan (Mellanhanden)." }
+                      ]
+                    },
+                    { 
+                      title: "Värden: Gianluigi Ferretti (UGT)", 
+                      info: "Chef för int. relationer på italienska facket UGT. Var valobservatör i Ryssland 2018: 'Ryssland kan lära ut valvetenskap'." 
+                    }
+                  ]
+                },
+                {
+                  title: "2. Den Interna Rapporten (Sommaren 2019)",
+                  info: "Malofeevs stab analyserade EU-valet och skickade hem en rapport om Bardella.",
+                  highlight: true,
+                  children: [
+                    { 
+                      title: "Citatet", 
+                      info: "'Han är en utmärkt politiker med konservativa och pro-ryska åsikter... gjorde inga misstag under kampanjen'." 
+                    },
+                    { 
+                      title: "Syftet", 
+                      info: "Att identifiera 'operatörer' som kan sälja Moskvas affärsplaner för att destabilisera Europa (enl. Anton Shekhovtsov)." 
+                    }
+                  ]
+                },
+                {
+                  title: "3. Mellanhanden: Fabrice Sorlin",
+                  info: "Tidigare RN-medlem. Har samarbetat med Malofeev sedan 2012. Viftade med DPR-flagga hos Gula Västarna 2018.",
+                  links: [{ text: "Gazeta.ru", url: "https://www.gazeta.ru/politics/news/2024/03/01/22458410.shtml" }],
+                  alert: true,
+                  children: [
+                    { title: "Flytten till Ryssland", info: "Flydde 'Europas icke-traditionella värderingar' efter invasionen 2022. Fick ryskt medborgarskap." },
+                    { title: "Lyxlivet (Minsk Highway)", info: "Propagandan sa 'landsbygden'. Verkligheten: Stugsamhälle där hus kostar från 30 miljoner rubel." },
+                    { title: "Roll idag", info: "Vice ordförande för 'Internationella Russofilrörelsen' (skapad av ryska UD)." }
+                  ]
+                },
+                {
+                  title: "4. Bardellas Ryska Spår (Före 2022)",
+                  children: [
+                    { title: "Citat 2014", info: "Kritiserade Hollande för att 'lära Putin demokrati'." },
+                    { title: "Citat 2018", info: "Gratulerade Putin: 'I en multipolär värld är Ryssland en partner, inte en motståndare'." },
+                    { title: "Lånet (9M USD)", info: "RN fick lån från Första Tjeckisk-Ryska Banken 2014. Bardella återbetalade det 2023 för att tvätta imagen." },
+                    { title: "Röstning 2021", info: "Röstade MOT resolutioner om Navalnyj och rysk truppuppbyggnad. Vägrade kräva Navalnyjs frigivning i TV." }
+                  ]
+                },
+                {
+                  title: "5. Den Nya Fasaden (Efter 2022)",
+                  info: "Försöker mildra bilden inför premiärministerposten. 'Marines robot' byter spår.",
+                  highlight: true,
+                  children: [
+                    { title: "Officiell hållning", info: "Stöder Ukraina verbalt. Röstade för kandidatstatus." },
+                    { title: "Reell politik", info: "Motsätter sig energisanktioner ('straffar oss'). Motsätter sig trupper och långdistansmissiler." },
+                    { title: "Voice of Europe", info: "Förnekade inblandning i propagandaskandalen 2024: 'Vår integritet är absolut'." }
+                  ]
+                }
+              ]
+            },
             // --- GREN: Polen: Sobieskiego 100 ---
             {
               title: "Polen: Sobieskiego 100 ('Szpiegowo')",
@@ -2909,6 +2993,9 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "Mötet i Rom (2019)", coords: [41.9028, 12.4964], info: "Här träffade Bardella oligarken Malofeevs delegation (Yakushev, Sorlin, Kirill Malofeev)." },
+    { name: "Fabrice Sorlin (Minsk Highway)", coords: [55.6700, 37.2800], info: "Lyxvilla (30M RUB) utanför Moskva. Sorlin (ex-RN) agerar mellanhand åt Malofeev." },
+    { name: "National Rally HQ (Paris)", coords: [48.8464, 2.2743], info: "Tidigare finansierat av ryska lån (9M USD). Bardella pekad ut som 'pro-rysk' i interna rapporter." },
     { name: "DHL Leipzig (Sabotage)", coords: [51.4223, 12.2366], info: "7 juli 2024: Brand i paketcentral. GRU-testkörning." },
     { name: "DHL Birmingham (Sabotage)", coords: [52.4539, -1.7481], info: "9 juli 2024: Brand i terminal. Del av sabotagekampanjen." },
     { name: "Warszawa (DHL-brand)", coords: [52.1672, 20.9679], info: "8 juli 2024: Brand i lastbil. 4 gripna kopplade till GRU." },
@@ -3235,7 +3322,19 @@ function initMap() {
 
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
+       {
+            from: [48.8464, 2.2743], // Paris
+            to: [41.9028, 12.4964],   // Rom
+            color: '#8e44ad',
+            text: "<b>2019:</b> Bardella reser till Rom för att möta Malofeevs nätverk."
+        },
         {
+            from: [41.9028, 12.4964], // Rom
+            to: [55.7558, 37.6173],   // Moskva
+            color: '#8e44ad',
+            text: "<b>Rapportering:</b> Malofeevs stab rapporterar hem: 'Utmärkt politiker med pro-ryska åsikter'."
+        }, 
+      {
             from: [69.0250, 18.5255], // Stugbyn
             to: [69.0558, 18.5404],   // Flygbasen
             color: '#e74c3c',         // Röd

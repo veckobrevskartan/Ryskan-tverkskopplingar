@@ -2814,6 +2814,102 @@ const treeData = {
       ]
     },
     // --- NY GREN 9: GRU-SABOTAGE, PYRAMIDSPEL & NORDISK PÅVERKAN ---
+    // RYSSLANDS DIGITALA GULAG (SORM & FINLAND) ---
+    {
+      title: "10) Rysslands Digitala Gulag (SORM & Övervakning)",
+      info: "Total kartläggning av Kremls digitala kontrollsystem, från internettrafik till kryptovaluta och ansiktsigenkänning.",
+      highlight: true,
+      alert: true,
+      links: [
+        { text: "Dossier Center (2024-03-11)", url: "https://dossier.center/sorm/" },
+        { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/posts/svensk-osint_tldr-rapporten-tracking-deployment-of-activity-7284972552702070784-FAcv" }
+      ],
+      children: [
+        // --- FINLAND-KOPPLINGEN ---
+        {
+          title: "Kopplingen till Finland: LocalBitcoins",
+          info: "Rosfinmonitoring fick tillgång till data från den finska kryptobörsen LocalBitcoins (stängd 2023) via internationellt datautbyte.",
+          highlight: true,
+          alert: true,
+          children: [
+            { title: "Metod", info: "Användes för att spåra transaktioner kopplade till 'Hydra' (Darknet) och ryska oppositionella." },
+            { title: "Implikation", info: "Visar att ryska underrättelsetjänster når in i finsk infrastruktur för att övervaka finansiella flöden." }
+          ]
+        },
+
+        // --- SORM & INTERNET ---
+        {
+          title: "SORM & 'Yarovaya-lagen'",
+          info: "System för att avlyssna och lagra all tele- och internettrafik.",
+          children: [
+            { 
+              title: "SORM-3 (Yarovaya)", 
+              info: "Lagen kräver att operatörer lagrar all trafik (ljud, video, text) i upp till 6 månader och metadata i 3 år. Ger retroaktiv åtkomst." 
+            },
+            { 
+              title: "Dekryptering & SSL", 
+              info: "Kan inte knäcka Signal/WhatsApp/Telegram direkt. Identifierar istället kontakter via 'paketstorlek' och tidsstämplar (Traffic Analysis)." 
+            },
+            { 
+              title: "Hårdvarukrav 2024", 
+              info: "Nya krav tvingar webbhotell och molntjänster att installera 'svarta lådor' som ger FSB direkt söktillgång (GraphQL)." 
+            }
+          ]
+        },
+
+        // --- FINANSIELL ÖVERVAKNING (ROSFINMONITORING) ---
+        {
+          title: "Finansiell Övervakning (Rosfinmonitoring)",
+          info: "Spårar pengar, krypto och 'oönskade organisationer'.",
+          children: [
+            { 
+              title: "Kryptovalutor", 
+              info: "Spårar Bitcoin, Litecoin, Ethereum m.fl. Använder 'brusfiltrering' och AI för att koppla plånböcker till individer." 
+            },
+            { 
+              title: "NGO & Utländska Agenter", 
+              info: "Nytt system 2023: Automatisk flaggning av alla transaktioner kopplade till anställda eller grundare av 'oönskade organisationer'." 
+            },
+            { 
+              title: "Systemet 'Poseidon'", 
+              info: "Övervakar specifikt statstjänstemäns inkomster och utgifter för att kontrollera lojalitet/korruption." 
+            }
+          ]
+        },
+
+        // --- FYSISK ÖVERVAKNING (SAFE CITY) ---
+        {
+          title: "Fysisk Övervakning ('Safe City')",
+          info: "13,5 miljoner kameror i Ryssland (3:e mest i världen).",
+          children: [
+            { 
+              title: "Ansiktsigenkänning (NtechLab)", 
+              info: "Integrerat i Moskva/S:t Petersburg. Används för att gripa demonstranter i tunnelbanan (t.ex. Rysslandsdagen 2022)." 
+            },
+            { 
+              title: "Fordonsspårning ('Pautina')", 
+              info: "Följer bilar i realtid via registreringsskyltar. Kan spåra en rutt från gränsen till dörren." 
+            },
+            { 
+              title: "Medicinsk Övervakning", 
+              info: "Ljudinspelning av läkarbesök införs i Moskva 2024. Bryter läkarsekretess och skapar läckagerisk." 
+            }
+          ]
+        },
+
+        // --- SVAGHETER & KORRUPTION ---
+        {
+          title: "Svagheter & 'Det Digitala Läckaget'",
+          info: "Korruption och inkompetens hindrar systemet från att bli totalitärt effektivt.",
+          highlight: true,
+          children: [
+            { title: "Svarta Marknaden", info: "Poliser säljer data ('Probiv') via Telegram. Dekryptering av telefoner kräver ofta mutor." },
+            { title: "Läckor", info: "Data från Alfa Bank, leverantörer och myndigheter läcker konstant. Anställda delar hemliga dokument via WhatsApp." },
+            { title: "Säkerhetshål", info: "Amerikanska NSA påstås ha hackat SORM tidigare (enligt Applebaum/Pentagon-läckor)." }
+          ]
+        }
+      ]
+    },
     {
       title: "9) GRU, Bedrägerier & Nordisk Säkerhet",
       highlight: true,
@@ -3247,6 +3343,8 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "LocalBitcoins (Helsingfors)", coords: [60.1675, 24.9426], info: "Finsk kryptobörs vars data hamnade hos ryska Rosfinmonitoring för att spåra dissidenter." },
+    { name: "Rosfinmonitoring HQ (Moskva)", coords: [55.7963, 37.5385], info: "Finansiell underrättelsetjänst. Övervakar krypto, NGO:er och transaktioner." },
     { name: "Celona Café (Frankfurt)", coords: [50.1135, 8.6780], info: "BROTTSPLATS: Ryska agenter/kriminella greps här när de jagade Khizanishvili (juni 2024)." },
     { name: "Dmitrovka (Ukraina)", coords: [50.4851, 30.2246], info: "Platsen för videon där Khizanishvili deltog vid avrättning av ryska fångar (mars 2022)." },
     { name: "Tiergarten (Berlin)", coords: [52.5145, 13.3501], info: "Platsen för mordet på Khangoshvili (2019). Tyska polisen ser kopplingar i modus operandi." },

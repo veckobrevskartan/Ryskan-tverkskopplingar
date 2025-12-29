@@ -888,6 +888,56 @@ const treeData = {
         {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
+            // --- CASE: FRANKFURT (MORDPLAN & SPIONAGE) - KOMPLETT ---
+            {
+              title: "CASE: Frankfurt (Mordplan & Spionage)",
+              info: "Tre män gripna juni 2024. Rysk underrättelseoperation mot georgisk soldat med hjälp av kriminella proxies.",
+              highlight: true,
+              alert: true,
+              links: [
+                { text: "Dossier Center (2024)", url: "https://dossier.center/frankfurt/" },
+                { text: "Lenta.ru (Vardges Ispiryan)", url: "https://lenta.ru/news/2021/11/22/zap/" }
+              ],
+              children: [
+                {
+                  title: "1. Gripandet (Celona Café)",
+                  info: "Måltavlan lurades till möte av 'Yaroslav' (falsk GUR-agent). Kontaktade polisen vid misstanke. Tre män greps utanför.",
+                  highlight: true,
+                  children: [
+                    { title: "De gripna", info: "En ryss, en ukrainare och en armenier. Hade GPS-tracker, stora summor kontanter och raderade foton på måltavlan i mobilen." },
+                    { title: "Vardges Ispiryan", info: "Armenisk brottsboss ('Tjuv i lagen'). Visar hur Ryssland anlitar grovt kriminella för 'wet work' i Europa." }
+                  ]
+                },
+                {
+                  title: "2. Måltavlan: 'Mannen med två ansikten'",
+                  info: "Mikael Khizanishvili (i Tyskland) / Mizaffar Shamilov (i Ukraina). F.d. livvakt åt Saakasjvili.",
+                  alert: true,
+                  children: [
+                    { 
+                      title: "Krigsförbrytelser (Dmitrovka)", 
+                      info: "Identifierad i video från mars 2022 där ryska krigsfångar avrättas. Ryska staten hävdade (falskt) att han 'straffats' och dödats 2022." 
+                    },
+                    { 
+                      title: "Kriminell bakgrund (Shamilov)", 
+                      info: "Dömd för väpnade rån i Donetsk (2014-2015). Efterlyst i Ukraina. Bytte namn och födelsedatum för att skapa ny identitet." 
+                    },
+                    { 
+                      title: "Flykten till Tyskland", 
+                      info: "Flydde aug 2023. Hävdar att ett personligt brev från Kirill Budanov (GUR-chefen) hjälpte honom över gränsen." 
+                    }
+                  ]
+                },
+                {
+                  title: "3. Tiergarten-kopplingen (Berlin)",
+                  info: "Tyska utredare ser tydliga likheter med mordet på Zelimkhan Khangoshvili 2019.",
+                  highlight: true,
+                  children: [
+                    { title: "Parallellerna", info: "Båda måltavlorna fanns på ryska dödslistor, hade stridit mot Ryssland, använde falska identiteter och sökte asyl i Tyskland." },
+                    { title: "Metoden", info: "Likvidering via kriminella proxies istället för officiella underrättelseofficerare (för att kunna neka inblandning)." }
+                  ]
+                }
+              ]
+            },
             // --- CASE: FRANKRIKE (BARDELLA & MALOFEEV) - KOMPLETT ---
             {
               title: "CASE: Jordan Bardella (Malofeev-kopplingen)",
@@ -3055,6 +3105,9 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "Celona Café (Frankfurt)", coords: [50.1109, 8.6821], info: "Gripande juni 2024. Ryska agenter/kriminella (Vardges Ispiryan) väntade på måltavlan Khizanishvili." },
+    { name: "Dmitrovka (Ukraina)", coords: [50.4851, 30.2246], info: "Platsen för videon där Khizanishvili deltog vid avrättning av ryska fångar (mars 2022)." },
+    { name: "Tiergarten (Berlin)", coords: [52.5145, 13.3501], info: "Platsen för mordet på Khangoshvili (2019). Tyska polisen ser kopplingar i modus operandi." },
     { name: "Farnborough Airport", coords: [51.2758, -0.7763], info: "Avgångsplats för Bombardier Global 5000 till Angola med Gemcorps VD (4 dec 2018)." },
     { name: "Mötet i Rom (2019)", coords: [41.9028, 12.4964], info: "Här träffade Bardella oligarken Malofeevs delegation (Yakushev, Sorlin, Kirill Malofeev)." },
     { name: "Fabrice Sorlin (Minsk Highway)", coords: [55.6700, 37.2800], info: "Lyxvilla (30M RUB) utanför Moskva. Sorlin (ex-RN) agerar mellanhand åt Malofeev." },
@@ -3385,7 +3438,19 @@ function initMap() {
 
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
-       // --- GEMCORP RÖRELSER ---
+       {
+            from: [50.4851, 30.2246], // Dmitrovka (Ukraina)
+            to: [50.1109, 8.6821],    // Frankfurt (Tyskland)
+            color: '#e74c3c',
+            text: "<b>Jakten på måltavlan:</b> Khizanishvili flydde till Tyskland efter anklagelser. Ryska 'hit squad' följde efter."
+        },
+        {
+            from: [52.5145, 13.3501], // Berlin (Tiergarten)
+            to: [50.1109, 8.6821],    // Frankfurt
+            color: '#8e44ad',
+            text: "<b>Seriemönster:</b> FSB använder kriminella proxies för att likvidera fiender på tysk mark."
+        },
+      // --- GEMCORP RÖRELSER ---
         {
             from: [51.2758, -0.7763], // Farnborough Airport (London)
             to: [-8.8147, 13.2302],   // Luanda (Angola)

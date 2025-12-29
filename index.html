@@ -578,11 +578,90 @@ const treeData = {
         {
           title: "Norge & Arktis",
           children: [
+            // --- CASE: MÅLSELV FJELLANDSBY (Total Kartläggning) ---
             { 
-              title: "Bardufoss (Atomflot & Militärbas)", 
-              info: "Stugor vid flygbasen ägda av Alexander Timofeev (Chef Atomflot) och Igor Morar (Borgmästare Murmansk).", 
+              title: "CASE: Målselv Fjellandsby (Murmansk-eliten)", 
+              info: "Stugby med direkt insyn över NATO-basen Bardufoss. Ägs av Murmansks politiska och militära elit.", 
               highlight: true,
-              links: [{ text: "Odessa Journal", url: "https://odessa-journal.com/public/russian-officials-own-real-estate-near-a-norwegian-military-base" }] 
+              alert: true,
+              links: [
+                { text: "Dossier Center (2024)", url: "https://dossier.center/norway-ski/" },
+                { text: "TV 2 Norge", url: "https://www.tv2.no/spesialer/nyheter/bardufoss-hytte-russere" },
+                { text: "Odessa Journal", url: "https://odessa-journal.com/public/russian-officials-own-real-estate-near-a-norwegian-military-base" }
+              ],
+              children: [
+                {
+                  title: "1. Hotbilden: Bardufoss & Camp Nord",
+                  info: "360m höjd. Direkt utsikt över landningsbanor och 'Camp Nord' där NATO-övningar (Nordic Response 2024) sker.",
+                  alert: true,
+                  children: [
+                    { title: "Säkerhetsrisk", info: "PST varnar för spionage. Tom Roseth (FHS): 'De kan inte motstå krav från Kreml'." },
+                    { title: "Lagen", info: "Ingen lag stoppar utlänningar från att köpa fastigheter nära skyddsobjekt i Norge." }
+                  ]
+                },
+                {
+                  title: "2. Igor Morar ('Skyltkungen' & Borgmästare)",
+                  info: "Borgmästare i Murmansk (Enade Ryssland). F.d. ägare av reklambolaget 'Propaganda Kolokol'.",
+                  highlight: true,
+                  children: [
+                    { 
+                      title: "Norska Stugan & Ekonomi", 
+                      info: "Hyr ut stugan för 4900-6900 NOK/natt (ca 120 000 RUB/helg). 'Tricolor TV'-parabol på taket.",
+                      children: [
+                         { title: "Citatet", info: "'Jag har inga problem med norska myndigheter'." }
+                      ]
+                    },
+                    { 
+                      title: "Dottern: Daria Morar", 
+                      info: "Formell ägare till 'Propaganda Kolokol' idag. Poserade på Instagram i Kirkenes 2017." 
+                    },
+                    { 
+                      title: "Tjeckien-nätverket (Prag)", 
+                      info: "Äger lägenheter och bolag i Prag tillsammans med kumpanen Yuri Vinogradchiy ('IP Vinogradchiy').",
+                      children: [
+                        { title: "Bolagen", info: "Ägde 'Movin' (fastigheter, Nusle-distriktet), 'Temple' (turism) och 'Power Lab' (racerbilar)." },
+                        { title: "Partners", info: "Drevs med Yuri Vinogradchiy och senare Dmitrij Lishenkevich." }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  title: "3. Viktor Saigin (Rikaste Suppleanten)",
+                  info: "Ledamot i Murmansks Duma (Säkerhetskommittén). Driver 'patriotisk fostran' via bolaget 'Legends of the North'.",
+                  children: [
+                    { 
+                      title: "Dottern & Stugan", 
+                      info: "Köpte 3 tomter kontant 2009. Överförda till dottern Tatjana Zemlyanaya. Stugan ihopkopplad med Morars via kabel." 
+                    },
+                    { 
+                      title: "Militär Fostran ('Lev i norr!')", 
+                      info: "Fick 23 Mkr i bidrag. Lär barn vapenhantering och taktisk medicin. Tog barn till atomisbrytaren Lenin." 
+                    },
+                    { 
+                      title: "Frun: Galina Saigina", 
+                      info: "Driver cateringfirman 'Lesnaya Skazka' och sanatoriet 'Flamingo' i Gelendzhik (där gäster väver kamouflagenät)." 
+                    },
+                    { 
+                      title: "Ryska Fredsstiftelsen", 
+                      info: "Saigin leder lokalavdelningen. Organisationen kopplas till Leonid Slutsky och påverkan/spionage." 
+                    }
+                  ]
+                },
+                {
+                  title: "4. Alexander Timofeev (Atomflot)",
+                  info: "Chef för utställningscentret på atomisbrytaren 'Lenin'. Arbetsgivaren Atomflot är sanktionerad.",
+                  children: [
+                    { 
+                      title: "Dottern: Ksenia Timofeeva", 
+                      info: "Besökte stugan 2015 och publicerade bilder på VKontakte." 
+                    },
+                    { 
+                      title: "Citatet", 
+                      info: "'Ryssar och norrmän är alltid vänner... oavsett den politiska situationen'. Hävdar privat bruk." 
+                    }
+                  ]
+                }
+              ] 
             },
 
             // --- CASE: AMBASSADSPIONERI (ORAHHOU) - UPPDATERAD MED DOM ---
@@ -2774,6 +2853,9 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Målselv Fjellandsby (Ryska Stugor)", coords: [69.0250, 18.5255], info: "Ägs av Morar, Saigin & Timofeev. 360m höjd med direkt insyn över NATO-basen." },
+    { name: "Bardufoss Flygstation (NATO)", coords: [69.0558, 18.5404], info: "Strategisk flygbas och högkvarter för norska armén (Camp Nord)." },
+    { name: "Power Lab (Prag)", coords: [50.0630, 14.4440], info: "Igor Morars (Borgmästare Murmansk) tidigare bolag i Nusle-distriktet. Koppling till Yuri Vinogradchiy." },
     { name: "MAGE/Sevnor (Murmansk)", coords: [68.9585, 33.0827], info: "Bas för Andrei Patrushevs flotta (MAGE) och Nordslettens fartyg (Sevnor/Marvik). Navet för kringgående av arktiska sanktioner." },
     { name: "Ryska Ambassaden (Sthlm)", coords: [59.3255, 18.0163], info: "Gjörwellsgatan 31. Arbetsplats för Gurov, Abdulin & Banatov. Navet för spionaget." },
     { name: "Lubjanka (Moskva)", coords: [55.7597, 37.6272], info: "FSB Högkvarter. Gurovs centrala ledning. Ökänt fängelse/högkvarter." },
@@ -2790,7 +2872,6 @@ const strategicProperties = [
     { name: "Whitehall Court", coords: [51.505244, -0.124488], info: "Ryskkopplat 3-plans penthouse. Historiskt MI6-högkvarter i Westminster." },
     { name: "Hangö (Rotenberg)", coords: [59.8231, 22.9691], info: "63 lägenheter ägda av Boris Rotenberg. Strategisk djuphamn. Frysta tillgångar." },
     { name: "Hartwall Arena (Helsingfors)", coords: [60.2057, 24.9288], info: "Tidigare Rotenberg/Timchenko. Såld till Trevian 2025." },
-    { name: "Bardufoss (Atomflot/Murmansk)", coords: [69.0636, 18.5255], info: "Stugor ägda av Chef Atomflot och Murmansks borgmästare nära flygbasen." },
     { name: "Naftogaz Beslag (Helsingfors)", coords: [60.1699, 24.9384], info: "40+ fastigheter beslagtagna av Finland för att täcka rysk skuld till Naftogaz." },
     { name: "Handelsrepresentationen (DK)", coords: [55.7276, 12.5638], info: "Vestagervej 7, Hellerup. Känd spioncentral (PET)." },
     { name: "Ruslands Hus (DK)", coords: [55.6783, 12.5681], info: "Vester Voldgade 11. Ryskt kulturhus/Propagandacentral." },
@@ -3156,6 +3237,12 @@ function initMap() {
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
         {
+            from: [69.0250, 18.5255], // Stugbyn
+            to: [69.0558, 18.5404],   // Flygbasen
+            color: '#e74c3c',         // Röd
+            text: "<b>VISUELLT HOT:</b> Ryska tjänstemän har direkt insyn över NATO-övningar."
+        },
+      {
             from: [59.3560, 18.1400], // NC Nordic Control (Lidingö)
             to: [59.589, 16.635],     // Ryska Kyrkan (Västerås)
             color: '#c0392b',         // Röd linje (Koppling kyrka/bolag)

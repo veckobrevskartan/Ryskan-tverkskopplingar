@@ -1120,6 +1120,64 @@ const treeData = {
         {
           title: "Storbritannien (London & Säkerhet)",
           children: [
+            // --- CASE: GEMCORP & ROSTEC (MAYFAIR) - TOTALITET ---
+            {
+              title: "CASE: Gemcorp & Rostec (Mayfair)",
+              info: "Brittisk fond (1md USD) i Mayfair. Grundad av ryska oligarker ('Chemezovs plånbok'). Kopplad till vapenhandel och Rostec.",
+              highlight: true,
+              alert: true,
+              links: [
+                { text: "Dossier Center (2024)", url: "https://dossier.center/mayfair/" },
+                { text: "Financial Times", url: "https://www.ft.com/content/a74fb9a7-88a1-4322-b98a-7775a124beb9" }
+              ],
+              children: [
+                {
+                  title: "1. Vapenmötet i Luanda (dec 2018)",
+                  info: "Diskuterade kredit på 1 miljard USD för ryska vapen till Angola. Rosoboronexport var sanktionerat.",
+                  highlight: true,
+                  children: [
+                    { title: "Logistiken", info: "VD Atanas Bostandzhiev flög privatjet (Bombardier Global 5000) från Farnborough. Ryssarna kom från IDEX i Kairo." },
+                    { title: "Ryska delegationen", info: "Alexander Mikheev (VD Rosoboronexport) och Alexander Shcherbinin (Vice VD)." },
+                    { title: "Resultat", info: "Gemcorp backade formellt pga sanktioner, men Angola skrev senare avtal med Ryssland (april 2019)." }
+                  ]
+                },
+                {
+                  title: "2. Oligarken: Albert Avdolyan",
+                  info: "Kallas 'Chemezovs plånbok'. Känner Rostec-chefen sedan barnsben. Grundade fonden med 250M USD (från Yota-försäljning).",
+                  alert: true,
+                  children: [
+                    { 
+                      title: "Familjen (Krasnodar)", 
+                      info: "Fadern Alik Avdalyan (stenbrott & drogrehab i Anapa). Brodern Grachik (dömd för narkotika). 'Mäktig familj'." 
+                    },
+                    { 
+                      title: "Det dolda Moskva-kontoret", 
+                      info: "Gemcorp hyrde kontor i Empire Tower (vån 39) av 'Victory Trading Group' (BVI) – kopplat till Avdolyan. Gratis hyra i ett år." 
+                    }
+                  ]
+                },
+                {
+                  title: "3. YATEK & Rostec-nätverket",
+                  info: "Gemcorp lånade 182M USD till Avdolyans bolag YATEK 2020. Styrelsen fylldes med Rostec-folk för att säkra kontrollen.",
+                  children: [
+                    { title: "Novikombank", info: "Lånet refinansierades senare av Novikombank (Rostecs ryggradsbank)." },
+                    { title: "Bulvan: Anton Agafonov", info: "Kopplad till Ekaterina Ignatova (Chemezovs fru)." },
+                    { title: "Bulvan: Anton Korobov", info: "Rådgivare till Sergey Chemezov och f.d. styrelseledamot i Norilsk Nickel." },
+                    { title: "Bulvan: Rodion Sokrovishchuk", info: "Chef för RT-Global Resources (Rostec)." },
+                    { title: "Bulvan: Tatiana Merzlyakova", info: "Biträdande personalchef på Rostec." }
+                  ]
+                },
+                {
+                  title: "4. Brittiska Eliten (Renommé-tvätt)",
+                  info: "Rekryterade tungviktare till styrelsen för att dölja de ryska rötterna.",
+                  highlight: true,
+                  children: [
+                    { title: "Lord Gerry Grimstone", info: "Ordförande. Tidigare Investeringsminister (2020-2022)." },
+                    { title: "Lord Edward Lister", info: "Styrelseledamot. Boris Johnsons stabschef (2019-2021)." }
+                  ]
+                }
+              ]
+            },
             {
               title: "St George Wharf Tower (Vauxhall)",
               info: "Omedelbar närhet till SIS/MI6 högkvarter (Vauxhall Cross). Känd som 'Vauxhall Tower'.",
@@ -2937,6 +2995,10 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Gemcorp HQ (Mayfair)", coords: [51.5085, -0.1437], info: "London-fond med 1md USD. Styrelse: Lord Grimstone & Lord Lister. Kopplad till Rostec." },
+    { name: "Luanda (Vapenmötet)", coords: [-8.8147, 13.2302], info: "Här möttes Gemcorp och Rosoboronexport (Mikheev) för vapenaffärer." },
+    { name: "Empire Tower (Moskva)", coords: [55.7496, 37.5376], info: "Våning 39: Gemcorps hemliga kontor i Avdolyans skyskrapa (ägare Victory Trading Group BVI)." },
+    { name: "Anapa (Avdalyan)", coords: [44.8948, 37.3161], info: "Familjens bas. Fadern Alik driver rehabcenter. Brodern Grachik dömd för narkotika." },
     { name: "Målselv Fjellandsby (Ryska Stugor)", coords: [69.0250, 18.5255], info: "Ägs av Morar, Saigin & Timofeev. 360m höjd med direkt insyn över NATO-basen." },
     { name: "Bardufoss Flygstation (NATO)", coords: [69.0558, 18.5404], info: "Strategisk flygbas och högkvarter för norska armén (Camp Nord)." },
     { name: "Power Lab (Prag)", coords: [50.0630, 14.4440], info: "Igor Morars (Borgmästare Murmansk) tidigare bolag i Nusle-distriktet. Koppling till Yuri Vinogradchiy." },
@@ -2993,6 +3055,7 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "Farnborough Airport", coords: [51.2758, -0.7763], info: "Avgångsplats för Bombardier Global 5000 till Angola med Gemcorps VD (4 dec 2018)." },
     { name: "Mötet i Rom (2019)", coords: [41.9028, 12.4964], info: "Här träffade Bardella oligarken Malofeevs delegation (Yakushev, Sorlin, Kirill Malofeev)." },
     { name: "Fabrice Sorlin (Minsk Highway)", coords: [55.6700, 37.2800], info: "Lyxvilla (30M RUB) utanför Moskva. Sorlin (ex-RN) agerar mellanhand åt Malofeev." },
     { name: "National Rally HQ (Paris)", coords: [48.8464, 2.2743], info: "Tidigare finansierat av ryska lån (9M USD). Bardella pekad ut som 'pro-rysk' i interna rapporter." },
@@ -3323,6 +3386,18 @@ function initMap() {
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
        {
+            from: [51.2758, -0.7763], // Farnborough
+            to: [-8.8147, 13.2302],   // Luanda
+            color: '#e74c3c',
+            text: "<b>Vapenresan:</b> Privatjet med Gemcorp-chefen för möte med ryska vapenhandlare."
+        },
+        {
+            from: [55.7558, 37.6173], // Moskva (Rostec/Chemezov)
+            to: [51.5085, -0.1437],   // London (Gemcorp)
+            color: '#2980b9',
+            text: "<b>Finansiell länk:</b> Avdolyan ('Chemezovs plånbok') grundade fonden. Rostec-folk i YATEK-styrelsen."
+        },
+      {
             from: [48.8464, 2.2743], // Paris
             to: [41.9028, 12.4964],   // Rom
             color: '#8e44ad',

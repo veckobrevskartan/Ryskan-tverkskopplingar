@@ -617,6 +617,83 @@ const treeData = {
                 }
               ]
             },
+            // --- NYTT CASE: DIPLOMATSÖNERNA (PATRUSHEV & NORDSLETTEN) ---
+            {
+              title: "CASE: Diplomatsönerna (Sanktionsundandragande)",
+              info: "Hur Nikolai Patrushevs son (Andrei) övervann sanktionerna för arktisk borrning med hjälp av norska ambassadörssonen Gunnar Nordsletten.",
+              highlight: true,
+              alert: true,
+              links: [
+                { text: "Dossier Center (2024)", url: "https://dossier.center/diplomat/" },
+                { text: "Stavanger Aftenbladet", url: "https://www.aftenbladet.no/magasin/i/0QmwQA/han-fortsatte-millionforretningene-i-russland-etter-krigen" }
+              ],
+              children: [
+                {
+                  title: "1. Den Norska Kopplingen (Nordsletten)",
+                  children: [
+                    { 
+                      title: "Gunnar Nordsletten", 
+                      info: "Son till Norges ambassadör. Bosatt i Moskva i 20 år. Ägare till Sevnor/Marvik Shipping. Medgrundare till skidlandslaget 'Russkaya Zima'.",
+                      highlight: true
+                    },
+                    { 
+                      title: "Fadern: Øyvind Nordsletten", 
+                      info: "Norges ambassadör i Ryssland (2000-2008) och generalkonsul i Murmansk. En nyckelfigur i norsk-ryska relationer.",
+                      alert: true
+                    },
+                    { 
+                      title: "Hustrun: Anastasia Levinson", 
+                      info: "Gunnars fru sedan 2011. Dotter till Iosif Levinson (tidigare viceguvernör i Jamalo-Nenets, 'Gaskammaren').",
+                      children: [
+                        { title: "Koppling NOVATEK", info: "Svärfadern Iosif Levinson godkände överföring av gasfält till NOVATEK. Gunnar har därefter haft stora kontrakt med NOVATEK." }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  title: "2. Den Ryska Motparten (Patrushev)",
+                  children: [
+                    { 
+                      title: "Andrei Patrushev", 
+                      info: "Yngste son till säkerhetsrådets sekreterare Nikolai Patrushev (Putins närmsta krets). Ansvarig för arktisk oljeutvinning.",
+                      alert: true 
+                    },
+                    { 
+                      title: "Döljande av ägande (MAGE)", 
+                      info: "Andrei ägde 37% av MAGE. Efter invasionen 2022 dolde han ägandet via pseudonymen 'Alexey Golubev' (samma passnummer) och bolaget Neva Invest." 
+                    },
+                    { 
+                      title: "Målvakten: Andrei Dovnarovich", 
+                      info: "F.d. IT-chef på Gazprom Neft Shelf. Son till KGB-anställd. Agerar målvakt för Patrushevs tillgångar i Neva Invest." 
+                    }
+                  ]
+                },
+                {
+                  title: "3. Upplägget: Fartyg & Borrning",
+                  info: "Utan specialfartyg stannar ryska offshore-projekt. Nordsletten tillhandahöll dessa trots krig och sanktioner.",
+                  highlight: true,
+                  children: [
+                    { 
+                      title: "Sevnor / Marvik Shipping", 
+                      info: "Nordslettens bolag (Cypern/Norge). Döpte om sig till Marvik efter invasionen. Hävdar försäljning 2023 (inga bevis).",
+                      links: [{ text: "Cypern-data", url: "https://dossier.center/diplomat/" }]
+                    },
+                    { 
+                      title: "Fartygen", 
+                      info: "Fartygen 'Almaz', 'Sayan Knyaz' och 'Kazanin Explorer' överfördes eller hyrdes ut till Patrushevs bolag (MAGE).",
+                      children: [
+                         { title: "Kazanin Explorer", info: "Ligger vid Gazproms borrplattform 'Severnoye Siyaniye'. Servar Patrushevs projekt." }
+                      ]
+                    },
+                    { 
+                      title: "Cypern-affären (Aurora & IGS)", 
+                      info: "Nordsletten (via bolaget Aurora och målvakten Roman Ivanov) köpte in sig i borrföretaget IGS. Läckta dokument (Cyprus Confidential) avslöjar Nordsletten som verklig ägare.",
+                      alert: true
+                    }
+                  ]
+                }
+              ]
+            },
 // --- NYTT CASE: FSB-INFILTRATION (NORD UNIVERSITET) ---
             {
               title: "CASE: Infiltration Nord universitet (Artem Kuréjev)",
@@ -2697,6 +2774,7 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "MAGE/Sevnor (Murmansk)", coords: [68.9585, 33.0827], info: "Bas för Andrei Patrushevs flotta (MAGE) och Nordslettens fartyg (Sevnor/Marvik). Navet för kringgående av arktiska sanktioner." },
     { name: "Ryska Ambassaden (Sthlm)", coords: [59.3255, 18.0163], info: "Gjörwellsgatan 31. Arbetsplats för Gurov, Abdulin & Banatov. Navet för spionaget." },
     { name: "Lubjanka (Moskva)", coords: [55.7597, 37.6272], info: "FSB Högkvarter. Gurovs centrala ledning. Ökänt fängelse/högkvarter." },
     { name: "Frunzenskaja 22/2 (Moskva)", coords: [55.7247, 37.5894], info: "8:e Direktoratet (Generalstaben). Abdulins officiella adress. Ansvar för statshemligheter & kryptering." },
@@ -3094,6 +3172,12 @@ function initMap() {
             to: [35.1600, 33.3600],   // MeritServus (Cypern)
             color: '#8e44ad',         // Lila linje (Oligark-nätverk)
             text: "<b>Rotenberg-nätverket:</b> Flytt av bolag för att undgå sanktioner."
+        },
+      {
+            from: [55.7558, 37.6173], // Moskva
+            to: [68.9585, 33.0827],   // Murmansk
+            color: '#e74c3c',
+            text: "<b>Diplomatsonen & Oligarksonen:</b> Gunnar Nordsletten stöttar Andrei Patrushevs arktiska projekt."
         }
     ];
 

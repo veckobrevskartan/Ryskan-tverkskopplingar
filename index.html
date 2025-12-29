@@ -3385,17 +3385,24 @@ function initMap() {
 
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
-       {
-            from: [51.2758, -0.7763], // Farnborough
-            to: [-8.8147, 13.2302],   // Luanda
+       // --- GEMCORP RÖRELSER ---
+        {
+            from: [51.2758, -0.7763], // Farnborough Airport (London)
+            to: [-8.8147, 13.2302],   // Luanda (Angola)
             color: '#e74c3c',
-            text: "<b>Vapenresan:</b> Privatjet med Gemcorp-chefen för möte med ryska vapenhandlare."
+            text: "<b>Vapenresan 2018:</b> Privatjet med Gemcorp-chefen för möte med ryska vapenhandlare."
         },
         {
-            from: [55.7558, 37.6173], // Moskva (Rostec/Chemezov)
-            to: [51.5085, -0.1437],   // London (Gemcorp)
+            from: [30.0444, 31.2357], // Kairo (IDEX)
+            to: [-8.8147, 13.2302],   // Luanda (Angola)
+            color: '#e74c3c',
+            text: "<b>Rosoboronexport:</b> Mikheev anlände från vapenmässan i Kairo."
+        },
+        {
+            from: [55.7496, 37.5376], // Empire Tower (Moskva) - KORRIGERAD PLATS
+            to: [51.5085, -0.1437],   // Mayfair (London)
             color: '#2980b9',
-            text: "<b>Finansiell länk:</b> Avdolyan ('Chemezovs plånbok') grundade fonden. Rostec-folk i YATEK-styrelsen."
+            text: "<b>Finansiell länk:</b> Avdolyan ('Chemezovs plånbok') grundade fonden. Gemcorp hade hemligt kontor i Empire Tower."
         },
       {
             from: [48.8464, 2.2743], // Paris

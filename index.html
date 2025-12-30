@@ -2560,6 +2560,38 @@ const treeData = {
             } 
           ]
         },
+        {
+          title: "Nordisk Tillämpning: NC Nordic Control AB",
+          highlight: true,
+          alert: true,
+          info: "Exempel på hur systemet används i Sverige. Import/Export-bolag kopplat till ryska kyrkan i Västerås.",
+          links: [{ text: "Frivärlden (2019)", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" }],
+          children: [
+            {
+              title: "Skatteverkets Granskning",
+              info: "Krav på 13,8 MSEK. Misstänkt penningtvätt och transfer pricing. Omsatte 40 MSEK utan lager.",
+              children: [
+                { title: "Metod", info: "Accepterade och betalade fakturor med höga belopp utan kontroll. Personliga lyxkostnader för ägaren (Monaco/Nice)." }
+              ]
+            },
+            {
+              title: "Koppling Västerås Kyrka",
+              info: "Bolaget betalade hyra för församlingen (45 000 kr) och fakturor för brandskydd/bygglov ('larmlåda').",
+              children: [
+                { title: "Nikita Makarenko", info: "Bolagets VD blev präst i Västerås. Lämnade VD-posten efter skattekravet." }
+              ]
+            },
+            {
+              title: "Ägare: Vladimir Gerasimov",
+              info: "Rysk affärsman kopplad till Gerda-gruppen. Använde bolaget för att täcka privata kostnader.",
+              links: [
+                { text: "Frivärlden (2019)", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" },
+                { text: "Molfar Institute (2025)", url: "https://www.molfar.institute/en/rpc-shpygue-u-evropi-doslidzhennya-molfar-chastyna-persha/" },
+                { text: "Liberal Forum (2023)", url: "https://liberalforum.eu/wp-content/uploads/2023/12/putins_europe_www-FINAL.pdf" }
+              ]
+            }
+          ]
+        },
 
         // 3. STRATEGISKA LÄGEN (SVERIGE)
         {
@@ -3498,37 +3530,357 @@ const treeData = {
           ]
         },
        {
-          title: "Nordisk Tillämpning: NC Nordic Control AB",
-          highlight: true,
-          alert: true,
-          info: "Exempel på hur systemet används i Sverige. Import/Export-bolag kopplat till ryska kyrkan i Västerås.",
-          links: [{ text: "Frivärlden (2019)", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" }],
+  title: "CASE: Skuggflottan & STS-omlastning nära Cypern (Morpheus-case)",
+  info: "Dossier Center följer hur ryska oljeprodukter flyttas mellan äldre tankfartyg (Ship-to-Ship, STS) i internationellt vatten utanför Cypern för att kringgå sanktioner/pristak och dölja ursprung. Case-exempel: Morpheus som ”ackumulatorfartyg” utanför Limassol.",
+  highlight: true,
+  alert: true,
+  links: [
+    { text: "Dossier Center (huvudkälla)", url: "https://dossier.center/mazut/" },
+    { text: "Bloomberg (STS vid Grekland, 2023)", url: "https://www.bloomberg.com/news/features/2023-12-06/oil-prices-how-russia-punched-an-11-billion-hole-in-west-s-sanctions-regime" },
+    { text: "Reuters (grekiska marinövningar mot STS)", url: "https://www.reuters.com/world/europe/greek-navy-extends-advisory-curb-russian-oil-ship-to-ship-transfers-sources-say-2024-07-17/" },
+    { text: "US Treasury (sanktioner – fartyg, jan 2025)", url: "https://home.treasury.gov/news/press-releases/jy2777" },
+    { text: "EU – fartygslista (153)", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202500394" }
+  ],
+  children: [
+    {
+      title: "1. Bakgrund: sanktioner, pristak och logistiskt tryck",
+      info: "Efter fullskaliga kriget i Ukraina riktades sanktioner mot rysk oljeexport. Pristak: 60 USD/fat för råolja; separata tak för petroleumprodukter (t.ex. eldningsolja och diesel). Västs strategi blev att slå mot logistik och försäkring snarare än att kunna tvinga tredje länder att följa reglerna.",
+      highlight: true,
+      children: [
+        {
+          title: "1.1 Pristak för petroleumprodukter",
+          info: "Dossier refererar till separat tak: ca 45 USD/fat för eldningsolja och 100 USD/fat för diesel (exempel i texten).",
+          links: [
+            { text: "RBC (om pristak för petroleumprodukter, 2023)", url: "https://www.rbc.ru/economics/04/02/2023/63de40249a79479d3e43442a" }
+          ]
+        },
+        {
+          title: "1.2 Varför ”skuggflotta” växer",
+          info: "När västliga tankers och försäkringsbolag inte får hantera transporter över pristak skapas en parallell flotta: äldre fartyg, ofta med oklara ägarstrukturer, svag försäkring och metoder som AIS-avstängning/falsk position.",
+          alert: true
+        }
+      ]
+    },
+
+    {
+      title: "2. Skuggflottan: definition, omfattning och kriterier",
+      info: "Dossier lutar på bransch/analysaktörer (bl.a. Lloyd’s List) som identifierar fartyg som del av skuggflottan och beskriver dem som ”rostiga hinkar”/”flytande tråg” (gamla, slitna fartyg ibland köpta för skrot).",
+      highlight: true,
+      children: [
+        {
+          title: "2.1 Lloyd’s List – skuggflottans storlek (jan 2025)",
+          info: "Dossier anger att Lloyd’s List har cirka 687 fartyg i sin lista (jan 2025) och att skuggfartyg utgör runt 15% av tankflottan i internationell handel.",
+          alert: true
+        },
+        {
+          title: "2.2 Lloyd’s List – fyra kriterier (enligt Dossiers återgivning)",
+          info: "1) 15 år eller äldre. 2) Ägarstruktur som döljer verklig ägare. 3) Transporterar sanktionerad olja (rysk/iransk/venezuelansk). 4) Bedrägliga beteenden (AIS av, falsk position m.m.)."
+        },
+        {
+          title: "2.3 Sanktionstryck mot skuggflotta (USA/EU)",
+          info: "Dossier beskriver att sanktionerade fartyg begränsas från västhamnar och affärer med EU/USA-bolag, vilket kan leda till att fartyg blir liggande overksamma nära kust i ”vänliga” områden.",
           children: [
             {
-              title: "Skatteverkets Granskning",
-              info: "Krav på 13,8 MSEK. Misstänkt penningtvätt och transfer pricing. Omsatte 40 MSEK utan lager.",
-              children: [
-                { title: "Metod", info: "Accepterade och betalade fakturor med höga belopp utan kontroll. Personliga lyxkostnader för ägaren (Monaco/Nice)." }
-              ]
-            },
-            {
-              title: "Koppling Västerås Kyrka",
-              info: "Bolaget betalade hyra för församlingen (45 000 kr) och fakturor för brandskydd/bygglov ('larmlåda').",
-              children: [
-                { title: "Nikita Makarenko", info: "Bolagets VD blev präst i Västerås. Lämnade VD-posten efter skattekravet." }
-              ]
-            },
-            {
-              title: "Ägare: Vladimir Gerasimov",
-              info: "Rysk affärsman kopplad till Gerda-gruppen. Använde bolaget för att täcka privata kostnader.",
+              title: "USA: >180 fartyg listade (jan 2025, enligt Dossier)",
+              info: "Dossier hänvisar till att över 180 fartyg lades till i amerikanska listor i januari 2025.",
               links: [
-                { text: "Frivärlden (2019)", url: "https://frivarld.se/wp-content/uploads/2019/12/Follow-The-Money-And-End-Up-in-Real-Estate-in-Strategic-Areas.pdf" },
-                { text: "Molfar Institute (2025)", url: "https://www.molfar.institute/en/rpc-shpygue-u-evropi-doslidzhennya-molfar-chastyna-persha/" },
-                { text: "Liberal Forum (2023)", url: "https://liberalforum.eu/wp-content/uploads/2023/12/putins_europe_www-FINAL.pdf" }
+                { text: "US Treasury (pressmeddelande)", url: "https://home.treasury.gov/news/press-releases/jy2777" }
+              ]
+            },
+            {
+              title: "EU: 153 fartyg (enligt Dossier vid publicering)",
+              info: "Dossier hänvisar till att EU-listan innehåller 153 fartyg.",
+              links: [
+                { text: "EU (OJ, fartygslista)", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202500394" }
               ]
             }
           ]
         },
+        {
+          title: "2.4 Bloomberg: två tredjedelar av sanktionerade tankers stoppade",
+          info: "Dossier återger Bloombergs genomgång (106 fartyg sanktionerade okt 2023–dec 2024): 68 (≈2/3) lastade inget efter sanktion; 38 fortsatte transportera.",
+          links: [
+            { text: "Bloomberg (16 dec 2024)", url: "https://www.bloomberg.com/news/articles/2024-12-16/idled-tankers-show-fresh-eu-sanctions-on-russia-ships-will-bite" }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "3. Case: Morpheus utanför Cypern – STS som ”ursprungs-tvätt”",
+      info: "Dossier följer STS-omlastning i internationellt vatten ca 40 km från Limassol. Morpheus ligger kvar som nav: tar emot från ett fartyg och skickar vidare till nästa.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "3.1 Observation 19 feb 2025: Voula → Morpheus",
+          info: "Dossier-korrespondent spårar på MarineTraffic: Voula och Morpheus ligger ihop (STS). Voula kom från Novorossijsk med ~30 000 ton oljeprodukter och överför via slangar till Morpheus.",
+          children: [
+            {
+              title: "Källa/verktyg i arbetet",
+              info: "MarineTraffic används för realtidsspårning; Dossier kopplar även beslut/insats till väder (drönarflygning svår vid byar).",
+              links: [
+                { text: "YouTube (Dossiers video i artikeln)", url: "https://www.youtube.com/watch?v=hKElnO5zNHg" }
+              ]
+            },
+            {
+              title: "Novorossijsk-terminalen (kontext i texten)",
+              info: "Dossier beskriver att kaj/terminal hanterar petroleumprodukter som kommit via järnväg och kopplar ägande till Novorossijsk hamn samt Transneft-dotterbolag (enligt deras hamndokument)."
+            }
+          ]
+        },
+
+        {
+          title: "3.2 Resan: Voula (22 jan 2025) → Cypern",
+          info: "Voula lämnar Novorossijsk, passerar Bosporen/Dardanellerna, cirklar vid Lesbos i Egeiska havet och går mot Cypern. Förtöjning med Morpheus startar 18 feb; överföring 19 feb.",
+          children: [
+            {
+              title: "Voula som skuggflottefartyg (Lloyd’s List-kriterier uppfyllda)",
+              info: "Dossier: ~20 år gammalt; ägandekedja via Hongkong (Thanda Aye Shipping) → Seychellerna (Quoc Maritime Inc.); slutlig mottagare oklar. Regelbunden transport av ryska produkter och AIS-avstängningar (bl.a. vid Svarta havet).",
+              alert: true
+            }
+          ]
+        },
+
+        {
+          title: "3.3 Kedjan fortsätter: Morpheus ↔ Garuda ↔ Gurudev",
+          info: "Efter Voula: Morpheus dockar 20 feb med Garuda (ytterligare ~30 000 ton från Ryssland, sannolikt diesel från Taman enligt två Dossier-tillfrågade experter). Därefter dockar Morpheus med Gurudev (kommer från Egypten) och last ”materialiseras” i Gurudev utan hamnanlöp – vilket pekar på lastupptag till sjöss.",
+          alert: true,
+          children: [
+            {
+              title: "Gurudev: indikatorer på last till sjöss",
+              info: "Dossier jämför MarineTraffic-data: Gurudev lämnar Port Said 20 feb ”delvis lastad” och anländer Alexandria 24 feb fullastad utan hamnanlöp och utan annan dockning än med Morpheus.",
+              highlight: true
+            },
+            {
+              title: "Koordinat (Alexandria-terminalens kaj, enligt Dossier/MarineTraffic)",
+              info: "Dossier uppger att exakt kaj-koordinat kan ses i MarineTraffic: 31.16369034427683, 29.85561499280531."
+            }
+          ]
+        },
+
+        {
+          title: "3.4 Analys i texten: varför STS? (dölja ursprung + ev. ”blandning”)",
+          info: "Dossier: huvudsyftet är att dölja ryskt ursprung och möjliggöra försäljning in i marknader som annars begränsas (inkl. EU-embargo). Expertcitat pekar på att blandning/”tillsats” gör produkten svårare att klassificera som sanktionerad.",
+          highlight: true,
+          children: [
+            {
+              title: "CREA – Isaac Levy (citerad i Dossier)",
+              info: "Kluster av tankers överför olja upprepade gånger, blandar och gör ursprung mycket svårt att fastställa; dokumentationen blir då ”icke-rysk” och kan köpas i Europa (Dossiers återgivning).",
+              links: [
+                { text: "CREA (organisation)", url: "https://energyandcleanair.org/" }
+              ]
+            },
+            {
+              title: "Adi Imsirovich (citerad i Dossier)",
+              info: "Beskriver mekaniken: en icke-sanktionerad last kan ”spädas” med sanktionerad produkt; efter blandning framstår allt som icke-sanktionerat (Dossiers återgivning)."
+            },
+            {
+              title: "Indikation: dyr omväg måste ha ett syfte",
+              info: "Dossier resonerar att Voula hade kunnat gå direkt till Egypten billigare/snabbare; att den väntar/drev runt i dagar för STS antyder sanktionsrundning som mest sannolika skäl."
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "4. ”Katter och möss” i EU-vatten: Cypern & Grekland som STS-noder",
+      info: "Dossier beskriver att lokala servicefartyg hjälper STS nära Cypern och att en stor del av ryska produktomlastningar sker nära Grekland; motåtgärder flyttar ofta bara aktiviteten geografiskt.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "4.1 Lokalt stöd nära Cypern: Ledra Dynamic & Ledra Pride",
+          info: "Dossier observerar cypriotiska fartyg som är ute nästan dagligen sedan februari för att assistera skuggtankers under STS.",
+          children: [
+            {
+              title: "Vilken assistans behövs vid STS?",
+              info: "Enligt Dossier (via ryskt YouTube-klipp) behövs bogserbåtar/servicefartyg för att sätta upp/ta ned stora gummifendrar (kранцы/fenders) mellan tankers så de inte slår i varandra, samt andra stödinsatser.",
+              links: [
+                { text: "YouTube – ”Дневник моряка” (STS-procedur)", url: "https://www.youtube.com/watch?v=XV4Hx6vf9ZU" }
+              ]
+            },
+            {
+              title: "CREA – reaktion (citerad i Dossier)",
+              info: "Isaac Levy säger att detta i praktiken stödjer omlastning och ryska exportintäkter och kräver omedelbart förbud (Dossiers återgivning).",
+              alert: true
+            }
+          ]
+        },
+        {
+          title: "4.2 Grekland: stor andel STS nära kusten",
+          info: "Dossier återger Levys uppskattning: ~50% nära Grekland, ~30% nära Rumänien, ~10% vardera nära Italien och Malta.",
+          children: [
+            {
+              title: "Bloomberg (första stora granskningen, 2023)",
+              info: "Dossier: Bloomberg filmade STS från land i Lakoniska viken; tankers låg i neutralt vatten (från 6 nautiska mil).",
+              links: [
+                { text: "Bloomberg (6 dec 2023)", url: "https://www.bloomberg.com/news/features/2023-12-06/oil-prices-how-russia-punched-an-11-billion-hole-in-west-s-sanctions-regime" }
+              ]
+            },
+            {
+              title: "Reuters (Grekland förlänger marinövningar)",
+              info: "Dossier: Reuters-källor säger att huvudmålet är att stoppa STS av rysk olja. Efter restriktioner flyttar skuggfartyg ofta rutterna (”katt-och-råtta”).",
+              links: [
+                { text: "Reuters (17 juli 2024)", url: "https://www.reuters.com/world/europe/greek-navy-extends-advisory-curb-russian-oil-ship-to-ship-transfers-sources-say-2024-07-17/" }
+              ]
+            },
+            {
+              title: "4.2.1 Exempel på fartyg som nämns av Dossier (jan 2025, Peloponnesos/Lesbos)",
+              info: "Dossier listar ett dussintal som kom från ryska Svarta havet-hamnar och omlastade nära Peloponnesos och Lesbos: Nachos, Chongchon, Aston Marine, Sea Marine I, Chandra, Cheetah II, Himalaya, Indras, Sandhya. Morpheus pekas ut som ett av ”ackumulatorfartygen”.",
+              alert: true
+            },
+            {
+              title: "UWEC – Evgeny Simonov (citerad i Dossier)",
+              info: "Dossier återger: tidigare var en stor andel av tankers i ogenomskinliga oljetransaktioner grekiska; kan indikera grekiskt affärsintresse i aktiviteten.",
+              links: [
+                { text: "UWEC (organisation)", url: "https://uwecworkgroup.info/" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "5. Riskdimension: STS i hårt väder, utan tillsyn och med skrotfartyg",
+      info: "Dossier betonar att miljörisken från STS i öppet hav kan vara större än sanktionsaspekten: slangbrott/ventilskador i internationellt vatten långt från insatsresurser, kombinerat med gamla fartyg och brist på kontroll.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "5.1 Hur STS går till (sammanfattat från Dossier + YouTube)",
+          info: "STS tar timmar–två dygn: fartyg ligger sida vid sida, driver/ankrar eller går parallellt långsamt. Slangar kopplas och produkter pumpas mellan tankar.",
+          links: [
+            { text: "YouTube – STS-procedur", url: "https://www.youtube.com/watch?v=XV4Hx6vf9ZU" }
+          ]
+        },
+        {
+          title: "5.2 Kapacitet: typiska skuggtransporter vs Morpheus",
+          info: "Dossier: skuggfartyg i Svarta havet–Medelhavet bär ofta ~30 000 ton, medan Morpheus rymmer 810 000 fat (över 110 000 ton).",
+          alert: true
+        },
+        {
+          title: "5.3 Historiska katastrofer (översatt från ryska avsnittet i Dossier)",
+          info: "Dossier lyfter Prestige (2002) och Exxon Valdez (1989) som referenspunkter för skadans skala och efterspel.",
+          children: [
+            {
+              title: "Prestige (2002) – >70 000 ton eldningsolja",
+              info: "Tanker på väg från Sankt Petersburg havererade i storm utanför Spanien, bröts i två delar och släppte ut över 70 000 ton; ca 2 000 km kust drabbades i Portugal/Spanien/Frankrike; slutlig EU-domstolsnivå i försäkringsprocess kom 2022 (Dossiers återgivning).",
+              links: [
+                { text: "Courthouse News (försäkringsdom, 2022)", url: "https://www.courthousenews.com/british-insurer-ordered-to-pay-spanish-bill-for-oil-spill-cleanup/" },
+                { text: "Euronews (Prestige 20 år senare)", url: "https://www.euronews.com/2022/11/14/spains-biggest-environmental-disaster-the-prestige-20-years-after" }
+              ]
+            },
+            {
+              title: "Exxon Valdez (1989) – ~37 000 ton råolja",
+              info: "Haveri nära Alaska; ~37 000 ton råolja; lång kuststräcka påverkades; Exxon uppgav städkostnader >1,2 miljarder USD (1989–1992) och ca 800 miljoner USD återkrävdes från försäkringsgivare (Dossiers återgivning).",
+              links: [
+                { text: "BBC (bakgrund, refererad i Dossier)", url: "https://www.bbc.com/ukrainian/news-russian-42680710" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "6. Försäkringsproblemet: ”Balance Insurance” (Garuda)",
+      info: "Dossier visar försäkringscertifikat för Garuda: oljeutsläppsförsäkring via ryska JSC “Balance Insurance” med begränsad finansiell styrka jämfört med potentiell skada i Medelhavet.",
+      highlight: true,
+      alert: true,
+      links: [
+        { text: "RAEXPERT (bolagsprofil – Balance Insurance)", url: "https://raexpert.ru/database/companies/103013/" },
+        { text: "Balance Insurance – ägare (dolda)", url: "https://www.balance-ins.ru/shareholders.php#" },
+        { text: "Balance Insurance – finansiella filer (exempel)", url: "https://www.balance-ins.ru/ftp/fin/15.pdf" }
+      ],
+      children: [
+        {
+          title: "6.1 Dossiers datapunkter om bolaget",
+          info: "Dossier: bolaget har begränsad fysisk närvaro (två rum i affärscenter i Moskvas utkant); tillgångar ca 850m RUB (slutet av 2023) och ca 4bn RUB (slutet av 2024).",
+          children: [
+            { title: "Tillgångar 2024 (enligt Dossier)", info: "≈4 miljarder rubel vid slutet av 2024.", links: [{ text: "Balance Insurance – 2024-fil", url: "https://www.balance-ins.ru/ftp/fin/19.pdf" }] },
+            { title: "Tillgångar 2023 (enligt Dossier)", info: "≈850 miljoner rubel vid slutet av 2023.", links: [{ text: "Balance Insurance – 2023-fil", url: "https://www.balance-ins.ru/ftp/fin/15.pdf" }] }
+          ]
+        },
+        {
+          title: "6.2 Kostnadsgap: sanering vs försäkringskapacitet",
+          info: "Dossier: oljesanering är extremt dyr. Anapa försöker kräva >200m RUB efter Svarta havet-haveri (siffran ej slutlig). CREA (Levy) uppskattar potentiell skada från stort utsläpp i Medelhavet till upp till 1 miljard euro; tillgångar <5% av potentiell skada beskrivs som icke trovärdiga.",
+          links: [
+            { text: "Anapa-krav (källa i Dossier; lokal domän)", url: "https://bfvzyhjffgtjnlni.oia7ds95vb0e.live/news/2025/03/10/meriya-anapy-potrebovala-211-millionov-rubley-ot-vladeltsev-tankerov-iz-za-krusheniya-kotoryh-proizoshel-razliv-mazuta-v-kerchenskom-prolive" }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "7. Incidenter 2025: explosioner på skuggflottan",
+      info: "Dossier beskriver en ny trend 2025: flera tankers drabbas av explosioner i hamn. Inga personskador enligt uppgifterna, men ökar riskbilden för Medelhavet och globalt.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "7.1 Koala (Ust-Luga, feb 2025)",
+          info: "Explosion vid motorstart. Fartyget låg i Ust-Luga med 130 000 ton eldningsolja ombord. Baza-källa påstod möjlig minering. Ingen olja ska ha läckt enligt Dossier.",
+          links: [
+            { text: "Baza (Telegram – påstående om minering)", url: "https://t.me/bazabazon/34965" }
+          ]
+        },
+        {
+          title: "7.2 Reuters-uppgifter: Seajewel, Seacharm, Grace Ferrum",
+          info: "Dossier: Reuters (via källor) uppger explosioner jan–feb 2025 på tre tankers i olika Medelhavshamnar. Grace Ferrum uppges ligga still nära Tripoli (skador) och är den enda av de tre som Dossier säger finns på Lloyd’s skugglista.",
+          links: [
+            { text: "Reuters via Yahoo (som Dossier länkar)", url: "https://www.yahoo.com/news/three-tankers-damaged-blasts-mediterranean-180745128.html" }
+          ],
+          children: [
+            { title: "Grace Ferrum (Ust-Luga, 12 jan)", info: "Dossier: lastade 32 000 ton oljeprodukter i Ust-Luga 12 januari." },
+            { title: "Seacharm (Novorossijsk, 2 dec)", info: "Dossier: lastade 86 000 ton petroleumprodukter 2 december." },
+            { title: "Seajewel (Novorossijsk, 15 jan)", info: "Dossier: lastade 95 000 ton råolja 15 januari – men nyans: kazakisk olja via CPC-terminal." }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "8. Nyansen: CPC (Caspian Pipeline Consortium) & drönarattack mot pumpstation",
+      info: "Dossier betonar att all olja som går via Novorossijsk inte är rysk: Seajewel kopplas till kazakisk olja via CPC. Dossier kopplar även in en drönarattack mot CPC-infrastruktur i Ryssland (enligt ryska uppgifter).",
+      highlight: true,
+      children: [
+        {
+          title: "8.1 Seajewel och CPC-terminalen",
+          info: "Dossier: Seajewel lastade via CPC-terminalen 18 nov 2024 och 15 jan 2025 (enligt Kpler-data som Dossier hänvisar till). CPC pumpar olja från fält i västra Kazakstan.",
+          links: [
+            { text: "Shell (CPC/KTK-projektinfo)", url: "https://www.shell.com.kz/ru_kz/about-us/projects-and-sites/ktk.html" },
+            { text: "CPC (aktieägare)", url: "https://www.cpc.ru/ru/about/pages/shareholders.aspx" }
+          ]
+        },
+        {
+          title: "8.2 Drönarattack mot CPC-pumpstation (översatt från ryska avsnittet)",
+          info: "Dossier: I mitten av februari attackerade ukrainska drönare den största pumpstationen på CPC-ledningen som kopplar Kazakstan till Novorossijsk. Stationen slogs ut; reparation upp till två månader enligt Transneft (största CPC-ägaren) i pressmeddelande (Dossiers återgivning).",
+          alert: true,
+          links: [
+            { text: "RBC (attacken, 17 feb 2025)", url: "https://www.rbc.ru/politics/17/02/2025/67b301ca9a7947d64a6c4228" }
+          ]
+        },
+        {
+          title: "8.3 CPC – huvudägare (som Dossier listar)",
+          info: "Transneft 24%, KazMunayGas 19%, Chevron 15%, Lukoil 12,5% (Dossiers återgivning). Övriga ägare finns på CPC-sidan.",
+          links: [
+            { text: "CPC – shareholders", url: "https://www.cpc.ru/ru/about/pages/shareholders.aspx" }
+          ]
+        },
+        {
+          title: "8.4 Hypotes: ”fel mål”",
+          info: "Dossier återger att Sergei Vakulenko (Berlin-baserat Carnegie) spekulerat att drönarna kan ha träffat fel eftersom stationen ligger öppet/tydligt och operatörer kan ha saknat kunskap om att oljan var kazakisk, inte rysk.",
+          links: [
+            { text: "Facebook-inlägg (Vakulenko, som Dossier länkar)", url: "https://www.facebook.com/share/1AgzNtMBz6/?mibextid=wwXIfr" }
+          ]
+        }
+      ]
+    }
+  ]
+},
         {
           title: "Motåtgärder & Sanktioner (2024-2025)",
           children: [

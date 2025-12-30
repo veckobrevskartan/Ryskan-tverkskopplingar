@@ -4436,6 +4436,10 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Novorossijsk (Oljeterminal)", coords: [44.7200, 37.7800], info: "Huvudhamn för utskeppning av rysk och kazakisk olja (CPC). Ursprung för Voula, Seajewel m.fl." },
+    { name: "Alexandria (Terminal)", coords: [31.1637, 29.8556], info: "Mottagarhamn. Gurudev anlände hit fullastad 24 feb 2025 efter misstänkt lastning till sjöss från Morpheus." },
+    { name: "Balance Insurance (Moskva)", coords: [55.7558, 37.6173], info: "Försäkringsbolag med minimala tillgångar ( Två rum i utkanten av Moskva) som försäkrar skuggflottan mot mångmiljardbelopp." },
+    { name: "Morpheus (Position)", coords: [34.4500, 33.2000], info: "Ackumulatorfartyg som ligger utanför Cypern och tar emot olja från skytteltankers (Voula, Garuda)." },
     { name: "Tartus (Syrien)", coords: [34.9130, 35.8750], info: "Rysk Marinbas. Fartyget Lauga stängde av AIS här (aug 2024) för att dölja anlöp." },
     { name: "Varvet Pregol (Kaliningrad)", coords: [54.7030, 20.4570], info: "Servicehubb för norska HAV Dolphins flotta. Utför jobb åt Rosatom och ryska staten." },
     { name: "Eckernförde Marinbas", coords: [54.4720, 9.8450], info: "Tysklands bas för ubåtar och specialfartyg. Sannolikt mål för HAV Dolphins spaning." },
@@ -4504,6 +4508,10 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "STS-zon (Limassol)", coords: [34.5000, 33.1500], info: "SKUGGFLOTTAN: Omlastningsplats ca 40 km utanför Limassol. Morpheus agerar 'ackumulator' här (feb 2025)." },
+    { name: "Lakoniska Viken (Grekland)", coords: [36.5500, 22.7000], info: "SKUGGFLOTTAN: Känd zon för Ship-to-Ship transfers. Bloomberg dokumenterade aktivitet här 2023." },
+    { name: "Ust-Luga (Explosion)", coords: [59.6600, 28.3000], info: "INCIDENT: Explosion på tankern Koala (feb 2025) och Grace Ferrum (jan 2025). Möjlig minering/sabotage." },
+    { name: "CPC Pumpstation (Ryssland)", coords: [46.7000, 44.5000], info: "DRÖNARATTACK: Ukrainska drönare slog ut pumpstation för kazakisk olja (Caspian Pipeline Consortium) feb 2025." }, 
     { name: "Borkum (Nordsjön)", coords: [53.5880, 6.6690], info: "DRÖNARINCIDENT (Lauga): 17 maj 2025. Sju drönare förföljde tyska patrullfartyget Potsdam i tre timmar." },
     { name: "Kiel / Eckernförde", coords: [54.5500, 10.1500], info: "OTILLÅTEN ANKRING (HAV Dolphin): Låg stilla 8 dagar i förbudszon nära tysk ubåtsbas. Drönare observerades i området." },
     { name: "Volkerak-slussarna (NL)", coords: [51.6430, 4.3050], info: "POLISRAZZIA (HAV Dolphin): Extraordinär insats av nederländsk polis och tull. Inga drönare hittades (misstänks dumpade)." },
@@ -4851,6 +4859,24 @@ function initMap() {
 
     // 5. RITA KOPPLINGAR (LINJER)
     const connections = [
+      {
+        from: [44.7200, 37.7800], // Novorossijsk
+        to: [34.4500, 33.2000],   // Morpheus (Cypern)
+        color: '#e74c3c',         // Röd (Skuggflotta)
+        text: "<b>Voula & Garuda:</b> Skytteltrafik med rysk olja/diesel till Morpheus för omlastning."
+    },
+    {
+        from: [34.4500, 33.2000], // Morpheus (Cypern)
+        to: [31.1637, 29.8556],   // Alexandria
+        color: '#e74c3c',         // Röd
+        text: "<b>Gurudev:</b> Hämtade last från Morpheus till sjöss och levererade till Egypten."
+    },
+    {
+        from: [31.2500, 32.3000], // Port Said (Ungefärlig startpunkt för Gurudev)
+        to: [34.4500, 33.2000],   // Morpheus
+        color: '#2980b9',         // Blå (Tom resa)
+        text: "<b>Gurudev:</b> Gick tom från Port Said för att möta Morpheus."
+    },
       {
             from: [50.4851, 30.2246], // Dmitrovka (Ukraina)
             to: [50.1135, 8.6780],    // Celona Café (Frankfurt) - NYA KOORDINATER

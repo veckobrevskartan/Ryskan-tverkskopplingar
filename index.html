@@ -889,6 +889,331 @@ const treeData = {
           title: "Baltikum & Europa (Säkerhet)",
           children: [
             {
+  title: "CASE: Fartyg, polis och drönare (Lauga & HAV Dolphin)",
+  info: "Myndigheter i Tyskland, Nederländerna och Belgien uppmärksammar två civila fartyg som misstänks ha använts för att flyga spiondrönare över militära installationer och infrastruktur. Båda hade rysk besättning och hade nyligen besökt ryska hamnar; ett seglar dessutom under rysk flagg. Inspektioner gav inga fynd (inga drönare hittades), vilket snarare belyser metodproblemet: drönare kan demonteras, gömmas eller kastas överbord efter flygning. Dossier pekar även ut kopplingar mellan ett av fartygen och Rosatom/Delo-gruppen via ägar- och agentstrukturer.",
+  highlight: true,
+  alert: true,
+  links: [
+    { text: "Dossier Center (huvudlänk)", url: "https://dossier.center/drone-chase/" },
+    { text: "Der Spiegel (först med händelsen; utan fartygsnamn)", url: "https://www.spiegel.de/panorama/nordsee-mutmasslich-russische-drohnen-spaehten-patrouillenschiff-der-bundespolizei-aus-a-636a814b-72cd-48af-9ce5-599d4ac7ae74?sara_ref=re-so-app-sh" }
+  ],
+  children: [
+    {
+      title: "0. Undersökningen (konsortium)",
+      info: "Utredningen är framtagen av Dossier Center tillsammans med europeiska partners i Nederländerna, Tyskland, Belgien och Sverige.",
+      highlight: true,
+      children: [
+        {
+          title: "Partners",
+          info: "Follow the Money; Pointer (Nederländerna); WDR; NDR; Süddeutsche Zeitung (Tyskland); VRT; De Tijd (Belgien); SVT (Sverige)."
+        }
+      ]
+    },
+
+    {
+      title: "1. Operativ kärnobservation (senaste månaden)",
+      info: "Myndigheter i Tyskland, Nederländerna och Belgien stötte på två civila fartyg misstänkta för drönarspaning över militära installationer och infrastruktur.",
+      highlight: true,
+      children: [
+        {
+          title: "Gemensamma indikatorer",
+          info: "Båda fartygen hade rysk besättning; båda hade nyligen besökt ryska hamnar; ett av fartygen seglar under rysk flagg."
+        },
+        {
+          title: "Inspektioner utan fynd",
+          info: "Sökningar och förhör gav inga resultat: inga drönare och inget misstänkt hittades ombord på något av fartygen."
+        },
+        {
+          title: "Metodproblem (varför inga fynd inte utesluter spaning)",
+          info: "Drönare kan demonteras och gömmas, kräver extremt omfattande genomsökning. De kan också kastas överbord/sänkas efter flygning utan spår.",
+          alert: true,
+          children: [
+            {
+              title: "Taktik: kasta överbord",
+              info: "En säkerhetsexpert noterar att drönare snabbt kan kastas i havet under inspektion utan att lämna spår."
+            },
+            {
+              title: "Niels Woudstra (docent, operationell analys, Nederländska försvarsakademin)",
+              info: "Ett lastfartyg är stort och drönare kan monteras isär och gömmas; man skulle behöva gå igenom hela fartyget."
+            },
+            {
+              title: "Patrick Bolder (säkerhetsrådgivare, HCSS)",
+              info: "Drönare kan helt enkelt sänkas ner i havet efter flygningar utan spår."
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "2. Incident 1: Lauga (Nordsjön – Borkum – Zeebrugge)",
+      info: "Natten 17 maj 2025 följde tyska patrullfartyget Potsdam det ryska lastfartyget Lauga nära Borkum. Drönare observerades i svärm runt Lauga och följde sedan patrullfartyget.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "Tidslinje (17 maj 2025)",
+          info: "Sju drönare räknades runt Lauga. Drönarna började följa patrullfartyget. Processionen (Lauga + Potsdam + drönare) pågick cirka tre timmar. Sedan försvann drönarna."
+        },
+        {
+          title: "Osäkerhet i observationen",
+          info: "Patrullbesättningen kunde inte avgöra drönarnas modell eller om de sköts upp från Lauga."
+        },
+        {
+          title: "Belgien: Zeebrugge (28 maj 2025)",
+          info: "Efter tips från tyskarna inspekterade belgiska tulltjänstemän Lauga i Zeebrugge. Inga fynd.",
+          children: [
+            {
+              title: "Besättning (förhör)",
+              info: "11 besättningsmedlemmar förhördes; samtliga var ryska medborgare. Inga ledtrådar framkom."
+            }
+          ]
+        },
+        {
+          title: "Tysk bedömning/rapportering",
+          info: "Händelsen togs in i en konfidentiell säkerhetsrapport. Der Spiegel var först att rapportera, utan att nämna fartygets namn.",
+          links: [
+            { text: "Der Spiegel", url: "https://www.spiegel.de/panorama/nordsee-mutmasslich-russische-drohnen-spaehten-patrouillenschiff-der-bundespolizei-aus-a-636a814b-72cd-48af-9ce5-599d4ac7ae74?sara_ref=re-so-app-sh" }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "3. Lauga – mönster & misstänkt resa till Tartus (Syrien)",
+      info: "Dossier identifierade en tidigare misstänkt resa kopplad till Tartus, där rysk militärbas finns i hamnen. Lauga stängde av radar/AIS i anslutning till Tartus, vilket normalt betraktas som misstänkt.",
+      alert: true,
+      children: [
+        {
+          title: "Lastning och utresa (Bronka → Syrien)",
+          info: "24 juli 2024 lastades ca 100 ton i hamnen Bronka nära Sankt Petersburg. Lauga angav därefter kurs mot syrisk hamn."
+        },
+        {
+          title: "AIS-lucka nära Tartus (21 augusti 2024)",
+          info: "När Lauga närmade sig Tartus stängde hon av radar/AIS. Signalen återkom ca 12 timmar senare vid nästan samma punkt som den försvann, vilket gör att kommersiella spårningstjänster inte visar tydligt om hamnanlöp skett.",
+          alert: true
+        },
+        {
+          title: "Spårningskällor: MarineTraffic vs Global Fishing Watch (GFW)",
+          info: "MarineTraffic visade inte tydligt om Tartus anlöpts p.g.a. signalbortfall. GFW-data indikerar dock att fartyget låg förtöjt i Tartus.",
+          links: [
+            { text: "GFW – Lauga/Tartus-spår (länk från texten)", url: "https://globalfishingwatch.org/map/fishing-activity/default-public/vessel/e37da3e3c-c64b-8836-ceb9-e898a833ebc1?longitude=35.87224441766734&latitude=34.891038882082896&zoom=12.407731236890903&start=2024-01-01T00%3A00%3A00.000Z&end=2025-06-01T00%3A00%3A00.000Z&dvIn%5B0%5D%5Bid%5D=vessel-5f916b6f8-8163-b53c-05eb-52f181e8e67b&dvIn%5B0%5D%5BdvId%5D=fishing-map-vessel-track-v-3&dvIn%5B0%5D%5Bcfg%5D%5Btrack%5D=public-global-all-tracks%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Binfo%5D=public-global-vessel-identity%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B0%5D=public-global-fishing-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B1%5D=public-global-port-visits-events%3Av3.1&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B2%5D=public-global-encounters-events%3Av3.0&dvIn%5B0%5D%5[cfg]%5Bevents%5D%5B3%5D=public-global-loitering-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B4%5D=public-global-gaps-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5BrVIs%5D%5B0%5D=ed0438c23-34e2-b1db-9bd1-058c03c86142&dvIn%5B0%5D%5Bcfg%5D%5Bclr%5D=%23F95E5E&dvIn%5B0%5BdT%5D=false&dvIn%5B1%5D%5Bid%5D=vms&dvIn%5B1%5D%5Bcfg%5D%5Bvis%5D=false&dvIn%5B2%5D%5Bid%5D=ais&dvIn%5B2%5D%5Bcfg%5D%5Bvis%5D=false&bDV&lTD=&fTD=&tV=vessel&vDi=public-global-vessel-identity%3Av3.0&vIs=registryInfo&vRi=1a80d46f6bfa5935aae82c8330647bfe&vE%5B0%5D=loitering&vE%5B1%5D=encounter&vE%5B2%5D=port_visit&tk%5B0%5D=public-global-vessel-identity%3Av3.0" }
+          ]
+        },
+        {
+          title: "Efter Tartus",
+          info: "Fartyget gick vidare till Bandırma (Turkiet) och därefter Novorossijsk."
+        },
+        {
+          title: "Resemönster (”mindre populära globala handelsnav” enligt Dossier)",
+          info: "Dossier konstaterar frekventa resor till mindre typiska nav: exempelvis Astrakhan → hamnar i Iran samt resa till Turkmenbashi (Turkmenistan), enligt hamndokument och spårningstjänster.",
+          links: [
+            { text: "GFW – spårning", url: "https://globalfishingwatch.org/map/fishing-activity/default-public/vessel/e37da3e3c-c64b-8836-ceb9-e898a833ebc1?longitude=31.208684510430203&latitude=40.48334109570206&zoom=4.456548585877815&start=2024-01-01T00%3A00%3A00.000Z&end=2025-06-01T00%3A00%3A00.000Z&dvIn[0][id]=vessel-5f916b6f8-8163-b53c-05eb-52f181e8e67b&dvIn[0][dvId]=fishing-map-vessel-track-v-3&dvIn[0][cfg][track]=public-global-all-tracks%3Av3.0&dvIn[0][cfg][info]=public-global-vessel-identity%3Av3.0&dvIn[0][cfg][events][0]=public-global-fishing-events%3Av3.0&dvIn[0][cfg][events][1]=public-global-port-visits-events%3Av3.1&dvIn[0][cfg][events][2]=public-global-encounters-events%3Av3.0&dvIn[0][cfg][events][3]=public-global-loitering-events%3Av3.0&dvIn[0][cfg][events][4]=public-global-gaps-events%3Av3.0&dvIn[0][cfg][rVIs][0]=ed0438c23-34e2-b1db-9bd1-058c03c86142&dvIn[0][cfg][clr]=%23F95E5E&dvIn[0][dT]=false&dvIn[1][id]=vms&dvIn[1][cfg][vis]=false&dvIn[2][id]=ais&dvIn[2][cfg][vis]=false&bDV&lTD=&fTD=&tV=vessel&vDi=public-global-vessel-identity%3Av3.0&vIs=registryInfo&vRi=1a80d46f6bfa5935aae82c8330647bfe&vE[0]=loitering&vE[1]=encounter&vE[2]=port_visit&tk[0]=public-global-vessel-identity%3Av3.0" }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "4. Lauga – flagg, ägare och sanktions-/holdingkopplingar",
+      info: "Lauga seglar under rysk flagg. Ägarkedjan och hamn-/agentrelationer kopplas i texten till Delo-gruppen och Rosatom.",
+      alert: true,
+      children: [
+        {
+          title: "Tidigare namn",
+          info: "Lauga hette tidigare Ivan Shchepetov."
+        },
+        {
+          title: "Tidigare ägare (t.o.m. augusti 2022)",
+          info: "Volga Shipping Company JSC. Företaget har senare drabbats av europeiska och brittiska åtgärder enligt de länkar som anges i texten.",
+          links: [
+            { text: "EU (CELEX 32025D0936)", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32025D0936" },
+            { text: "UK (company info/disqualified officers)", url: "https://find-and-update.company-information.service.gov.uk/disqualified-officers/corporate/uK8yGXXtf_PmEGaMfLIqjtJ4_40" }
+          ]
+        },
+        {
+          title: "Ny ägare (efter aug 2022): Idan Shipping (Sankt Petersburg)",
+          info: "Köptes enligt Dossiers dokument av Idan Shipping, ett litet bolag med endast två fartyg."
+        },
+        {
+          title: "Systerfartyg/nod: Vetluga",
+          info: "Det andra fartyget Vetluga uppges ha varit förtöjt i Tartus ungefär en månad innan (enligt GFW-länk i texten).",
+          links: [
+            { text: "GFW – Vetluga/Tartus-indikation (länk från texten)", url: "https://globalfishingwatch.org/map/fishing-activity/default-public?longitude=37.55328532851088&latitude=41.874279060347426&zoom=3.9282469726285583&start=2024-01-01T00%3A00%3A00.000Z&end=2025-06-01T00%3A00%3A00.000Z&dvIn%5B0%5D%5Bid%5D=vessel-5f916b6f8-8163-b53c-05eb-52f181e8e67b&dvIn%5B0%5D%5BdvId%5D=fishing-map-vessel-track-v-3&dvIn%5B0%5D%5Bcfg%5D%5Btrack%5D=public-global-all-tracks%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Binfo%5D=public-global-vessel-identity%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B0%5D=public-global-fishing-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B1%5D=public-global-port-visits-events%3Av3.1&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B2%5D=public-global-encounters-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B3%5D=public-global-loitering-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5Bevents%5D%5B4%5D=public-global-gaps-events%3Av3.0&dvIn%5B0%5D%5Bcfg%5D%5BrVIs%5D%5B0%5D=ed0438c23-34e2-b1db-9bd1-058c03c86142&dvIn%5B0%5D%5Bcfg%5D%5Bclr%5D=%23F95E5E&dvIn%5B0%5D%5BdT%5D=false&dvIn%5B1%5D%5Bid%5D=vms&dvIn%5B1%5D%5Bcfg%5D%5Bvis%5D=false&dvIn%5B2%5D%5Bid%5D=ais&dvIn%5B2%5D%5[cfg]%5Bvis%5D=false&bDV&lTD=&fTD=&tV=vessel" }
+          ]
+        },
+
+        {
+          title: "4.1 Ägarprofil: Idan Shipping – delägare & Delo/Rosatom-koppling",
+          info: "Idan Shipping ägs av tre personer. En av dem, Andrey Selyanin, är även VD. Hans karriär kopplas till Delo-gruppen (transportholding) som ägs av oligarken Sergey Shishkarev och det statliga bolaget Rosatom.",
+          alert: true,
+          children: [
+            {
+              title: "Delo-gruppen (Global Ports)",
+              info: "Petrolesport JSC beskrivs som del av Delo-gruppen.",
+              links: [
+                { text: "Delo Group – Global Ports (länk i texten)", url: "https://www.delo-group.ru/business/globalports/" }
+              ]
+            },
+            {
+              title: "Selyanin: Porttransservice (2007 → VD 2012)",
+              info: "Enligt läckt information arbetade Selyanin på Porttransservice sedan 2007 och blev VD 2012."
+            },
+            {
+              title: "Ägande 2009–2018: Petrolesport JSC",
+              info: "Under perioden 2009–2018 tillhörde Porttransservice Petrolesport JSC (del av Delo-gruppen), vilket innebär att Selyanin ledde ett bolag inom holdingstrukturen."
+            },
+            {
+              title: "2018: Selyanin ensam ägare, men affärer fortsätter inom Delo-sfären",
+              info: "2018 blev Selyanin ensam ägare, men Porttransservice fortsatte nära affärer med Delo-enheter, inklusive tjänster vid Petrolesport-terminalen.",
+              links: [
+                { text: "Porttransservice (arkiverad sida – länk i texten)", url: "https://web.archive.org/web/20221207011911/https://porttransservice.ru/" }
+              ]
+            },
+            {
+              title: "2024: Porttransservice som generalagent för FSUE Atomflot (Rosatom)",
+              info: "Från och med 2024 uppges Porttransservice fungera som generalagent för FSUE Atomflot, Rosatom-dotter och delägare i Delo-gruppen.",
+              links: [
+                { text: "Porttransservice-blogg (Atomflot/generalagent – länk i texten)", url: "https://porttransservice.ru/blog/2024/11/22/sevmorput-2024/" }
+              ]
+            },
+            {
+              title: "Lauga + Delo-enheter (operationellt mönster)",
+              info: "Lauga använder ofta tjänster från Delo-associerade enheter: agent i Novorossijsk är Delo Service Company LLC. Efter belgisk inspektion låg Lauga även förtöjd vid Petrolesport-terminalen (Delo) enligt MarineTraffic.",
+              alert: true
+            },
+            {
+              title: "Svarsfrekvens",
+              info: "Idan Shipping svarade inte på journalisternas förfrågningar."
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "5. Incident 2: HAV Dolphin (Volkerak-slussarna – Kielområdet – Bremen)",
+      info: "Två dagar före Nordsjöjakten (Lauga) genomfördes en ovanlig inspektion av HAV Dolphin i Nederländerna. Fartygets beteende (rutt, hastighet, och lång vistelse i otillåtet ankringsområde nära tyska militära installationer) lyfts som indikatorer.",
+      highlight: true,
+      alert: true,
+      children: [
+        {
+          title: "Inspektion: Volkerak-slussarna (Nederländerna)",
+          info: "Razzia genomförd av tull, polis och nederländska nationella gendarmeriet enligt källor till Follow the Money. Beskrivs som extraordinär inspektion under exceptionella omständigheter."
+        },
+        {
+          title: "Rutt och beteende före inspektion",
+          info: "Avgick från Kaliningrad 23 april, anlöpte Liepaja (Lettland), styrde mot Kiel (Tyskland). Färdades ovanligt långsamt: genomsnitt 7,6 knop (normal 10–11).",
+          children: [
+            {
+              title: "Möjliga förklaringar (enligt texten)",
+              info: "Bränsleekonomi/tekniska problem – eller medveten taktik att fördröja på vissa platser, en metod som kopplas till fartyg misstänkta för spionage."
+            }
+          ]
+        },
+        {
+          title: "Otillåten ankring nära Kiel (8 dagar)",
+          info: "Tillbringade åtta dagar nordväst om Kiel i område där ankring inte är tillåten. I närheten finns tyska militära installationer, bl.a. Eckernförde-basen för specialfartyg och ubåtar.",
+          alert: true
+        },
+        {
+          title: "Drönarobservationer (uppgifter i flera publikationer)",
+          info: "Källor i flera europeiska publikationer uppger att drönare observerades i området vid tidpunkten, vilket sannolikt bidrog till tysk polisinspektion av HAV Dolphin. Polisen kommenterar inte detta."
+        },
+        {
+          title: "Ägarens förnekande (Hav Bulk AS, Norge)",
+          info: "Ägaren förnekar polisinspektion och säger att fartyget väntade på lastningsorder på plats anvisad av hamnmyndigheten."
+        },
+        {
+          title: "Order och förflyttning (9 maj)",
+          info: "Den 9 maj kom lastningsorder; HAV Dolphin gick därefter till Bremen (Tyskland)."
+        },
+        {
+          title: "Resultat av inspektionen",
+          info: "Inga drönare eller misstänkta föremål hittades. Sju besättningsmedlemmar förhördes – alla ryska medborgare – utan resultat. HAV Dolphin släpptes utan anklagelser och seglade vidare till Spanien; seglar därefter åter genom Europa (enligt MarineTraffic)."
+        }
+      ]
+    },
+
+    {
+      title: "6. HAV Dolphin – varför rysk besättning i norsk struktur + Kaliningrad-spåret",
+      info: "Texten beskriver hur norska HAV byggt en långvarig rekryterings- och servicekedja i Kaliningrad, inklusive representationskontor och ett managementbolag, samt varvsservice vid 'Pregol' som även haft kontrakt kopplade till bl.a. Rosatom-fartyg.",
+      alert: true,
+      children: [
+        {
+          title: "HAV i Kaliningrad (sedan 2006)",
+          info: "2006 öppnade norska HAV koncernen representationskontor i Kaliningrad. Besättningar rekryterades regelbundet genom kontoret."
+        },
+        {
+          title: "Motiv (Peter Kleppan, styrelseordförande)",
+          info: "Företaget gynnades av att anställa hårt arbetande och högkvalificerade ryska sjömän för cabotagetrafik."
+        },
+        {
+          title: "Nuvarande struktur",
+          info: "HAV har fortfarande representationskontor i Kaliningrad och ett bolag 'HAV Ship Management Norrus', där 79% ägs direkt av Kleppan."
+        },
+        {
+          title: "Efter fullskaligt krig: påstående om stoppad Rysslandstrafik",
+          info: "Källa betonar att företaget sedan fullskaliga krigets start inte accepterat last och inte har kunder i Ryssland."
+        },
+        {
+          title: "Varv/spår: 'Pregol' (Kaliningrad)",
+          info: "Norska bolagets fartyg har i många år servats på varvet 'Pregol' i Kaliningrad. Varvet är privat men har enligt texten statliga kontrakt för bl.a. forskningsfartyg och även fartyg kopplade till Rosatom (enligt uppgifter i offentliga upphandlingar)."
+        },
+        {
+          title: "HAV Dolphin – verkstadsstopp (april 2024)",
+          info: "HAV Dolphin tillbringade nästan en månad i planerat underhåll i april 2024 innan resa till Kiel och vidare genom Europa."
+        }
+      ]
+    },
+
+    {
+      title: "7. Hotbild och indikatorer (Nordeuropa – militär och industri)",
+      info: "Texten beskriver drönarspaning från fartyg som ny utmaning för europeiska myndigheter. Flera oberoende källor uppges styrka att drönarincidenter sker, men attribution och beslag är svåra.",
+      highlight: true,
+      children: [
+        {
+          title: "ACLED: nästan 40 fall av drönarövervakning",
+          info: "ACLED-analytiker uppger att de sedan fullskaligt krig i Ukraina registrerat nästan 40 fall av drönarövervakning av infrastruktur i norra Europa. Mellan aug 2024 och feb 2025 riktade ungefär hälften sig mot krigsfartyg, militärbaser och deras omgivningar i Tyskland och Storbritannien.",
+          links: [
+            { text: "ACLED ", url: "https://acleddata.com/report/testing-waters-suspected-russian-activity-challenges-europes-support-ukraine" }
+          ],
+          children: [
+            {
+              title: "Budskap (Nikita Gurkov, senioranalytiker ACLED)",
+              info: "Rysslands huvudbudskap till européer: 'vi håller koll på er, och vi kan få tag på er.'",
+              alert: true
+            }
+          ]
+        },
+        {
+          title: "Der Spiegel: drönare nästan dagligen (27 feb–7 mars 2025)",
+          info: "Der Spiegel hänvisar till säkerhetsmyndigheter och uppger att drönare flög nästan dagligen över marinbaser, hamnar och kemiska fabriker i norra och östra Tyskland mellan 27 februari och 7 mars 2025; vingspann uppges ha nått fem meter.",
+          links: [
+            { text: "Der Spiegel (samma huvudlänk som nämns i texten)", url: "https://www.spiegel.de/panorama/nordsee-mutmasslich-russische-drohnen-spaehten-patrouillenschiff-der-bundespolizei-aus-a-636a814b-72cd-48af-9ce5-599d4ac7ae74?sara_ref=re-so-app-sh" }
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "8. Slutsats: varför beslag/attribution är svårt",
+      info: "Två fartyg (Lauga och HAV Dolphin) kopplas i händelsekedjan till drönarobservationer och militära närmiljöer, men båda inspektionerna gav nollfynd. Texten pekar på en strukturell europeisk sårbarhet: metoden är snabb, spårlös och svår att bevisa i stunden.",
+      alert: true,
+      children: [
+        {
+          title: "Teknisk/operativ realitet",
+          info: "Drönare kan delas, gömmas, och dumpas i havet efter flygning; att hitta dem kräver total genomsökning av stora fartyg."
+        },
+        {
+          title: "Signalindikatorer",
+          info: "AIS/radar-avstängning nära känsliga hamnar (Tartus), otillåten ankring nära militära installationer (Kielområdet), avvikande hastighet, rysk besättning, ryska hamnanlöp, och kopplingar via ägar-/agentkedjor till Rosatom/Delo."
+        }
+      ]
+    }
+  ]
+},
+            {
   title: "CASE: GRU-journalistnätverket (Sudlenkova & Shavrov)",
   info: "Nätverk där den belarusiska journalisten Natalia Sudlenkova enligt tjeckiska säkerhetsmyndigheter agerat påverkansaktör i Tjeckien, i samverkan med sin GRU-handläggare Alexei Shavrov. Dossier Center kopplar Shavrov till GRU:s enhet 74455 (cyber/psyops) och beskriver hur Sudlenkova parallellt med journalistisk roll arbetade med PR/lobbying för ryska statsbolag (Rosatom, RZD m.fl.), oligarkintressen samt finansierades via Pravfond.",
   highlight: true,
@@ -3759,6 +4084,10 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Tartus (Syrien)", coords: [34.9130, 35.8750], info: "Rysk Marinbas. Fartyget Lauga stängde av AIS här (aug 2024) för att dölja anlöp." },
+    { name: "Varvet Pregol (Kaliningrad)", coords: [54.7030, 20.4570], info: "Servicehubb för norska HAV Dolphins flotta. Utför jobb åt Rosatom och ryska staten." },
+    { name: "Eckernförde Marinbas", coords: [54.4720, 9.8450], info: "Tysklands bas för ubåtar och specialfartyg. Sannolikt mål för HAV Dolphins spaning." },
+    { name: "Bronka (S:t Petersburg)", coords: [59.9300, 29.6500], info: "Lastningsplats för Lauga inför den dolda resan till Syrien. Del av Delo-gruppens logistik." },
     { name: "Prague Telegraph (Redaktion)", coords: [50.0835, 14.4539], info: "Navet för Sudlenkovas påverkan. Finansierad av Pravfond och Ryska handelskammaren." },
     { name: "Rosatom HQ (Moskva)", coords: [55.7405, 37.6256], info: "Bolshaya Ordynka 24. Uppdragsgivare för Sudlenkovas PR-kampanjer sedan 2012." },
     { name: "USM Holdings (Usmanov)", coords: [55.7836, 37.5960], info: "Lesnaya St. Dit kontakten Grigorij Levchenko (och Sudlenkova) flyttade efter RZD-skandalen." },
@@ -3823,6 +4152,10 @@ const blockedProperties = [
 
 // --- VARNINGSTRIANGEL: MÖJLIG PÅVERKAN ---
 const warningProperties = [
+    { name: "Borkum (Nordsjön)", coords: [53.5880, 6.6690], info: "DRÖNARINCIDENT (Lauga): 17 maj 2025. Sju drönare förföljde tyska patrullfartyget Potsdam i tre timmar." },
+    { name: "Kiel / Eckernförde", coords: [54.5500, 10.1500], info: "OTILLÅTEN ANKRING (HAV Dolphin): Låg stilla 8 dagar i förbudszon nära tysk ubåtsbas. Drönare observerades i området." },
+    { name: "Volkerak-slussarna (NL)", coords: [51.6430, 4.3050], info: "POLISRAZZIA (HAV Dolphin): Extraordinär insats av nederländsk polis och tull. Inga drönare hittades (misstänks dumpade)." },
+    { name: "Zeebrugge (Belgien)", coords: [51.3350, 3.2050], info: "INSPEKTION (Lauga): Belgiska myndigheter sökte igenom fartyget 28 maj 2025 efter tips från Tyskland." },
     { name: "Ockupationsmuseet (Riga)", coords: [56.9472, 24.1066], info: "SABOTAGE: Molotovcocktail feb 2024. Beställt av GRU ('Wlodek')." },
     { name: "Daugavgriva Fängelse (Daugavpils)", coords: [55.8900, 26.5500], info: "REKRYTERING: Fånge agerade mellanhand åt GRU via Telegram." },
     { name: "Diehl Metal (Berlin)", coords: [52.4430, 13.3180], info: "SABOTAGE: Fabriksbrand maj 2024. Tillverkar luftvärn. Kopplas till GRU." },

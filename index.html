@@ -1773,6 +1773,93 @@ const treeData = {
             }
           ]
         },
+        // --- NY SEKTION: FÄRÖARNA (FISKE & SPIONAGE) ---
+        {
+          title: "Färöarna – Ryska fiskebolag & Spionage (2022–2026)",
+          info: "Från 1 jan 2026 förbjuds specifika ryska bolag i färöiska hamnar p.g.a. spionagerisk. Bryter tidigare praxis.",
+          highlight: true,
+          links: [
+            { text: "Svensk OSINT (LinkedIn)", url: "https://www.linkedin.com/feed/update/urn:li:activity:7413546916288004096" }
+          ],
+          children: [
+            {
+              title: "Beslut & Rättslig Ram",
+              info: "Ny lagstiftning möjliggör bolagsspecifik utestängning av säkerhetsskäl. Förbud från 1 jan 2026.",
+              highlight: true,
+              links: [
+                { text: "The Danish Dream", url: "https://thedanishdream.com/news/faroe-islands-ban-russian-ships-over-espionage/" },
+                { text: "SeafoodSource", url: "https://www.seafoodsource.com/news/supply-trade/faroese-parliament-nearing-passage-of-bill-to-sanction-russian-companies-murman-norebo" }
+              ],
+              children: [
+                { 
+                  title: "Omfattning", 
+                  info: "Gäller fiske, hamnanlöp och verksamhet inom jurisdiktionen. Riktar sig mot Norebo JSC och Murman Sea Food." 
+                }
+              ]
+            },
+            {
+              title: "Utpekade Bolag",
+              alert: true,
+              children: [
+                {
+                  title: "Norebo JSC",
+                  info: "En av Rysslands största fiskekoncerner. Vertikalt integrerad djuphavsflotta. Opererar i Barents hav/Nordatlanten.",
+                  links: [{ text: "UnderCurrent News", url: "https://www.undercurrentnews.com/2025/12/31/russias-norebo-murman-lose-faroese-fishing-licenses-as-sanctions-take-effect/" }]
+                },
+                {
+                  title: "Murman Sea Food",
+                  info: "Baserad i Murmansk. Opererar nära rysk militär infrastruktur och Nordflottan. Pekas ut i säkerhetsbedömningar.",
+                  alert: true
+                }
+              ]
+            },
+            {
+              title: "Kärnan i Misstankarna",
+              info: "Fiskefartyg används för underrättelseinhämtning och kartläggning.",
+              links: [{ text: "Reuters", url: "https://www.reuters.com/world/russia-warns-faroe-islands-potential-retaliation-over-sanctions-related-alleged-2025-12-04/" }],
+              children: [
+                { 
+                  title: "Inhämtning", 
+                  info: "Fokus på sjökablar, energiinfrastruktur och militära övningsområden." 
+                },
+                { 
+                  title: "Avvikande beteenden", 
+                  info: "Rörelsemönster utan 'fiskelogik', långvarig närvaro, avstängd/manipulerad AIS." 
+                },
+                { 
+                  title: "Teknisk utrustning", 
+                  info: "Observationer av omfattande antenner och sensorer (Dual-use) utan tydlig fiskerifunktion." 
+                }
+              ]
+            },
+            {
+              title: "Internationell Kontext & Avtal",
+              children: [
+                { 
+                  title: "Fiskeriavtalet 2026", 
+                  info: "Förnyat trots sanktioner. Kvoter: Färöarna får torsk i Barents hav; Ryssland får blåvitling, sill och makrill." 
+                },
+                { 
+                  title: "EU & Norge", 
+                  info: "Färöarnas åtgärder speglar grannländernas fokus på säkerhetsrisker snarare än enbart handelssanktioner." 
+                }
+              ]
+            },
+            {
+              title: "Säkerhetsanalys & Reaktion",
+              children: [
+                { 
+                  title: "Hybrid- & Gråzonslogik", 
+                  info: "Civila fartyg fungerar som lågtröskelplattformar och sensorer. Ger Ryssland uthållig närvaro och förnekbarhet." 
+                },
+                { 
+                  title: "Rysk Reaktion", 
+                  info: "Varnar för motåtgärder. Kallar beslutet 'fientligt' och politiserat." 
+                }
+              ]
+            }
+          ]
+        },
         {
          title: "Danmark (Spioncentraler)",
           children: [
@@ -4436,6 +4523,7 @@ const cityCoords = {
 
 // --- RÖDA RINGAR: KÖPTA/STRATEGISKA FASTIGHETER ---
 const strategicProperties = [
+    { name: "Murmansk (Norebo & Murman SF)", coords: [68.9700, 33.0700], info: "Hemmahamn för de utpekade bolagen. Opererar i Barents hav nära rysk militär infrastruktur." },
     { name: "Novorossijsk (Oljeterminal)", coords: [44.7200, 37.7800], info: "Huvudhamn för utskeppning av rysk och kazakisk olja (CPC). Ursprung för Voula, Seajewel m.fl." },
     { name: "Alexandria (Terminal)", coords: [31.1637, 29.8556], info: "Mottagarhamn. Gurudev anlände hit fullastad 24 feb 2025 efter misstänkt lastning till sjöss från Morpheus." },
     { name: "Balance Insurance (Moskva)", coords: [55.7558, 37.6173], info: "Försäkringsbolag med minimala tillgångar ( Två rum i utkanten av Moskva) som försäkrar skuggflottan mot mångmiljardbelopp." },
@@ -4497,6 +4585,7 @@ const strategicProperties = [
 
 // --- X-MARKERINGAR: BLOCKERADE KÖP/OMRÅDEN ---
 const blockedProperties = [
+    { name: "Färöarna (Hamnförbud 2026)", coords: [62.0107, -6.7741], info: "Förbud för Norebo & Murman Sea Food från 1 jan 2026. Misstänkt spionage och kartläggning av kablar." },
     { name: "Finland: Mikkeli", coords: [61.6886, 27.2723], info: "Köp blockerat 2024. Nära arméns huvudkvarter/övningsområden." },
     { name: "Finland: Parainen", coords: [60.3019, 22.3015], info: "Köp blockerat 2024. Strategisk skärgårdsposition nära farleder." },
     { name: "Finland: Sysmä", coords: [61.503, 25.684], info: "Försvarsministeriet blockerade fastighetsköp av säkerhetsskäl (Yle)." },

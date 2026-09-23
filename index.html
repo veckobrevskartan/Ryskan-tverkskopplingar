@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ryska Intressen & Nätverk</title>
+  <title>Ryska Intressen & Nätverk – Version 3</title>
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   
@@ -21,7 +21,7 @@
 
     #main-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 50px); position: relative; }
     
-    #left-panel { flex: 2; position: relative; border-right: 1px solid #ddd; min-width: 300px; display: flex; flex-direction: column; }
+    #left-panel { flex: 1; position: relative; border-right: 1px solid #ddd; min-width: 300px; display: flex; flex-direction: column; }
     
     .view-section { flex: 1; display: none; width: 100%; height: 100%; overflow: hidden; }
     .view-section.active { display: block; }
@@ -31,9 +31,114 @@
     #tree-container:active { cursor: grabbing; }
 
     /* Map Container */
-    #map-container { width: 100%; height: 100%; background: #e5e9ec; position: relative; }
+    #map-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-color: #e5e9ec;
+      background-image:
+        linear-gradient(rgba(255,255,255,.55) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.55) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .map-status {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      z-index: 1000;
+      max-width: 300px;
+      padding: 6px 9px;
+      border: 1px solid #c8d0d6;
+      border-radius: 4px;
+      background: rgba(255,255,255,.92);
+      color: #44515a;
+      font-size: 11px;
+      line-height: 1.35;
+      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+    }
+    .map-status.error { border-color: #d9a441; background: rgba(255,248,225,.96); color: #6f4b00; }
 
-    #foi-panel { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 350px; max-width: 600px; border-left: 1px solid #ccc; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 15; }
+    /*
+      FOI-registret är ett fristående <details>-lager. Det är stängt från start,
+      ligger ovanpå innehållet när det öppnas och kan därför aldrig ta kartbredd.
+    */
+    #foi-panel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1400;
+      width: auto;
+      max-width: calc(100vw - 20px);
+      box-sizing: border-box;
+      background: transparent;
+    }
+    #foi-panel > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 34px;
+      padding: 7px 11px;
+      box-sizing: border-box;
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid #aeb7bd;
+      border-radius: 5px;
+      background: rgba(255,255,255,.96);
+      color: #2c3e50;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,.16);
+    }
+    #foi-panel > summary::-webkit-details-marker { display: none; }
+    #foi-panel > summary:hover { background: #edf1f3; }
+    #foi-panel[open] {
+      bottom: 10px;
+      width: min(600px, calc(100vw - 20px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #aeb7bd;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+    #foi-panel[open] > summary {
+      flex: 0 0 auto;
+      border: 0;
+      border-bottom: 1px solid #ccd3d8;
+      border-radius: 0;
+      background: #2c3e50;
+      color: #fff;
+      box-shadow: none;
+    }
+    .foi-content {
+      display: none;
+      min-height: 0;
+    }
+    #foi-panel[open] .foi-content {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      flex-direction: column;
+    }
+    .foi-summary-state::before { content: 'Öppna ▸'; }
+    #foi-panel[open] .foi-summary-state::before { content: 'Stäng ×'; }
+    .foi-toggle-btn {
+      padding: 6px 11px;
+      border: 1px solid #aeb7bd;
+      background: #f7f8f9;
+      color: #2c3e50;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .foi-toggle-btn:hover { background: #edf1f3; }
+    .foi-toggle-btn[aria-expanded="true"] { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+    .header-meta { display: flex; align-items: center; gap: 12px; }
 
     .tree-controls { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); padding: 5px; border-radius: 4px; border: 1px solid #ddd; z-index: 100; display: flex; gap: 5px; }
     .ctrl-btn { padding: 4px 10px; font-size: 11px; cursor: pointer; background: #fff; border: 1px solid #bbb; border-radius: 3px; color: #333; font-weight: bold; }
@@ -180,7 +285,11 @@
 
     /* --- FOI TABELL STYLING --- */
     .panel-header { padding: 10px 15px; background: #f1f1f1; border-bottom: 1px solid #ddd; }
+    .panel-title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .panel-header h2 { margin: 0 0 10px 0; font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+    .panel-title-row h2 { margin-bottom: 8px; }
+    .panel-close { border: 0; background: transparent; color: #555; cursor: pointer; font-size: 19px; line-height: 1; padding: 2px 4px 7px; }
+    .panel-close:hover { color: #111; }
     #searchFOI { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     .table-wrapper { flex: 1; overflow-y: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -192,12 +301,17 @@
     .sni-F { background: #e67e22; } .sni-G { background: #27ae60; } .sni-K { background: #8e44ad; } .sni-M { background: #2980b9; } .sni-def { background: #95a5a6; }
 
     @media (max-width: 768px) {
-      #main-container { flex-direction: column; overflow-y: auto; }
-      #left-panel, #foi-panel { flex: none; width: 100%; min-width: 0; }
-      #left-panel { height: 60vh; }
-      #foi-panel { height: 40vh; border-left: none; border-top: 2px solid #333; }
+      header { padding: 0 10px; }
+      h1 { font-size: 15px; }
+      .header-date { display: none; }
+      .view-btn { padding: 5px 8px; margin-left: 5px; }
+      .foi-toggle-btn { padding: 5px 8px; font-size: 11px; }
+      #main-container { flex-direction: column; overflow: hidden; }
+      #left-panel { width: 100%; min-width: 0; height: 100%; }
+      #foi-panel { top: 8px; right: 8px; max-width: calc(100vw - 16px); }
+      #foi-panel[open] { bottom: 8px; width: calc(100vw - 16px); }
       .tree { margin-left: 0; }
-      body { overflow: auto; }
+      body { overflow: hidden; }
     }
   </style>
 </head>
@@ -211,7 +325,10 @@
         <button class="view-btn" onclick="setView('map')">Karta</button>
     </div>
   </div>
-  <div style="font-size:12px; color:#666;">Interaktiv analys · Uppdaterad 23 september 2026</div>
+  <div class="header-meta">
+    <div class="header-date" style="font-size:12px; color:#666;">Version 3 · OpenStreetMap · Uppdaterad 23 september 2026</div>
+    <button id="foi-toggle" class="foi-toggle-btn" type="button" aria-expanded="false" aria-controls="foi-panel" onclick="toggleFOIPanel()">FOI-register (128) ▸</button>
+  </div>
 </header>
 
 <div id="main-container">
@@ -229,6 +346,7 @@
 
     <div id="view-map" class="view-section">
         <div id="map-container">
+            <div id="map-status" class="map-status">OpenStreetMap · ingen API-nyckel krävs</div>
             <div id="map-legend" class="map-legend">
                 <div class="legend-header" onclick="toggleLegend()">
                     <span>Kategorier</span>
@@ -246,19 +364,19 @@
                     <div class="legend-item">
                         <label style="cursor:pointer; display:flex; align-items:center;">
                             <input type="checkbox" checked onchange="toggleLayer('fastigheter')" style="margin-right:6px;">
-                            <span class="ring-red"></span> Köpta Fastigheter
+                            <span class="ring-red"></span> Fastigheter / objekt
                         </label>
                     </div>
                     <div class="legend-item">
                         <label style="cursor:pointer; display:flex; align-items:center;">
                             <input type="checkbox" checked onchange="toggleLayer('blockerade')" style="margin-right:6px;">
-                            <span class="x-mark">X</span> Blockerade Köp
+                            <span class="x-mark">X</span> Stoppade / övertagna
                         </label>
                     </div>
                     <div class="legend-item">
                         <label style="cursor:pointer; display:flex; align-items:center;">
                             <input type="checkbox" checked onchange="toggleLayer('varningar')" style="margin-right:6px;">
-                            <span class="warn-mark">⚠️</span> Varning/Risk
+                            <span class="warn-mark">⚠️</span> Indikation / utredning
                         </label>
                     </div>
                     <div class="legend-item">
@@ -308,27 +426,36 @@
 
   </div>
 
-  <div id="foi-panel">
-    <div class="panel-header">
-      <h2>FOI-register (128 bolag)</h2>
-      <input type="text" id="searchFOI" placeholder="Sök bolag, ägare, ort..." onkeyup="filterFOI()">
-      <div style="margin-top:5px; font-size:11px; color:#666;" id="foi-count">Visar alla rader</div>
+  <details id="foi-panel" ontoggle="syncFOIPanelState()">
+    <summary aria-label="Öppna eller stäng FOI-registret">
+      <span>FOI-register (128 bolag)</span>
+      <span class="foi-summary-state" aria-hidden="true"></span>
+    </summary>
+    <div class="foi-content">
+      <div class="panel-header">
+        <div class="panel-title-row">
+          <h2>FOI-register (128 bolag)</h2>
+          <button class="panel-close" type="button" aria-label="Stäng FOI-registret" title="Stäng" onclick="toggleFOIPanel(false)">×</button>
+        </div>
+        <input type="text" id="searchFOI" placeholder="Sök bolag, ägare, ort..." onkeyup="filterFOI()">
+        <div style="margin-top:5px; font-size:11px; color:#666;" id="foi-count">Visar alla rader</div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:30px;">ID</th>
+              <th>Bolag / Ort</th>
+              <th>SNI</th>
+              <th>Info / Koppling</th>
+            </tr>
+          </thead>
+          <tbody id="foi-body">
+            </tbody>
+        </table>
+      </div>
     </div>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:30px;">ID</th>
-            <th>Bolag / Ort</th>
-            <th>SNI</th>
-            <th>Info / Koppling</th>
-          </tr>
-        </thead>
-        <tbody id="foi-body">
-          </tbody>
-      </table>
-    </div>
-  </div>
+  </details>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -354,6 +481,10 @@ const treeData = {
         {
           "title": "Pågående utredning eller rättstvist",
           "info": "Misstankar, beslag, husrannsakningar och överklaganden är inte samma sak som en lagakraftvunnen dom. Sådana poster anges uttryckligen som pågående."
+        },
+        {
+          "title": "Medie- eller underrättelseuppgift",
+          "info": "Uppgifter från granskande medier eller namngivna säkerhets- och underrättelseorgan redovisas med tydlig attribuering. De behandlas inte som en dom eller som självständigt bevisade av denna sammanställning."
         },
         {
           "title": "Riskindikator / historiskt granskningsspår",
@@ -474,6 +605,21 @@ const treeData = {
                 {
                   "text": "Syre",
                   "url": "https://tidningensyre.se/2023/15-januari-2023/sapo-vill-kunna-stoppa-fientliga-fastighetskop/"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT 2026: skärpt svensk kontroll av säkerhetskänsliga fastighetsöverlåtelser",
+              "info": "Från den 1 juli 2026 omfattas överlåtelser av fast egendom som är av betydelse för Sveriges säkerhet av säkerhetsskyddslagens krav på särskild säkerhetsskyddsbedömning, lämplighetsprövning och samråd. Regeringen gav dessutom i juni 2026 en utredare i uppdrag att föreslå ett nytt expropriationsändamål för fastighetsinnehav som kan innebära risk för Sveriges säkerhet; uppdraget ska redovisas senast den 31 mars 2027. Källstatus: beslutad lagändring respektive pågående statlig utredning. Reglerna pekar inte ut varje utländsk eller rysk ägare som säkerhetshot.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "Riksdagen: beslut och ikraftträdande",
+                  "url": "https://www.riksdagen.se/sv/dokument-och-lagar/dokument/betankande/starkt-sakerhetsskydd-vid-overlatelse-av-fast_hd01juu29/"
+                },
+                {
+                  "text": "Regeringen: expropriationsutredningen",
+                  "url": "https://www.regeringen.se/rattsliga-dokument/kommittedirektiv/2026/06/uppdrag-att-utreda-ett-nytt-expropriationsandamal-till-skydd-for-sveriges-sakerhet/"
                 }
               ]
             },
@@ -686,6 +832,40 @@ const treeData = {
                   "url": "https://www.sverigesradio.se/artikel/ekonomireportern-kubal-forsoker-medvetet-blanda-bort-korten"
                 }
               ]
+            },
+            {
+              "title": "SÄKERHETSINCIDENT 2026: Furuvik nära Saab-vd – misstanken avskriven",
+              "info": "Två ryska medborgare tältade i augusti 2026 intill en stuga i Furuvik där Saabs vd Micael Johansson vistades med personskydd. En förundersökning om hemfridsbrott och förberedelse till grov stöld inleddes, men paret delgavs inte misstanke och uppgavs kort därefter inte längre vara misstänkt. Stugan ägs av en närstående till Johansson, inte av paret. Källstatus: bekräftad säkerhetsincident och därefter avskriven brottsmisstanke; ingen offentlig uppgift belägger koppling till rysk stat eller underrättelsetjänst.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "SVT: händelsen vid stugan (10 aug 2026)",
+                  "url": "https://www.svt.se/nyheter/lokalt/gavleborg/ryska-turisterna-campade-intill-saab-chefen-ville-fiska-fran-bryggan"
+                },
+                {
+                  "text": "SVT: förvar hävt och utredning (12 aug 2026)",
+                  "url": "https://www.svt.se/nyheter/lokalt/gavleborg/ryska-taltparet-i-gavle-polisen-utreder-forberedelse-till-grov-stold"
+                },
+                {
+                  "text": "Omni: inte längre misstänkta",
+                  "url": "https://omni.se/ryska-paret-lamnar-sverige-inte-langre-misstankta/a/wrVnpd"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT ÄGARINTRESSE: Sweden House i Sankt Petersburg",
+              "info": "Sweden House är ett ryskt aktiebolag som enligt regeringens ägarredovisning ägs av Ladoga Holding AB (CA Fastigheter) till 49 procent, svenska staten till 36 procent och staden Sankt Petersburg till 15 procent. Bolaget disponerar fastighetskomplexet Sverigehuset med cirka 4 400 kvadratmeter uthyrningsbar yta och tillhörande mark under 49 år från 1994. Sveriges generalkonsulat lämnade fastigheten 2023. Källstatus: officiellt redovisat ägande och dispositionsrätt; posten innebär inte misstanke om brott eller rysk underrättelseverksamhet.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "Regeringen: Sweden House",
+                  "url": "https://www.regeringen.se/myndigheter-med-flera/sweden-house/"
+                },
+                {
+                  "text": "Regeringens ägarredovisning 2025 (PDF)",
+                  "url": "https://www.regeringen.se/contentassets/10ac9316e0e044a890befdbf7e272f52/2025-ars-redogorelse-for-foretag-med-statligt-agande-skr.-202425140.pdf"
+                }
+              ]
             }
           ]
         },
@@ -796,6 +976,43 @@ const treeData = {
                 {
                   "text": "Yle – ägarens bemötande",
                   "url": "https://yle.fi/a/7-10104804"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT STOPP 2022: tidigare äldreboende i Kankaanpää",
+              "info": "Finlands försvarsministerium nekade tre ryska medborgare tillstånd att köpa det tidigare äldreboendet Lohikko i Kankaanpää. Ministeriet hänvisade till objektets storlek och läget nära Niinisalo garnison samt risken att fastigheten kunde användas på ett sätt som skadar Finlands territoriella integritet. Källstatus: ett officiellt, negativt tillståndsbeslut – inte ett påstående om att köparna begått brott eller redan hade använt platsen för underrättelseverksamhet.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "Finlands regering (21 dec 2022)",
+                  "url": "https://valtioneuvosto.fi/en/-/236553176/negative-decision-on-real-estate-transaction-in-kankaanpaa"
+                },
+                {
+                  "text": "Yle: läget nära Niinisalo",
+                  "url": "https://yle.fi/a/74-20009913"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT STOPP 2024: Pargas och fem objekt i Kokemäki",
+              "info": "Den 10 december 2024 avslog försvarsministeriet två ryska privatpersoners ansökningar. Besluten omfattade en fastighet i Pargas och fem i Kokemäki. Som skäl angavs att affärerna kunde hota nationell säkerhet och försvåra organiseringen av försvaret. Besluten hade vid pressmeddelandet ännu inte vunnit laga kraft. Källstatus: officiella tillståndsbeslut; pressmeddelandet anger inte offentligt exakt adress eller bevisad fientlig avsikt.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "Finlands regering (12 dec 2024)",
+                  "url": "https://valtioneuvosto.fi/en/-/236553176/two-negative-decisions-on-real-estate-transactions"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT STOPP 2026: fyra fastighetsaffärer i Sibbo",
+              "info": "Finlands försvarsministerium stoppade fyra försök av en 41-årig rysk man att köpa tre bostadsfastigheter i Sibbo och en fjärde genom ett bolag registrerat i Vanda. Köparen saknade permanent uppehållstillstånd. Källstatus: bekräftat myndighetsbeslut enligt Yle; offentlig rapportering belägger inte brott eller en rysk statlig beställare.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "Yle (24 jan 2026)",
+                  "url": "https://yle.fi/a/74-20206259"
                 }
               ]
             }
@@ -1316,13 +1533,17 @@ const treeData = {
           "children": [
             {
               "title": "CASE: Målselv Fjellandsby (Murmansk-eliten)",
-              "info": "Stugby med direkt insyn över NATO-basen Bardufoss. Ägs av Murmansks politiska och militära elit.",
+              "info": "TV 2 och Dossier Center kartlade tre stugor med fri sikt mot Bardufoss flygstation och Hærens huvudkvarter. Vid publiceringen knöts ägarna till Murmansks borgmästare Igor Morar, en chef vid Atomflot och dottern till regionalpolitikern Viktor Sajgin. En av stugorna övergick senare till norskt ägande. Källstatus: fastighetsägandet och nätverkskopplingarna är en omfattande mediegranskning; någon offentlig dom om spioneri genom stugorna finns inte.",
               "highlight": true,
               "alert": true,
               "links": [
                 {
                   "text": "Dossier Center (2024)",
                   "url": "https://dossier.center/norway-ski/"
+                },
+                {
+                  "text": "TV 2:s metodrapport (PDF, 2025)",
+                  "url": "https://skup.no/sites/default/files/2025-03/skup_rapport-_russerhyttene_tv2.pdf"
                 },
                 {
                   "text": "TV 2 Norge",
@@ -1419,6 +1640,42 @@ const treeData = {
                       "info": "'Ryssar och norrmän är alltid vänner... oavsett den politiska situationen'. Hävdar privat bruk."
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "title": "MEDIEGRANSKNING: Jøkelfjord i Kvænangen – hus och lagerbyggnad",
+              "info": "TV 2 och Dossier Center uppger att den ryske affärsmannen Oleg Strazding äger ett hus och ett närings-/lagerbyggnadsobjekt i Jøkelfjord i Kvænangen. Området har använts som militärt övningsområde, bland annat under Nordic Response, och E6 är en strategiskt sårbar transportled. Granskningen dokumenterade att Strazding under flera år satt i styrelsen för Energogarant tillsammans med den tidigare FSB-vicechefen Viktor Komogorov och tidigare med Gennadij Krasnikov, senare medlem av Rysslands säkerhetsråd. Strazding bestred enligt rapporten att han hade kopplingar till FSB. Källstatus: ägandet och styrelsehistoriken är journalistiskt dokumenterade; detta är inte en dom om underrättelseverksamhet eller olagligt fastighetsköp.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "TV 2: Jøkelfjord-granskningen",
+                  "url": "https://www.tv2.no/spesialer/nyheter/russisk-eiendom-fjord-nato-strazding"
+                },
+                {
+                  "text": "TV 2:s metodrapport (PDF)",
+                  "url": "https://skup.no/sites/default/files/2025-03/skup_rapport-_russerhyttene_tv2.pdf"
+                },
+                {
+                  "text": "PST:s hotbedömning 2025 (PDF)",
+                  "url": "https://www.pst.no/globalassets/2025/nasjonal-trusselvurdering-2025/nasjonal-trusselvurdering-2025_no_web.pdf"
+                }
+              ]
+            },
+            {
+              "title": "MEDIEGRANSKNING: Gjesvær/Nordkapp – hus nära radarområdet",
+              "info": "TV 2 och Dossier Center uppger att Vladimir Sosnovskij äger ett hus i Gjesvær i Nordkapp, ett område med kystradar och planerad luftvarningsradar. Granskningen redovisade dokument som placerade honom på det ryska presidentkontorets lönelistor 2016, 2017 och 2019 och uppgifter om arbete för ryska utrikesministeriet i Bryssel och Strasbourg. Sosnovskij sade att han hade arbetat som inhyrd rörmokare åt UD och att han varit pensionär länge. Källstatus: ägandet är journalistiskt verifierat; yrkes- och maktkopplingarna är medieuppgifter med ett uttryckligt bemötande, inte en dom om spioneri.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "TV 2: Nordkapp-granskningen",
+                  "url": "https://www.tv2.no/spesialer/nyheter/russisk-eiendom-nordkapp"
+                },
+                {
+                  "text": "TV 2:s metodrapport (PDF)",
+                  "url": "https://skup.no/sites/default/files/2025-03/skup_rapport-_russerhyttene_tv2.pdf"
                 }
               ]
             },
@@ -2743,6 +3000,26 @@ const treeData = {
               ]
             },
             {
+              "title": "BEKRÄFTAT 2026: Ryska huset i Berlin – avtal uppsagt, fastigheten kvar i rysk ägo",
+              "info": "Tyskland sade i september 2026 upp kulturavtalet som ligger till grund för verksamheten i Ryska huset på Friedrichstrasse, drivet av den ryska statsmyndigheten Rossotrudnitjestvo. Åtgärden ingick i motåtgärder efter att Tyskland tillskrev Ryssland ett försök till drönarattack mot Leipzig/Halle-flygplatsen, vilket Ryssland förnekar. Enligt rapporteringen kan kulturverksamheten löpa till 2027 och själva byggnaden förbli rysk statsegendom enligt ett separat 99-årigt avtal från 2013. Källstatus: uppsägningen och ägarförhållandet är rapporterade som bekräftade; påståenden om att huset i sig fungerat som underrättelsetäckmantel är medie-/underrättelseuppgifter och inte offentligt rättsligt fastställda.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "Reuters: tyska åtgärder (1 sep 2026)",
+                  "url": "https://www.reuters.com/world/europe/germany-says-russia-responsible-drone-attack-leipzig-airport-2026-09-01/"
+                },
+                {
+                  "text": "AP: Ryska huset och konsulatstvisterna",
+                  "url": "https://apnews.com/article/f53afb72a33195d1383c2fe450557122"
+                },
+                {
+                  "text": "Welt: byggnaden och 99-årsavtalet",
+                  "url": "https://www.welt.de/article6a99445adde98c923617ff0f"
+                }
+              ]
+            },
+            {
               "title": "Nederländerna (Sanktioner & Beslag)",
               "children": [
                 {
@@ -2792,6 +3069,91 @@ const treeData = {
               ]
             },
             {
+              "title": "BEKRÄFTAT ÖVERTAGANDE 2024: Moskvas hus i Riga",
+              "info": "Lettlands parlament beslutade den 11 januari 2024 att fastigheten Moskvas hus på Marijas iela 7 skulle övergå till staten. Beslutet motiverades med nationell säkerhet och uppgifter från den lettiska säkerhetstjänsten om att byggnaden sedan starten hade stött verksamhet avsedd att utvidga Ryska federationens inflytande mot Lettlands intressen. Lagen anger att staten redan ägde marken under byggnaden. Källstatus: övertagandet och parlamentets motivering är officiella; formuleringen om inflytandeverksamhet är uttryckligen en myndighetsbedömning.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "Lettlands parlament (11 jan 2024)",
+                  "url": "https://www.saeima.lv/en/news/saeima-news/33942-in-case-of-mobilisation-foreign-nationals-/33028-saeima-moscow-house-will-become-public-property"
+                },
+                {
+                  "text": "Saeima: försäljningsintäkter till Ukraina",
+                  "url": "https://www.saeima.lv/en/news/saeima-news/29302-/33572-moscow-house-sales-revenues-earmarked-to-support-ukraine"
+                }
+              ]
+            },
+            {
+              "title": "DOMSTOLSBESLUT MEN KVAR 2026: Moskvas hus i Vilnius",
+              "info": "Det ofärdiga Moskvas hus nära Vilnius centrum planerades som ett rysk-litauiskt kultur- och affärscentrum efter ett initiativ 2004. Litauisk säkerhetstjänst beskrev 2017 hur ryska UD, ambassaden och Rossotrudnitjestvo aktivt drev projektet. Bygglovet ogiltigförklarades 2016; domstol gav senare byggnadsinspektionen rätt att riva huset. Rivningen var fortfarande inte verkställd 2026 och en ny tvist gällde om konkursboets borgenärer fick skriva av och överföra byggnaden till staden. Källstatus: bygglovs- och rivningsbesluten är bekräftade. Beskrivningen av projektets ryska inflytanderoll är en offentlig säkerhetstjänstbedömning, inte en brottmålsdom mot en fastighetsägare.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "LRT: domstol tillät rivning (2022)",
+                  "url": "https://www.lrt.lt/en/news-in-english/19/1842274/vilnius-to-demolish-moscow-house"
+                },
+                {
+                  "text": "LRT/BNS: ny ägar- och rivningstvist (4 jun 2026)",
+                  "url": "https://www.lrt.lt/ru/novosti/17/2950101/vil-nius-osporil-v-sude-reshenie-kreditorov-o-spisanii-doma-moskvy"
+                },
+                {
+                  "text": "Litauens säkerhetstjänst: hotbedömning 2017",
+                  "url": "https://www.vsd.lt/wp-content/uploads/2017/03/AKATSKT_DRAFT-3-31-EN-HQ.pdf"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTAT PLANSTOPP 2020: ryska ambassaden på Orwell Road, Dublin",
+              "info": "Irlands regering ändrade genom ett särskilt beslut delar av bygglovet för den ryska ambassadfastigheten på 184–186 Orwell Road. Den officiella ordern anger att den planerade utvecklingen sannolikt skulle skada statens säkerhet och försvar samt relationer med andra stater. RTE rapporterade att en större utbyggnad stoppades medan vissa konsulära och bostadsdelar tilläts. Den ryske ambassadören avvisade att utbyggnaden utgjorde ett säkerhetshot. Källstatus: planbeslutet och dess motivering är officiella; medieuppgifter om en tänkt spionbas är säkerhetsbedömningar, inte domstolsfastställda fakta.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "Irish Statute Book: S.I. 61/2020",
+                  "url": "https://www.irishstatutebook.ie/eli/2020/si/61/made/en/print"
+                },
+                {
+                  "text": "RTE Prime Time: bakgrunden",
+                  "url": "https://www.rte.ie/news/primetime/2022/0310/1285699-russian-embassy-orwell-road-irish-government/"
+                },
+                {
+                  "text": "Ambassadörens bemötande",
+                  "url": "https://www.independent.ie/irish-news/russian-ambassador-says-embassy-expansion-is-for-comfort-and-does-not-pose-security-threat/39279293.html"
+                }
+              ]
+            },
+            {
+              "title": "BEKRÄFTADE FRYSNINGAR 2022: tre italienska villaobjekt",
+              "info": "Italienska myndigheter frös i mars 2022 flera fastigheter som del av genomförandet av EU:s sanktioner: en lyxvilla i Costa Smeralda kopplad till Alisher Usmanov, fastigheter vid Comosjön kopplade till den statlige tv-profilen Vladimir Solovjov och Villa Lazzareschi i Lucca-provinsen kopplad till dumaledamoten Oleg Savtjenko. Frysning är inte konfiskation. Usmanov avfördes från EU:s sanktionslista den 22 september 2026, vilket innebär att objektets aktuella rättsläge måste kontrolleras separat; posten dokumenterar åtgärden 2022.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "ANSA: villor och yachter frysta (5 mar 2022)",
+                  "url": "https://www.ansa.it/sito/notizie/mondo/2022/03/05/ucraina-congelata-villa-di-usmanov-in-costa-smeralda_df80e4e8-1b75-4800-911e-3b242011e7be.html"
+                },
+                {
+                  "text": "Reuters: EU avlistar Usmanov (22 sep 2026)",
+                  "url": "https://www.reuters.com/world/eu-renews-russia-sanctions-drops-russian-billionaires-usmanov-fridman-2026-09-22/"
+                }
+              ],
+              "children": [
+                {
+                  "title": "Costa Smeralda, Sardinien – Usmanovkopplad villa",
+                  "info": "ANSA angav 2022 ett uppskattat värde om 17 miljoner euro. Status: historiskt fryst objekt; Usmanovs senare EU-avlistning gör att aktuell status inte ska antas utan nytt italienskt beslut."
+                },
+                {
+                  "title": "Comosjön – Solovjovkopplade fastigheter",
+                  "info": "ANSA angav ett samlat uppskattat värde om cirka 8 miljoner euro. Status: tillgångsfrysning enligt sanktionsregler, inte bevis för brott i själva fastighetsköpen."
+                },
+                {
+                  "title": "Villa Lazzareschi, Lucca – Savtjenkokoppling",
+                  "info": "Den historiska villan i Lucca-provinsen uppgavs ha frysts efter att Oleg Savtjenko sanktionslistats för sin roll i dumans erkännande av de ockuperade områdena Donetsk och Luhansk."
+                }
+              ]
+            },
+            {
               "title": "Estland: Strategiska objekt",
               "info": "Stopp för tredjelandsmedborgare att köpa mark nära kritisk infrastruktur och gräns.",
               "links": [
@@ -2822,6 +3184,29 @@ const treeData = {
                 {
                   "text": "El País (10 mar 2026)",
                   "url": "https://elpais.com/espana/2026-03-10/tres-detenidos-por-la-supuesta-venta-fraudulenta-de-cinco-mansiones-ocultas-en-mallorca-de-nikolai-kolesov-oligarca-ruso-cercano-a-putin.html"
+                }
+              ]
+            },
+            {
+              "title": "PÅGÅENDE UTREDNING: åtta Rivierafastigheter beslagtagna i Frankrike",
+              "info": "Fransk domstol beslutade 2024 om beslag av åtta fastigheter värderade till cirka 69,8 miljoner euro kring Grasse, Saint-Raphaël och Grimaud, samt bolagsandelar och två lyxbilar. Le Monde kopplade tillgångarna till de ryskfödda affärsmännen Ruslan Goryukhin och Mikhail Opengeym och beskrev finansiering genom bolag i Cypern och Brittiska Jungfruöarna. Åtgärden ingår i en preliminär utredning om misstänkt grov penningtvätt. Källstatus: beslagen är rapporterade som rättsligt beslutade, men utredningen är inte en fällande dom; de berördas jurister har avböjt eller bestritt delar av uppgifterna.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "Le Monde: beslag och offshorefinansiering (2024)",
+                  "url": "https://www.lemonde.fr/en/les-decodeurs/article/2024/10/14/villas-luxury-cars-worth-70-million-and-belonging-to-russian-oligarchs-seized-in-france_6729372_8.html"
+                }
+              ]
+            },
+            {
+              "title": "MEDIEGRANSKNING 2026: Batyr Agajevs fastighetsintressen i Luxemburg och Tyskland",
+              "info": "En granskning av OC Media uppgav att Batyr Agajev, bror till den ryske dumaledamoten Bekhan Agajev, äger 43,5 procent av Luxemburgbaserade Mimco Real Estate Holding och har ett större intresse i fondstrukturen Everest One. Granskningen beskrev fastighetsinvesteringar i bland annat Tyskland till betydande belopp. Källstatus: journalistiskt redovisade ägar- och bolagsuppgifter; posten innebär inte att investeringarna i sig är olagliga och har inte självständigt verifierats av denna sammanställning genom dom eller myndighetsbeslut.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "OC Media: granskningen (2026)",
+                  "url": "https://oc-media.org/investigation-finds-that-brother-of-chechen-mp-owns-real-estate-and-other-assets-in-europe/"
                 }
               ]
             },
@@ -2866,7 +3251,7 @@ const treeData = {
             },
             {
               "title": "Tyskland: Rottach-Egern och fastigheter kopplade till Alisher Usmanov",
-              "info": "Tyska myndigheter genomförde 2022 och 2023 tillslag mot fastigheter i Bayern som kopplats till den EU-sanktionerade oligarken Alisher Usmanov. En domstol bedömde senare 2022 års tillslag som olagliga. I december 2025 uppgav AP att en separat utredning om möjliga sanktionsbrott skulle läggas ned efter en betalning på 10 miljoner euro; betalningen var inte en bot. Usmanovs företrädare har bestridit hans ägarkopplingar. Källstatus: tillslagen är bekräftade, medan ägarkontroll och rättsläge har varit omstridda; posten ska inte beskrivas som slutlig konfiskation.",
+              "info": "Tyska myndigheter genomförde 2022 och 2023 tillslag mot fastigheter i Bayern som kopplats till Alisher Usmanov, som då stod på EU:s sanktionslista. En domstol bedömde senare 2022 års tillslag som olagliga. I december 2025 uppgav AP att en separat utredning om möjliga sanktionsbrott skulle läggas ned efter en betalning på 10 miljoner euro; betalningen var inte en bot. Den 22 september 2026 beslutade EU att avföra Usmanov från sanktionslistan. Hans företrädare har bestridit ägarkopplingarna. Källstatus: tillslagen och avlistningen är bekräftade, medan ägarkontroll och rättsläge har varit omstridda; posten ska inte beskrivas som slutlig konfiskation eller som ett aktuellt EU-sanktionsfall.",
               "links": [
                 {
                   "text": "Reuters (5 okt 2023)",
@@ -2875,6 +3260,10 @@ const treeData = {
                 {
                   "text": "Associated Press: rättsläge 2025",
                   "url": "https://apnews.com/article/fb34fa24678eb31d4e93f6e6c56443d7"
+                },
+                {
+                  "text": "Reuters: EU avlistar Usmanov (22 sep 2026)",
+                  "url": "https://www.reuters.com/world/eu-renews-russia-sanctions-drops-russian-billionaires-usmanov-fridman-2026-09-22/"
                 }
               ]
             }
@@ -3168,6 +3557,41 @@ const treeData = {
               ]
             },
             {
+              "title": "BEKRÄFTAT ÄGARSPÅR: Witanhurst i Highgate",
+              "info": "USA:s finansdepartement uppgav 2022 att den tidigare ryske senatorn och PhosAgro-grundaren Andrej Gurjev äger Witanhurst, Londons näst största privata residens efter Buckingham Palace. Ett senare skriftligt underlag till brittiska parlamentet beskrev ägandet som rapporterat genom BVI-bolaget Boradge Ltd och använde objektet som exempel på brister i transparensen kring sanktionstillgångar. Källstatus: den amerikanska myndigheten gör ett uttryckligt ägarpåstående; de exakta brittiska ägar- och frysningsförhållandena är komplexa och fastighetsägandet i sig är inte ett brott.",
+              "highlight": true,
+              "links": [
+                {
+                  "text": "U.S. Treasury (2 aug 2022)",
+                  "url": "https://home.treasury.gov/news/press-releases/jy0905"
+                },
+                {
+                  "text": "Brittiska parlamentet: skriftligt underlag",
+                  "url": "https://committees.parliament.uk/writtenevidence/129293/html/"
+                }
+              ]
+            },
+            {
+              "title": "AVBRUTET KÖP 2026: Grange-over-Sands Golf Club",
+              "info": "Yury Shamara och senare hans dotter Anastasia försökte enligt Financial Times köpa golfklubben för 800 000 pund. Marken ligger intill den enda kollektivtrafikförbindelsen till BAE Systems ubåtsvarv i Barrow-in-Furness och kärnavfallsanläggningen Sellafield. Cabinet Office begärde information och regeringen övervägde prövning enligt National Security and Investment Act; köparen drog sig därefter ur. Shamaras jurist sade att han inte kände till den strategiska närheten och att avsikten var att rädda en ekonomiskt pressad golfklubb. Källstatus: dokumenterat, avbrutet köp efter säkerhetsgranskning – ingen dom och inget bevis för fientlig avsikt.",
+              "highlight": true,
+              "alert": true,
+              "links": [
+                {
+                  "text": "Financial Times (24 apr 2026)",
+                  "url": "https://www.ft.com/content/19a3d7b1-c8a8-47b1-9f60-8901e6502241"
+                },
+                {
+                  "text": "RAIB: järnvägsavsnittets sårbarhet",
+                  "url": "https://www.gov.uk/raib-reports/report-02-slash-2025-derailment-of-a-passenger-train-at-grange-over-sands"
+                },
+                {
+                  "text": "GOV.UK: NSI-reglerna",
+                  "url": "https://www.gov.uk/guidance/national-security-and-investment-act-guidance-on-acquisitions"
+                }
+              ]
+            },
+            {
               "title": "Strukturellt problem: Offshore & Truster",
               "info": "Minst £64 miljarder i fastigheter döljs via otransparenta strukturer (truster/offshore).",
               "alert": true,
@@ -3187,6 +3611,69 @@ const treeData = {
                   "info": "Omöjligt att identifiera ägare nära skyddsobjekt utan läckor eller visselblåsare."
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "INTERNATIONELLA JÄMFÖRELSEFALL: statliga fastigheter, säkerhetsingripanden och bulvanupplägg",
+      "info": "Kontrollerbara fall utanför Norden och Europa som visar tre olika risktyper: diplomatfastighet nära politiskt centrum, statsägda rekreationsanläggningar som amerikanska myndigheter kopplat till underrättelseverksamhet samt bolagsbulvaner för utländska intressen. Fallen ska inte läsas som att varje rysk ägare eller medborgare utgör en säkerhetsrisk.",
+      "highlight": true,
+      "children": [
+        {
+          "title": "BEKRÄFTAT INGRIPANDE 2023–2025: Canberra – rysk ambassadtomt 300 meter från parlamentet",
+          "info": "Ryssland hade sedan 2008 ett arrende i Canberra för diplomat-, konsulära eller officiella ändamål. Australiens parlament avslutade arrendet genom Home Affairs Act 2023 och angav nationell säkerhet som skäl. High Court fastställde den 12 november 2025 lagens giltighet; domstolens målbeskrivning anger att tomten ligger cirka 300 meter från Parliament House. Källstatus: lagstiftning och dom är bekräftade. Avgörandet är inte ett konstaterande att en fientlig operation faktiskt bedrevs på tomten.",
+          "highlight": true,
+          "alert": true,
+          "links": [
+            {
+              "text": "High Court of Australia: [2025] HCA 44",
+              "url": "https://www.hcourt.gov.au/cases-and-judgments/judgments/judgments-1998-current/government-russian-federation-v-commonwealth-australia-0"
+            },
+            {
+              "text": "Australiens lag: Home Affairs Act 2023",
+              "url": "https://www.legislation.gov.au/C2023A00046/latest/text"
+            }
+          ]
+        },
+        {
+          "title": "OFFICIELL USA-ÅTGÄRD 2016: två ryska statsägda anläggningar i Maryland och New York",
+          "info": "USA nekade den 30 december 2016 rysk tillgång till två ryska statsägda rekreationsanläggningar, en i Maryland och en i New York. Åtgärden ingick i Obama-administrationens svar på rysk valpåverkan, cyberoperationer och trakasserier mot amerikansk diplomatisk personal. Regeringen beskrev anläggningarna som använda för underrättelserelaterade ändamål. Källstatus: den amerikanska åtgärden och dess officiella attribuering är bekräftade; formuleringen är USA:s myndighetsbedömning och inte en fristående domstolsprövning av verksamheten på varje fastighet.",
+          "highlight": true,
+          "children": [
+            {
+              "title": "Pioneer Point, Maryland",
+              "info": "Rysk statsägd anläggning på Marylands Eastern Shore. Kartpunkten är en områdespunkt och ska inte användas som exakt fastighetsgräns."
+            },
+            {
+              "title": "Killenworth, Glen Cove, New York",
+              "info": "Rysk statsägd anläggning på Long Island. Kartpunkten är en områdespunkt och ska inte användas som exakt fastighetsgräns."
+            }
+          ],
+          "links": [
+            {
+              "text": "Vita huset: faktablad 29 dec 2016",
+              "url": "https://obamawhitehouse.archives.gov/the-press-office/2016/12/29/fact-sheet-actions-response-russian-malicious-cyber-activity-and/"
+            },
+            {
+              "text": "Vita huset: presidentens uttalande",
+              "url": "https://obamawhitehouse.archives.gov/the-press-office/2016/12/29/statement-president-actions-response-russian-malicious-cyber-activity"
+            }
+          ]
+        },
+        {
+          "title": "BROTTUTREDNING 2024: Phuket – bolagsbulvaner för främst ryska utlänningar",
+          "info": "Thailändsk polis uppgav 2024 att ett nätverk hjälpt utlänningar, huvudsakligen ryssar, att stanna och bedriva verksamhet långsiktigt genom skenbolag och thailändska bulvaner. AP rapporterade att 98 utlänningar – däribland 68 ryssar – och 37 thailändare hade anklagats, medan minst 50 utlänningar då formellt hade delgivits åtal. En rysk och en thailändsk kvinna pekades ut som centrala organisatörer; den thailändska kvinnan stod som chef eller delägare i över 270 bolag. Källstatus: myndighetsutredning och anklagelser, inte slutliga domar. Fallet visar ett affärs- och migrationsupplägg; ingen koppling till den ryska staten är belagd i källorna.",
+          "highlight": true,
+          "links": [
+            {
+              "text": "Associated Press (31 maj 2024)",
+              "url": "https://apnews.com/article/bb6b289d25f24272b3949ca38f2ef78f"
+            },
+            {
+              "text": "Thailands DSI: tillslag mot bulvanbolag",
+              "url": "https://www.dsi.go.th/en/Detail/16e196dbad4319443160247864b0fd22"
             }
           ]
         }
@@ -3328,6 +3815,32 @@ const treeData = {
                   "info": "Algirdas Paleckis (Litauen), Yuri Zaitsev & Yevgeny Osipov (Lettland)."
                 }
               ]
+            }
+          ]
+        },
+        {
+          "title": "POLIS- OCH MEDIEUPPGIFT: Villa Elena på Halkidiki – möjlig GRU-stödpunkt",
+          "info": "Villa Elena på Halkidiki köptes 2009 av Nikolaj och Elena Šapošnikov och drevs som hotell. Tjeckisk polis har misstänkt Elena Šapošniková för spionage i anslutning till Vrběticeutredningen; hon har förnekat att hon samarbetat med GRU. The Insider redovisade köpehandlingar, rese- och telefondata samt tjeckiska utredningsuppgifter och beskrev villan som en möjlig säker plats för medlemmar av GRU-enhet 29155. Källstatus: fastighetsköpet och den tjeckiska polisutredningen är dokumenterade; uppgiften att villan fungerade som GRU-stödpunkt är en journalistisk slutsats byggd på utrednings- och resedata, inte en lagakraftvunnen dom.",
+          "highlight": true,
+          "alert": true,
+          "links": [
+            {
+              "text": "Tjeckisk TV: polisens misstanke och bemötande",
+              "url": "https://ct24.ceskatelevize.cz/clanek/domaci/posilala-informace-o-zakazkach-policie-podezriva-saposnikovou-ze-spionaze-kvuli-vrbeticim-349287"
+            },
+            {
+              "text": "The Insider: dokument- och resedata",
+              "url": "https://www.theins.org/en/politics/271205"
+            }
+          ],
+          "children": [
+            {
+              "title": "Fastighetsspåret",
+              "info": "The Insider publicerade ett notarieunderlag med köpeskilling 275 292 euro och uppgav att familjen flyttade in 2010. Kartpunkten i sidan visar Halkidikiområdet och är inte en exakt adress."
+            },
+            {
+              "title": "GRU-spåret",
+              "info": "Granskningen uppgav att Andrej Averjanov och flera andra från enhet 29155 reste till Thessaloniki eller området 2012–2018. Närvaro i regionen är inte ensam bevisning för vistelse i villan; slutsatsen bygger på den samlade dokumentationen."
             }
           ]
         },
@@ -4166,6 +4679,32 @@ const treeData = {
                   "url": "https://www.euronews.com/2025/07/07/unorthodox-intelligence-operations-how-russia-is-using-its-churches-abroad"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "title": "BIS-UPPGIFT 2025: Karlovy Vary – kyrka, prästgård och Villa Sofia",
+          "info": "Tjeckisk TV rapporterade med hänvisning till säkerhetstjänsten BIS och andra säkerhetskällor att ryska underrättelsepersoner möttes i den rysk-ortodoxa prästgården i Karlovy Vary och att platsen kunde användas för att förbereda aktiviteter i andra EU-länder. Församlingen är ett podvorje under Moskvapatriarkatet. Kyrkan började 2025 föra över egendom till sin ungerska gren; bland objekten nämndes kyrkan, prästgården och den närbelägna Villa Sofia, värderad till tiotals miljoner tjeckiska kronor. Källstatus: fastighetsöverföringen och myndighetsåtgärderna mot den ansvarige prästen är dokumenterade; underrättelseanvändningen är en attribuerad BIS-/säkerhetsuppgift, inte en dom.",
+          "highlight": true,
+          "alert": true,
+          "links": [
+            {
+              "text": "Tjeckisk TV: BIS och fastighetsöverföringen",
+              "url": "https://ct24.ceskatelevize.cz/clanek/domaci/ruske-pravoslavi-ve-varech-vyuzivaly-tajne-sluzby-tvrdi-bis-358883"
+            },
+            {
+              "text": "Tjeckiens inrikesministerium: rysk påverkan",
+              "url": "https://mv.gov.cz/chh/priklady-kauz-spojenych-s-ruskym-vlivovym-pusobenim-v-cr-za-posledni-dekadu"
+            }
+          ],
+          "children": [
+            {
+              "title": "Nikolaj Liščenjuk",
+              "info": "Tjeckiska myndigheter upphävde hans permanenta uppehållstillstånd och förklarade honom 2024 persona non grata med hänvisning till en välgrundad bedömning att hans aktiviteter kunde hota landet genom stöd till separatistiska strukturer i EU."
+            },
+            {
+              "title": "Evidensgräns",
+              "info": "Kyrklig anknytning eller ett fastighetsinnehav är inte i sig bevis för underrättelseverksamhet. Här bygger säkerhetsklassningen på uttryckliga uppgifter från BIS och tjeckiska myndigheter."
             }
           ]
         },
@@ -6926,7 +7465,7 @@ const strategicProperties = [
       69.025,
       18.5255
     ],
-    "info": "Ägs av Morar, Saigin & Timofeev. 360m höjd med direkt insyn över NATO-basen."
+    "info": "TV 2 dokumenterade tre ryskägda stugor med utsikt mot Bardufossområdet. En stuga övergick senare till norsk ägare; markören är därför ett historiskt områdesspår, inte ett påstående om att alla tre fortfarande är ryskägda."
   },
   {
     "name": "Bardufoss Flygstation (NATO)",
@@ -7287,6 +7826,102 @@ const strategicProperties = [
       14.2146
     ],
     "info": "Ryskt statsägt fartyg taget i rättsligt beslag på Svalbard i september 2026. Kartpunkten visar Barentsburg."
+  },
+  {
+    "name": "Sweden House (Sankt Petersburg)",
+    "coords": [
+      59.9343,
+      30.3351
+    ],
+    "info": "Ryskt aktiebolag: Ladoga Holding/CA Fastigheter 49 %, svenska staten 36 % och Sankt Petersburgs stad 15 %. Områdespunkt i centrala staden."
+  },
+  {
+    "name": "Ryska huset (Berlin)",
+    "coords": [
+      52.5119,
+      13.3896
+    ],
+    "info": "Rysk statsfastighet på Friedrichstrasse. Tyskland sade 2026 upp kulturavtalet; separat avtal innebär enligt rapporteringen fortsatt ryskt ägande."
+  },
+  {
+    "name": "Karlovy Vary: kyrka, prästgård och Villa Sofia",
+    "coords": [
+      50.2304,
+      12.8712
+    ],
+    "info": "Fastighetskluster knutet till Moskvapatriarkatet och överfört till dess ungerska gren. BIS-uppgifter om underrättelsemöten; områdespunkt."
+  },
+  {
+    "name": "Jøkelfjord/Kvænangen: Strazding-objekt",
+    "coords": [
+      69.83,
+      21.98
+    ],
+    "info": "TV 2/Dossier Center dokumenterade ett hus och en lager-/näringsbyggnad ägda av Oleg Strazding. Styrelsekopplingar till tidigare ryska säkerhetsfunktionärer är medieuppgifter; Strazding förnekade FSB-koppling. Områdespunkt."
+  },
+  {
+    "name": "Gjesvær/Nordkapp: Sosnovskij-hus",
+    "coords": [
+      71.1,
+      25.38
+    ],
+    "info": "TV 2/Dossier Center dokumenterade ett ryskägt hus i ett radarpräglat område och rapporterade tidigare anställningsspår till ryska statsorgan. Ägaren uppgav att han varit inhyrd rörmokare och pensionär. Områdespunkt."
+  },
+  {
+    "name": "Ryska ambassaden, Orwell Road (Dublin)",
+    "coords": [
+      53.314,
+      -6.258
+    ],
+    "info": "Irland stoppade 2020 delar av en planerad utbyggnad med hänvisning till statens säkerhet och försvar. Beslutet avser byggplaner, inte ett fastställt brott."
+  },
+  {
+    "name": "Costa Smeralda: Usmanov-kopplad villa",
+    "coords": [
+      41.08,
+      9.39
+    ],
+    "info": "Italienska myndigheter frös 2022 en villa med rapporterad koppling till Alisjer Usmanov. Frysning är inte konfiskation; kartpunkten visar området."
+  },
+  {
+    "name": "Comosjön: Solovjov-kopplade fastigheter",
+    "coords": [
+      45.99,
+      9.26
+    ],
+    "info": "Italienska myndigheter frös 2022 fastigheter med rapporterad koppling till Vladimir Solovjov. Frysning är inte konfiskation; kartpunkten visar Comosjöområdet."
+  },
+  {
+    "name": "Villa Lazzareschi, Lucca",
+    "coords": [
+      43.84,
+      10.5
+    ],
+    "info": "Italienska myndigheter frös 2022 villan med rapporterad koppling till Oleg Savtjenko. Frysning är inte konfiskation; områdespunkt."
+  },
+  {
+    "name": "Witanhurst, Highgate",
+    "coords": [
+      51.571,
+      -0.178
+    ],
+    "info": "USA:s finansdepartement uppgav 2022 att Andrej Gurjev äger residenset. Brittiska underlag beskriver en BVI-bolagsstruktur; ägandet i sig är inte ett brott."
+  },
+  {
+    "name": "Pioneer Point, Maryland",
+    "coords": [
+      39.05,
+      -76.07
+    ],
+    "info": "Rysk statsägd anläggning som USA stängde för rysk tillgång 2016. USA kopplade åtgärden till underrättelserelaterad användning; områdespunkt."
+  },
+  {
+    "name": "Killenworth, Glen Cove",
+    "coords": [
+      40.87,
+      -73.63
+    ],
+    "info": "Rysk statsägd anläggning som USA stängde för rysk tillgång 2016. USA kopplade åtgärden till underrättelserelaterad användning; områdespunkt."
   }
 ];
 
@@ -7314,7 +7949,7 @@ const blockedProperties = [
       60.3019,
       22.3015
     ],
-    "info": "Köp blockerat 2024. Strategisk skärgårdsposition nära farleder."
+    "info": "Finlands försvarsministerium stoppade 2024 en fastighetsaffär i Pargas (Parainen). Kartpunkten visar kommunen, inte exakt objekt."
   },
   {
     "name": "Finland: Sysmä",
@@ -7338,7 +7973,7 @@ const blockedProperties = [
       61.8,
       22.4
     ],
-    "info": "Nära Niinisalo garnison. Köp stoppat."
+    "info": "Finlands försvarsministerium stoppade 2022 ett ryskt köp av ett tidigare äldreboende nära Niinisalo garnison. Kartpunkten visar kommunen."
   },
   {
     "name": "Estland: Narva (Ida-Viru)",
@@ -7379,6 +8014,62 @@ const blockedProperties = [
       11.582
     ],
     "info": "Tre lägenheter kopplade till sanktionerad rysk dumaledamot beslagtogs 2022. Kartpunkten visar München, inte adresserna."
+  },
+  {
+    "name": "Franska rivieran: åtta beslagtagna fastigheter",
+    "coords": [
+      43.6584,
+      6.9222
+    ],
+    "info": "Åtta fastigheter kring Grasse, Saint-Raphaël och Grimaud beslagtogs inom en pågående utredning om misstänkt grov penningtvätt. Punkten visar Grasse, inte en exakt adress."
+  },
+  {
+    "name": "Finland: Kokemäki – fem stoppade objekt",
+    "coords": [
+      61.256,
+      22.356
+    ],
+    "info": "Finlands försvarsministerium stoppade 2024 fem fastighetsförvärv i Kokemäki. Kartpunkten visar kommunen, inte objekten."
+  },
+  {
+    "name": "Finland: Sibbo – fyra stoppade affärer 2026",
+    "coords": [
+      60.377,
+      25.269
+    ],
+    "info": "Finlands försvarsministerium stoppade 2026 fyra fastighetsaffärer i Sibbo. Kartpunkten visar kommunen, inte objekten."
+  },
+  {
+    "name": "Grange-over-Sands Golf Club",
+    "coords": [
+      54.19,
+      -2.91
+    ],
+    "info": "Ett ryskt köp för 800 000 pund avbröts 2026 sedan brittiska Cabinet Office begärt information och en säkerhetsprövning övervägts. Ingen dom eller fientlig avsikt är fastställd."
+  },
+  {
+    "name": "Moskvas hus, Riga",
+    "coords": [
+      56.95,
+      24.12
+    ],
+    "info": "Lettland övertog 2024 den ryska statsfastigheten genom lag med hänvisning till nationell säkerhet. Kartpunkten är en områdespunkt i Riga."
+  },
+  {
+    "name": "Moskvas hus, Vilnius",
+    "coords": [
+      54.697,
+      25.288
+    ],
+    "info": "Bygglovet ogiltigförklarades och domstol har tillåtit rivning, men den ofärdiga byggnaden stod kvar och var föremål för ny rättstvist 2026. Områdespunkt."
+  },
+  {
+    "name": "Canberra: stoppad rysk ambassadtomt",
+    "coords": [
+      -35.307,
+      149.126
+    ],
+    "info": "Australien avslutade 2023 Rysslands arrende cirka 300 meter från Parliament House. High Court fastställde lagens giltighet 2025; beslutet är inte bevis för att en fientlig operation bedrevs där."
   }
 ];
 
@@ -8038,7 +8729,39 @@ const warningProperties = [
       47.689,
       11.77
     ],
-    "info": "Tillslag och omstridda ägarkopplingar; rättsläget har ändrats och posten är inte en slutlig konfiskation."
+    "info": "Tillslag och omstridda ägarkopplingar; rättsläget har ändrats, Usmanov avlistades av EU den 22 september 2026 och posten är inte en slutlig konfiskation."
+  },
+  {
+    "name": "Villa Elena (Halkidiki)",
+    "coords": [
+      39.947,
+      23.527
+    ],
+    "info": "Journalistiskt utpekad möjlig stödpunkt för GRU-enhet 29155; tjeckisk polisutredning och bemötande finns. Punkten visar Halkidikiområdet, inte exakt adress."
+  },
+  {
+    "name": "Furuvik: incident nära Saab-vd",
+    "coords": [
+      60.65,
+      17.33
+    ],
+    "info": "Ryskt par tältade nära en stuga där Saabs vd vistades. Brottsmisstanken avskrevs; ingen rysk stats- eller underrättelsekoppling är belagd. Områdespunkt."
+  },
+  {
+    "name": "Luxemburg/Tyskland: Agajev-fastighetsintressen",
+    "coords": [
+      49.6116,
+      6.1319
+    ],
+    "info": "OC Media-granskning om ägarintressen i Mimco Real Estate Holding och Everest One. Punkten visar Luxemburg; investeringarna är inte i sig uppgivna som olagliga."
+  },
+  {
+    "name": "Phuket: misstänkt ryskt bulvanbolagsnätverk",
+    "coords": [
+      7.88,
+      98.39
+    ],
+    "info": "Thailändsk polis uppgav 2024 att ett nätverk hjälpt främst ryska utlänningar genom skenbolag och thailändska bulvaner. Pågående brottsspår, inte slutliga domar och ingen belagd rysk statskoppling. Områdespunkt."
   }
 ];
 
@@ -8053,6 +8776,24 @@ function setView(viewName) {
     if (viewName === 'map') {
         initMap(); // Rita kartan när den visas
     }
+}
+
+// FOI-registret använder webbläsarens inbyggda <details>-tillstånd.
+// Panelen är ett absolut positionerat lager och påverkar aldrig kartans bredd.
+function syncFOIPanelState() {
+    const panel = document.getElementById('foi-panel');
+    const button = document.getElementById('foi-toggle');
+    const isOpen = panel.open;
+
+    panel.setAttribute('aria-expanded', String(isOpen));
+    button.setAttribute('aria-expanded', String(isOpen));
+    button.textContent = isOpen ? 'FOI-register (128) ×' : 'FOI-register (128) ▸';
+}
+
+function toggleFOIPanel(forceOpen) {
+    const panel = document.getElementById('foi-panel');
+    panel.open = typeof forceOpen === 'boolean' ? forceOpen : !panel.open;
+    syncFOIPanelState();
 }
 
 // --- RITA TRÄDET (HORISONTELLT) ---
@@ -8218,12 +8959,28 @@ function initMap() {
     // Centrera på södra Sverige
     map = L.map('map-container').setView([59.0, 16.0], 5);
 
-    // Gratis kartlager (OpenStreetMap)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    // OpenStreetMaps standardlager kräver ingen API-nyckel.
+    // Om kartplattorna blockeras av nätverket ligger markörer och den neutrala reservbakgrunden kvar.
+    const mapStatus = document.getElementById('map-status');
+    let tileLoaded = false;
+    const baseTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        subdomains: 'abcd',
         maxZoom: 19
-    }).addTo(map);
+    });
+    baseTiles.on('tileload', () => {
+        if (!tileLoaded) {
+            tileLoaded = true;
+            mapStatus.classList.remove('error');
+            mapStatus.textContent = 'OpenStreetMap · ingen API-nyckel krävs';
+        }
+    });
+    baseTiles.on('tileerror', () => {
+        if (!tileLoaded) {
+            mapStatus.classList.add('error');
+            mapStatus.textContent = 'Kartplattor kunde inte hämtas. Markörer och reservbakgrund visas ändå.';
+        }
+    });
+    baseTiles.addTo(map);
 
     // --- SKAPA LAGERGRUPPER & LÄGG TILL PÅ KARTAN ---
     // Vi lägger till alla lager direkt så de syns när sidan laddas
@@ -8277,7 +9034,7 @@ function initMap() {
         }
     });
 
-    // 2. LÄGG TILL KÖPTA FASTIGHETER (Röda ringar)
+    // 2. LÄGG TILL FASTIGHETER OCH FASTA OBJEKT (Röda ringar)
     strategicProperties.forEach(prop => {
         const ring = L.circleMarker(prop.coords, {
             radius: 10,
@@ -8469,4 +9226,3 @@ renderFOI(foiList);
 </script>
 </body>
 </html>
-

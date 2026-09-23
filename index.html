@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ryska Intressen & Nätverk – Version 3</title>
+  <title>Ryska Intressen & Nätverk – Version 4 med graf</title>
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   
@@ -12,8 +12,10 @@
     /* --- LAYOUT & BAS --- */
     body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 20; }
+    header { background: #fff; border-bottom: 1px solid #ddd; padding: 0 20px; height: 50px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 20; }
     h1 { margin: 0; font-size: 18px; color: #2c3e50; font-weight: 600; }
+    .header-main { display: flex; align-items: center; min-width: 0; }
+    .view-nav { display: flex; align-items: center; margin-left: 20px; }
     
     .view-btn { padding: 6px 12px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; margin-left: 10px; }
     .view-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
@@ -57,6 +59,105 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.12);
     }
     .map-status.error { border-color: #d9a441; background: rgba(255,248,225,.96); color: #6f4b00; }
+
+    /* Obsidian-liknande strukturgraf. Canvas kräver varken API eller externt grafbibliotek. */
+    #graph-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(42,61,78,.42), transparent 48%),
+        #0e151c;
+    }
+    #graph-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      user-select: none;
+    }
+    .graph-toolbar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: calc(100% - 150px);
+      padding: 7px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 7px;
+      background: rgba(14,21,28,.92);
+      color: #e9f0f5;
+      box-shadow: 0 3px 12px rgba(0,0,0,.28);
+      backdrop-filter: blur(5px);
+    }
+    .graph-toolbar input,
+    .graph-toolbar select,
+    .graph-toolbar button {
+      min-height: 34px;
+      box-sizing: border-box;
+      border: 1px solid #52616d;
+      border-radius: 4px;
+      background: #18232c;
+      color: #edf4f8;
+      font: inherit;
+      font-size: 12px;
+    }
+    .graph-toolbar input { width: min(270px, 35vw); padding: 7px 9px; }
+    .graph-toolbar input::placeholder { color: #aebac3; }
+    .graph-toolbar select { max-width: 230px; padding: 6px 28px 6px 8px; }
+    .graph-toolbar button { padding: 6px 10px; cursor: pointer; }
+    .graph-toolbar button:hover { background: #263540; }
+    .graph-count { font-size: 11px; color: #bdc9d1; white-space: nowrap; }
+    .graph-caveat {
+      flex-basis: 100%;
+      color: #9eacb6;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+    .graph-hint {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      z-index: 700;
+      max-width: calc(100% - 20px);
+      padding: 6px 9px;
+      border-radius: 5px;
+      background: rgba(14,21,28,.84);
+      color: #bac7cf;
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .graph-detail {
+      position: absolute;
+      top: 56px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 1000;
+      display: none;
+      width: min(370px, calc(100% - 20px));
+      box-sizing: border-box;
+      overflow-y: auto;
+      padding: 15px;
+      border: 1px solid #b8c2c9;
+      border-radius: 7px;
+      background: rgba(255,255,255,.98);
+      color: #25323a;
+      box-shadow: 0 8px 26px rgba(0,0,0,.35);
+    }
+    .graph-detail.open { display: block; }
+    .graph-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .graph-detail h2 { margin: 0; font-size: 16px; line-height: 1.25; }
+    .graph-detail-close { flex: 0 0 auto; border: 0; background: transparent; color: #44515a; font-size: 22px; line-height: 1; cursor: pointer; }
+    .graph-detail-meta { margin: 8px 0; color: #6d7880; font-size: 11px; }
+    .graph-detail-info { margin: 0; font-size: 13px; line-height: 1.48; white-space: pre-wrap; }
+    .graph-detail-links { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
+    .graph-detail-links a { color: #065ea8; font-size: 12px; overflow-wrap: anywhere; }
 
     /*
       FOI-registret är ett fristående <details>-lager. Det är stängt från start,
@@ -301,32 +402,74 @@
     .sni-F { background: #e67e22; } .sni-G { background: #27ae60; } .sni-K { background: #8e44ad; } .sni-M { background: #2980b9; } .sni-def { background: #95a5a6; }
 
     @media (max-width: 768px) {
-      header { padding: 0 10px; }
-      h1 { font-size: 15px; }
+      body { height: 100dvh; overflow: hidden; }
+      header { position: relative; flex: 0 0 88px; height: 88px; padding: 7px 8px; align-items: stretch; }
+      .header-main { width: 100%; flex-direction: column; align-items: stretch; }
+      h1 { min-height: 22px; padding-right: 142px; font-size: 15px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .view-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; margin: 7px 0 0; }
       .header-date { display: none; }
-      .view-btn { padding: 5px 8px; margin-left: 5px; }
-      .foi-toggle-btn { padding: 5px 8px; font-size: 11px; }
-      #main-container { flex-direction: column; overflow: hidden; }
+      .header-meta { position: absolute; top: 6px; right: 8px; }
+      .view-btn { min-height: 38px; padding: 7px 5px; margin: 0; font-size: 12px; }
+      .foi-toggle-btn { min-height: 34px; padding: 5px 8px; font-size: 11px; }
+      #main-container { height: calc(100dvh - 88px); flex-direction: column; overflow: hidden; }
       #left-panel { width: 100%; min-width: 0; height: 100%; }
       #foi-panel { top: 8px; right: 8px; max-width: calc(100vw - 16px); }
+      #foi-panel:not([open]) { pointer-events: none; }
+      #foi-panel:not([open]) > summary { display: none; }
       #foi-panel[open] { bottom: 8px; width: calc(100vw - 16px); }
+      #foi-panel > summary { min-height: 40px; }
+      .graph-toolbar {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 5px;
+        max-width: none;
+        padding: 6px;
+      }
+      .graph-toolbar input { grid-column: 1 / -1; width: 100%; min-width: 0; font-size: 16px; }
+      .graph-toolbar select { width: 100%; min-width: 0; max-width: none; font-size: 16px; }
+      .graph-count { grid-column: 1 / -1; }
+      .graph-caveat { display: none; }
+      .graph-hint { left: 6px; right: 6px; bottom: 6px; max-width: none; text-align: center; }
+      .graph-detail {
+        top: auto;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        width: auto;
+        max-height: 48%;
+        padding: 13px;
+        border-radius: 9px;
+      }
+      .graph-detail h2 { font-size: 15px; }
+      .graph-detail-info { font-size: 13px; }
+      .map-legend { right: 6px; bottom: 42px; max-height: calc(100% - 60px); overflow-y: auto; }
+      .map-status { left: 6px; right: 6px; bottom: 6px; max-width: none; }
+      #searchFOI { font-size: 16px; }
       .tree { margin-left: 0; }
-      body { overflow: hidden; }
+      #tree-container { padding: 52px 18px 30px; }
+      .content { min-width: 150px; max-width: min(280px, calc(100vw - 80px)); }
+      .children { margin-left: 10px; }
+      .children .node { padding-left: 10px; }
+      .children .node::before { width: 10px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex; align-items:center;">
+  <div class="header-main">
     <h1>Ryska Intressen & Nätverk</h1>
-    <div style="margin-left:20px;">
+    <nav class="view-nav" aria-label="Vy">
         <button class="view-btn active" onclick="setView('tree')">Mindmap</button>
+        <button class="view-btn" onclick="setView('graph')">Graf</button>
         <button class="view-btn" onclick="setView('map')">Karta</button>
-    </div>
+    </nav>
   </div>
   <div class="header-meta">
-    <div class="header-date" style="font-size:12px; color:#666;">Version 3 · OpenStreetMap · Uppdaterad 23 september 2026</div>
+    <div class="header-date" style="font-size:12px; color:#666;">Version 4 · Graf + OpenStreetMap · Uppdaterad 23 september 2026</div>
     <button id="foi-toggle" class="foi-toggle-btn" type="button" aria-expanded="false" aria-controls="foi-panel" onclick="toggleFOIPanel()">FOI-register (128) ▸</button>
   </div>
 </header>
@@ -422,6 +565,38 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="view-graph" class="view-section">
+      <div id="graph-container">
+        <canvas id="graph-canvas" role="img" aria-label="Interaktiv graf över sidans personer, bolag, platser, fastigheter och händelser"></canvas>
+        <div class="graph-toolbar" aria-label="Grafkontroller">
+          <input id="graph-search" type="search" placeholder="Sök person, bolag, plats eller fall…" aria-label="Sök i grafen">
+          <select id="graph-filter" aria-label="Filtrera grafen">
+            <option value="all">Alla noder</option>
+            <option value="property">Fastighetsrelaterat</option>
+            <option value="confirmed">Bekräftat / myndighetsåtgärd</option>
+            <option value="indication">Indikation / medieuppgift</option>
+            <option value="alert">Varning / risk</option>
+          </select>
+          <select id="graph-cluster" aria-label="Välj huvudområde">
+            <option value="all">Alla huvudområden</option>
+          </select>
+          <button id="graph-reset" type="button">Återställ</button>
+          <span id="graph-count" class="graph-count" aria-live="polite"></span>
+          <span class="graph-caveat">Linjerna visar sidans struktur och källmässiga gruppering – inte i sig bevisade operativa samband.</span>
+        </div>
+        <div class="graph-hint">Dra för att flytta · rulla eller nyp för att zooma · tryck på en nod för detaljer</div>
+        <aside id="graph-detail" class="graph-detail" aria-live="polite" aria-label="Vald nod">
+          <div class="graph-detail-head">
+            <h2 id="graph-detail-title"></h2>
+            <button id="graph-detail-close" class="graph-detail-close" type="button" aria-label="Stäng detaljer">×</button>
+          </div>
+          <div id="graph-detail-meta" class="graph-detail-meta"></div>
+          <p id="graph-detail-info" class="graph-detail-info"></p>
+          <div id="graph-detail-links" class="graph-detail-links"></div>
+        </aside>
+      </div>
     </div>
 
   </div>
@@ -8776,6 +8951,638 @@ function setView(viewName) {
     if (viewName === 'map') {
         initMap(); // Rita kartan när den visas
     }
+    if (viewName === 'graph') {
+        requestAnimationFrame(initGraph);
+    }
+}
+
+// --- INTERAKTIV STRUKTURGRAF (CANVAS, UTAN API/EXTERNT GRAFBIBLIOTEK) ---
+const graphState = {
+    initialized: false,
+    canvas: null,
+    ctx: null,
+    nodes: [],
+    edges: [],
+    visibleNodes: [],
+    visibleSet: new Set(),
+    width: 0,
+    height: 0,
+    dpr: 1,
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    selected: null,
+    hovered: null,
+    search: '',
+    filter: 'all',
+    cluster: 'all',
+    pointers: new Map(),
+    drag: null,
+    pinch: null,
+    moved: false,
+    resizeObserver: null
+};
+
+const graphColors = [
+    '#67b7dc', '#f6a85f', '#8dd17e', '#d98ed3', '#ff7f7f',
+    '#b9a5ff', '#68d5c3', '#f3d36a', '#91a8d0', '#e995b4'
+];
+
+function graphHash(text) {
+    let hash = 2166136261;
+    for (let i = 0; i < text.length; i++) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+}
+
+function graphClassify(title, info, alert) {
+    const text = `${title || ''} ${info || ''}`.toLocaleLowerCase('sv');
+    return {
+        property: /(fastighet|villa|bostad|hus\b|tomt|mark\b|lägenhet|stuga|residens|ambassad|kyrka|hotell|byggnad|arena|golf|hamn|gård|compound|property)/i.test(text),
+        confirmed: /(bekräftat|domstolsbeslut|officiell|övertagande|blockerat|beslag|fryst|stoppad|stoppat|avbrutet köp|åtal|dömd|myndighetsåtgärd)/i.test(text),
+        indication: /(misstänkt|mediegranskning|medieuppgift|indikation|möjlig|obekräft|pågående utredning|risk|utpekad|uppges)/i.test(text),
+        alert: Boolean(alert)
+    };
+}
+
+function buildGraphData() {
+    const nodes = [];
+    const edges = [];
+
+    function walk(item, parentId, depth, clusterIndex, breadcrumb) {
+        const id = nodes.length;
+        const title = item.title || 'Namnlös nod';
+        const info = item.info || '';
+        const nodeCluster = depth === 0 ? -1 : clusterIndex;
+        const flags = graphClassify(title, info, item.alert);
+        const node = {
+            id,
+            parentId,
+            depth,
+            cluster: nodeCluster,
+            title,
+            info,
+            links: Array.isArray(item.links) ? item.links : [],
+            alert: Boolean(item.alert),
+            highlight: Boolean(item.highlight),
+            breadcrumb: [...breadcrumb, title],
+            text: `${title} ${info}`.toLocaleLowerCase('sv'),
+            flags,
+            x: 0,
+            y: 0,
+            visible: true,
+            searchMatch: false,
+            matchRank: -1
+        };
+        nodes.push(node);
+        if (parentId !== null) edges.push({ source: parentId, target: id });
+
+        const children = Array.isArray(item.children) ? item.children : [];
+        children.forEach((child, childIndex) => {
+            const nextCluster = depth === 0 ? childIndex : clusterIndex;
+            walk(child, id, depth + 1, nextCluster, node.breadcrumb);
+        });
+    }
+
+    walk(treeData, null, 0, -1, []);
+
+    const topNodes = nodes.filter(node => node.depth === 1);
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+    const orbit = Math.max(560, 320 + topNodes.length * 45);
+
+    nodes[0].x = 0;
+    nodes[0].y = 0;
+
+    topNodes.forEach((topNode, clusterIndex) => {
+        const angle = -Math.PI / 2 + (Math.PI * 2 * clusterIndex / Math.max(1, topNodes.length));
+        const clusterNodes = nodes.filter(node => node.cluster === clusterIndex);
+        const sizeFactor = Math.min(130, Math.sqrt(clusterNodes.length) * 8);
+        const centerRadius = orbit + sizeFactor;
+        const centerX = Math.cos(angle) * centerRadius;
+        const centerY = Math.sin(angle) * centerRadius;
+
+        topNode.x = centerX;
+        topNode.y = centerY;
+
+        clusterNodes.filter(node => node.depth > 1).forEach((node, index) => {
+            const jitter = ((graphHash(node.title) % 1000) / 1000 - .5) * .35;
+            const localAngle = angle + goldenAngle * (index + 1) + jitter;
+            const localRadius = 45 + Math.sqrt(index + 1) * 23 + Math.min(node.depth, 8) * 5;
+            node.x = centerX + Math.cos(localAngle) * localRadius;
+            node.y = centerY + Math.sin(localAngle) * localRadius;
+        });
+    });
+
+    graphState.nodes = nodes;
+    graphState.edges = edges;
+}
+
+function graphNodeRadius(node) {
+    let radius = node.depth === 0 ? 10 : node.depth === 1 ? 7 : node.depth === 2 ? 4.6 : 3;
+    if (node.highlight) radius += 1;
+    if (node.alert) radius += .7;
+    return radius;
+}
+
+function graphClusterColor(node) {
+    if (node.depth === 0 || node.cluster < 0) return '#f4f7f9';
+    return graphColors[node.cluster % graphColors.length];
+}
+
+function graphModeMatches(node) {
+    if (graphState.filter === 'all') return true;
+    return Boolean(node.flags[graphState.filter]);
+}
+
+function applyGraphFilters(refit = false) {
+    const query = graphState.search.trim().toLocaleLowerCase('sv');
+    let rank = 0;
+
+    const visibleIds = new Set();
+    graphState.nodes.forEach(node => {
+        const clusterMatch = graphState.cluster === 'all' || String(node.cluster) === graphState.cluster;
+        if (clusterMatch && graphModeMatches(node)) {
+            let current = node;
+            while (current) {
+                visibleIds.add(current.id);
+                current = current.parentId === null ? null : graphState.nodes[current.parentId];
+            }
+        }
+    });
+
+    graphState.nodes.forEach(node => {
+        node.visible = visibleIds.has(node.id);
+        node.searchMatch = Boolean(query) && node.text.includes(query);
+        node.matchRank = node.searchMatch ? rank++ : -1;
+    });
+
+    graphState.visibleNodes = graphState.nodes.filter(node => node.visible);
+    graphState.visibleSet = new Set(graphState.visibleNodes.map(node => node.id));
+
+    if (graphState.selected && !graphState.visibleSet.has(graphState.selected.id)) {
+        closeGraphDetail();
+    }
+
+    const count = graphState.visibleNodes.length;
+    const matches = query ? graphState.visibleNodes.filter(node => node.searchMatch).length : 0;
+    document.getElementById('graph-count').textContent = query
+        ? `${count} noder · ${matches} träff${matches === 1 ? '' : 'ar'}`
+        : `${count} noder`;
+
+    if (refit) fitGraphToView();
+    drawGraph();
+}
+
+function resizeGraph() {
+    const container = document.getElementById('graph-container');
+    const canvas = graphState.canvas;
+    if (!container || !canvas) return;
+
+    const rect = container.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
+
+    const previousWidth = graphState.width;
+    const previousHeight = graphState.height;
+    const previousCenterX = previousWidth ? (previousWidth / 2 - graphState.offsetX) / graphState.scale : 0;
+    const previousCenterY = previousHeight ? (previousHeight / 2 - graphState.offsetY) / graphState.scale : 0;
+
+    graphState.width = rect.width;
+    graphState.height = rect.height;
+    graphState.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(rect.width * graphState.dpr);
+    canvas.height = Math.round(rect.height * graphState.dpr);
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+
+    if (previousWidth && previousHeight) {
+        graphState.offsetX = rect.width / 2 - previousCenterX * graphState.scale;
+        graphState.offsetY = rect.height / 2 - previousCenterY * graphState.scale;
+    }
+    drawGraph();
+}
+
+function fitGraphToView() {
+    const nodes = graphState.visibleNodes.length ? graphState.visibleNodes : graphState.nodes;
+    if (!nodes.length || !graphState.width || !graphState.height) return;
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    nodes.forEach(node => {
+        minX = Math.min(minX, node.x);
+        minY = Math.min(minY, node.y);
+        maxX = Math.max(maxX, node.x);
+        maxY = Math.max(maxY, node.y);
+    });
+
+    const toolbarAllowance = window.innerWidth <= 768 ? 135 : 90;
+    const usableWidth = Math.max(100, graphState.width - 80);
+    const usableHeight = Math.max(100, graphState.height - toolbarAllowance - 50);
+    const graphWidth = Math.max(1, maxX - minX);
+    const graphHeight = Math.max(1, maxY - minY);
+    graphState.scale = Math.max(.12, Math.min(1.4, Math.min(usableWidth / graphWidth, usableHeight / graphHeight)));
+    graphState.offsetX = graphState.width / 2 - ((minX + maxX) / 2) * graphState.scale;
+    graphState.offsetY = (graphState.height + toolbarAllowance * .35) / 2 - ((minY + maxY) / 2) * graphState.scale;
+}
+
+function graphScreenPoint(node) {
+    return {
+        x: node.x * graphState.scale + graphState.offsetX,
+        y: node.y * graphState.scale + graphState.offsetY
+    };
+}
+
+function graphRoundRect(ctx, x, y, width, height, radius) {
+    const r = Math.min(radius, width / 2, height / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + width, y, x + width, y + height, r);
+    ctx.arcTo(x + width, y + height, x, y + height, r);
+    ctx.arcTo(x, y + height, x, y, r);
+    ctx.arcTo(x, y, x + width, y, r);
+    ctx.closePath();
+}
+
+function shortGraphLabel(text, maxLength = 46) {
+    return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+}
+
+function drawGraphLabel(node, point, emphasized = false) {
+    const ctx = graphState.ctx;
+    const text = shortGraphLabel(node.title);
+    const fontSize = emphasized ? 12 : 11;
+    ctx.font = `${emphasized ? 600 : 500} ${fontSize}px Segoe UI, Arial, sans-serif`;
+    const metrics = ctx.measureText(text);
+    const width = metrics.width + 12;
+    const height = 22;
+    let x = point.x + 9;
+    let y = point.y - height / 2;
+
+    if (x + width > graphState.width - 8) x = point.x - width - 9;
+    if (y < 5) y = 5;
+    if (y + height > graphState.height - 5) y = graphState.height - height - 5;
+
+    graphRoundRect(ctx, x, y, width, height, 4);
+    ctx.fillStyle = emphasized ? 'rgba(248,251,253,.97)' : 'rgba(18,29,38,.90)';
+    ctx.fill();
+    ctx.fillStyle = emphasized ? '#17242d' : '#e8f0f5';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x + 6, y + height / 2 + .5);
+}
+
+function drawGraph() {
+    const ctx = graphState.ctx;
+    if (!ctx || !graphState.width || !graphState.height) return;
+
+    ctx.setTransform(graphState.dpr, 0, 0, graphState.dpr, 0, 0);
+    ctx.clearRect(0, 0, graphState.width, graphState.height);
+
+    const queryActive = Boolean(graphState.search.trim());
+    const activeIds = new Set();
+    if (graphState.selected) {
+        activeIds.add(graphState.selected.id);
+        graphState.edges.forEach(edge => {
+            if (edge.source === graphState.selected.id) activeIds.add(edge.target);
+            if (edge.target === graphState.selected.id) activeIds.add(edge.source);
+        });
+    }
+
+    ctx.lineCap = 'round';
+    graphState.edges.forEach(edge => {
+        if (!graphState.visibleSet.has(edge.source) || !graphState.visibleSet.has(edge.target)) return;
+        const source = graphState.nodes[edge.source];
+        const target = graphState.nodes[edge.target];
+        const a = graphScreenPoint(source);
+        const b = graphScreenPoint(target);
+        const active = graphState.selected && (edge.source === graphState.selected.id || edge.target === graphState.selected.id);
+        const searchEdge = queryActive && (source.searchMatch || target.searchMatch);
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = active
+            ? 'rgba(245,249,252,.78)'
+            : searchEdge
+                ? 'rgba(151,192,218,.38)'
+                : 'rgba(137,158,174,.16)';
+        ctx.lineWidth = active ? 1.6 : .75;
+        ctx.stroke();
+    });
+
+    graphState.visibleNodes.forEach(node => {
+        const point = graphScreenPoint(node);
+        const worldRadius = graphNodeRadius(node);
+        const radius = Math.max(2.2, Math.min(11, worldRadius * Math.sqrt(Math.max(.45, graphState.scale))));
+        const dimmed = queryActive && !node.searchMatch && node.depth > 1;
+        const isSelected = graphState.selected && graphState.selected.id === node.id;
+        const isHovered = graphState.hovered && graphState.hovered.id === node.id;
+        const isAdjacent = activeIds.has(node.id);
+
+        ctx.globalAlpha = dimmed ? .12 : graphState.selected && !isAdjacent && node.depth > 1 ? .38 : .94;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = graphClusterColor(node);
+        ctx.fill();
+
+        if (node.alert) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, radius + 2.4, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ff6b63';
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+        }
+
+        if (isSelected || isHovered) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, radius + (isSelected ? 5 : 3.5), 0, Math.PI * 2);
+            ctx.strokeStyle = isSelected ? '#ffffff' : 'rgba(255,255,255,.78)';
+            ctx.lineWidth = isSelected ? 2 : 1.3;
+            ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+    });
+
+    graphState.visibleNodes.forEach(node => {
+        const topLabel = node.depth <= 1;
+        const searchedLabel = queryActive && node.searchMatch && node.matchRank < 14;
+        const isSelected = graphState.selected && graphState.selected.id === node.id;
+        const isHovered = graphState.hovered && graphState.hovered.id === node.id;
+        if (topLabel || searchedLabel || isSelected || isHovered) {
+            drawGraphLabel(node, graphScreenPoint(node), isSelected || isHovered || searchedLabel);
+        }
+    });
+}
+
+function graphPointerPosition(event) {
+    const rect = graphState.canvas.getBoundingClientRect();
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+}
+
+function graphNodeAt(x, y) {
+    let best = null;
+    let bestDistance = 16;
+    graphState.visibleNodes.forEach(node => {
+        const point = graphScreenPoint(node);
+        const distance = Math.hypot(point.x - x, point.y - y);
+        const target = Math.max(10, graphNodeRadius(node) * Math.sqrt(Math.max(.5, graphState.scale)) + 6);
+        if (distance <= target && distance < bestDistance) {
+            best = node;
+            bestDistance = distance;
+        }
+    });
+    return best;
+}
+
+function graphZoomAt(x, y, factor) {
+    const oldScale = graphState.scale;
+    const nextScale = Math.max(.08, Math.min(4, oldScale * factor));
+    const worldX = (x - graphState.offsetX) / oldScale;
+    const worldY = (y - graphState.offsetY) / oldScale;
+    graphState.scale = nextScale;
+    graphState.offsetX = x - worldX * nextScale;
+    graphState.offsetY = y - worldY * nextScale;
+    drawGraph();
+}
+
+function focusGraphNode(node) {
+    if (!node) return;
+    graphState.scale = Math.max(graphState.scale, .72);
+    const targetY = graphState.height * (window.innerWidth <= 768 ? .34 : .5);
+    graphState.offsetX = graphState.width * .5 - node.x * graphState.scale;
+    graphState.offsetY = targetY - node.y * graphState.scale;
+    selectGraphNode(node);
+}
+
+function graphNodeStatus(node) {
+    const labels = [];
+    if (node.flags.confirmed) labels.push('bekräftat/myndighetsåtgärd');
+    if (node.flags.indication) labels.push('indikation eller medieuppgift');
+    if (node.flags.property) labels.push('fastighetsrelaterat');
+    if (node.alert) labels.push('varning/risk');
+    return labels.length ? labels.join(' · ') : 'bakgrund eller nätverksnod';
+}
+
+function selectGraphNode(node) {
+    graphState.selected = node;
+    const panel = document.getElementById('graph-detail');
+    const title = document.getElementById('graph-detail-title');
+    const meta = document.getElementById('graph-detail-meta');
+    const info = document.getElementById('graph-detail-info');
+    const links = document.getElementById('graph-detail-links');
+
+    title.textContent = node.title;
+    const clusterNode = graphState.nodes.find(item => item.depth === 1 && item.cluster === node.cluster);
+    const clusterTitle = node.depth === 0 ? 'Översikt' : clusterNode ? clusterNode.title : 'Övrigt';
+    meta.textContent = `${clusterTitle} · ${graphNodeStatus(node)} · nivå ${node.depth}`;
+    info.textContent = node.info || 'Ingen separat beskrivning finns för denna nod.';
+    links.replaceChildren();
+
+    node.links.forEach(link => {
+        const anchor = document.createElement('a');
+        anchor.href = link.url;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        anchor.textContent = link.text || link.url;
+        links.appendChild(anchor);
+    });
+
+    panel.classList.add('open');
+    drawGraph();
+}
+
+function closeGraphDetail() {
+    graphState.selected = null;
+    const panel = document.getElementById('graph-detail');
+    if (panel) panel.classList.remove('open');
+    drawGraph();
+}
+
+function populateGraphClusters() {
+    const select = document.getElementById('graph-cluster');
+    const topNodes = graphState.nodes.filter(node => node.depth === 1);
+    topNodes.forEach(node => {
+        const option = document.createElement('option');
+        option.value = String(node.cluster);
+        option.textContent = shortGraphLabel(node.title, 62);
+        select.appendChild(option);
+    });
+}
+
+function bindGraphInteractions() {
+    const canvas = graphState.canvas;
+    const search = document.getElementById('graph-search');
+    const filter = document.getElementById('graph-filter');
+    const cluster = document.getElementById('graph-cluster');
+
+    search.addEventListener('input', () => {
+        graphState.search = search.value;
+        applyGraphFilters(false);
+    });
+    search.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            const first = graphState.visibleNodes.find(node => node.searchMatch);
+            if (first) focusGraphNode(first);
+        }
+        if (event.key === 'Escape') {
+            search.value = '';
+            graphState.search = '';
+            applyGraphFilters(false);
+        }
+    });
+    filter.addEventListener('change', () => {
+        graphState.filter = filter.value;
+        applyGraphFilters(true);
+    });
+    cluster.addEventListener('change', () => {
+        graphState.cluster = cluster.value;
+        applyGraphFilters(true);
+    });
+    document.getElementById('graph-reset').addEventListener('click', () => {
+        search.value = '';
+        filter.value = 'all';
+        cluster.value = 'all';
+        graphState.search = '';
+        graphState.filter = 'all';
+        graphState.cluster = 'all';
+        graphState.hovered = null;
+        closeGraphDetail();
+        applyGraphFilters(true);
+    });
+    document.getElementById('graph-detail-close').addEventListener('click', closeGraphDetail);
+
+    canvas.addEventListener('wheel', event => {
+        event.preventDefault();
+        const point = graphPointerPosition(event);
+        graphZoomAt(point.x, point.y, Math.exp(-event.deltaY * .0012));
+    }, { passive: false });
+
+    canvas.addEventListener('pointerdown', event => {
+        const point = graphPointerPosition(event);
+        canvas.setPointerCapture(event.pointerId);
+        graphState.pointers.set(event.pointerId, point);
+        graphState.moved = false;
+
+        if (graphState.pointers.size === 1) {
+            graphState.drag = {
+                pointerId: event.pointerId,
+                startX: point.x,
+                startY: point.y,
+                offsetX: graphState.offsetX,
+                offsetY: graphState.offsetY
+            };
+            graphState.pinch = null;
+        } else if (graphState.pointers.size === 2) {
+            const points = [...graphState.pointers.values()];
+            graphState.pinch = {
+                distance: Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y),
+                midX: (points[0].x + points[1].x) / 2,
+                midY: (points[0].y + points[1].y) / 2
+            };
+        }
+    });
+
+    canvas.addEventListener('pointermove', event => {
+        const point = graphPointerPosition(event);
+
+        if (graphState.pointers.has(event.pointerId)) {
+            graphState.pointers.set(event.pointerId, point);
+            if (graphState.pointers.size === 2) {
+                const points = [...graphState.pointers.values()];
+                const distance = Math.max(1, Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y));
+                const midX = (points[0].x + points[1].x) / 2;
+                const midY = (points[0].y + points[1].y) / 2;
+                if (graphState.pinch) {
+                    graphState.offsetX += midX - graphState.pinch.midX;
+                    graphState.offsetY += midY - graphState.pinch.midY;
+                    graphZoomAt(midX, midY, distance / Math.max(1, graphState.pinch.distance));
+                    graphState.moved = true;
+                }
+                graphState.pinch = { distance, midX, midY };
+            } else if (graphState.drag && graphState.drag.pointerId === event.pointerId) {
+                const dx = point.x - graphState.drag.startX;
+                const dy = point.y - graphState.drag.startY;
+                if (Math.hypot(dx, dy) > 3) graphState.moved = true;
+                graphState.offsetX = graphState.drag.offsetX + dx;
+                graphState.offsetY = graphState.drag.offsetY + dy;
+                drawGraph();
+            }
+            return;
+        }
+
+        if (event.pointerType === 'mouse') {
+            const hovered = graphNodeAt(point.x, point.y);
+            if ((hovered && !graphState.hovered) || (!hovered && graphState.hovered) || (hovered && graphState.hovered && hovered.id !== graphState.hovered.id)) {
+                graphState.hovered = hovered;
+                canvas.style.cursor = hovered ? 'pointer' : 'grab';
+                drawGraph();
+            }
+        }
+    });
+
+    function finishPointer(event) {
+        const point = graphPointerPosition(event);
+        const wasSinglePointer = graphState.pointers.size === 1;
+        if (!graphState.moved && wasSinglePointer) {
+            const node = graphNodeAt(point.x, point.y);
+            if (node) selectGraphNode(node);
+            else closeGraphDetail();
+        }
+
+        graphState.pointers.delete(event.pointerId);
+        if (graphState.pointers.size === 1) {
+            const [pointerId, remaining] = [...graphState.pointers.entries()][0];
+            graphState.drag = {
+                pointerId,
+                startX: remaining.x,
+                startY: remaining.y,
+                offsetX: graphState.offsetX,
+                offsetY: graphState.offsetY
+            };
+        } else {
+            graphState.drag = null;
+        }
+        if (graphState.pointers.size < 2) graphState.pinch = null;
+    }
+
+    canvas.addEventListener('pointerup', finishPointer);
+    canvas.addEventListener('pointercancel', finishPointer);
+    canvas.addEventListener('pointerleave', event => {
+        if (event.pointerType === 'mouse' && !graphState.pointers.size) {
+            graphState.hovered = null;
+            canvas.style.cursor = 'grab';
+            drawGraph();
+        }
+    });
+    canvas.addEventListener('dblclick', event => {
+        const point = graphPointerPosition(event);
+        const node = graphNodeAt(point.x, point.y);
+        if (node) focusGraphNode(node);
+        else graphZoomAt(point.x, point.y, 1.35);
+    });
+}
+
+function initGraph() {
+    if (!graphState.initialized) {
+        graphState.canvas = document.getElementById('graph-canvas');
+        graphState.ctx = graphState.canvas.getContext('2d');
+        buildGraphData();
+        populateGraphClusters();
+        bindGraphInteractions();
+        graphState.resizeObserver = new ResizeObserver(() => resizeGraph());
+        graphState.resizeObserver.observe(document.getElementById('graph-container'));
+        graphState.initialized = true;
+    }
+
+    resizeGraph();
+    graphState.nodes.forEach(node => {
+        node.visible = true;
+        node.searchMatch = false;
+    });
+    graphState.visibleNodes = graphState.nodes.slice();
+    graphState.visibleSet = new Set(graphState.nodes.map(node => node.id));
+    applyGraphFilters(false);
+    fitGraphToView();
+    drawGraph();
 }
 
 // FOI-registret använder webbläsarens inbyggda <details>-tillstånd.

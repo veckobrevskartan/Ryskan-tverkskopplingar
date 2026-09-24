@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ryska Intressen & Nätverk – Version 4 med graf</title>
+  <title>Ryska Intressen & Nätverk – Version 6 med läsöversikt</title>
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   
@@ -114,6 +114,22 @@
     .graph-toolbar button { padding: 6px 10px; cursor: pointer; }
     .graph-toolbar button:hover { background: #263540; }
     .graph-count { font-size: 11px; color: #bdc9d1; white-space: nowrap; }
+    .graph-cross-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 8px;
+      box-sizing: border-box;
+      border: 1px solid #52616d;
+      border-radius: 4px;
+      background: #18232c;
+      color: #edf4f8;
+      font-size: 11px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .graph-cross-toggle input { width: auto; min-height: auto; margin: 0; accent-color: #f0a34a; }
     .graph-caveat {
       flex-basis: 100%;
       color: #9eacb6;
@@ -158,6 +174,177 @@
     .graph-detail-info { margin: 0; font-size: 13px; line-height: 1.48; white-space: pre-wrap; }
     .graph-detail-links { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
     .graph-detail-links a { color: #065ea8; font-size: 12px; overflow-wrap: anywhere; }
+    .graph-connection-list { width: 100%; margin-top: 5px; padding-top: 9px; border-top: 1px solid #d8dee3; color: #46545e; font-size: 12px; line-height: 1.4; }
+    .graph-connection-list strong { display: block; margin-bottom: 4px; color: #26343d; }
+    .graph-connection-item { margin-top: 4px; }
+    .graph-connection-key { display: inline-block; width: 10px; height: 3px; margin-right: 5px; vertical-align: middle; border-radius: 3px; }
+    .graph-connection-key.actor { background: #f0a34a; }
+    .graph-connection-key.institution { background: #c08cff; }
+    .graph-connection-key.source { background: #60b9ec; }
+
+    /* --- LÄSÖVERSIKT / LÖPTEXT --- */
+    #view-narrative.active { display: block; overflow: hidden; }
+    #narrative-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background: #f4f6f8;
+    }
+    .narrative-shell {
+      width: min(1060px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 30px 0 90px;
+      box-sizing: border-box;
+    }
+    .narrative-hero {
+      padding: 0 0 22px;
+      border-bottom: 1px solid #cfd7dd;
+    }
+    .narrative-kicker {
+      margin: 0 0 7px;
+      color: #9a4c17;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .narrative-hero h2 { margin: 0; color: #21313d; font-size: clamp(24px, 3vw, 38px); line-height: 1.15; }
+    .narrative-hero p { max-width: 790px; margin: 12px 0 0; color: #53616b; font-size: 15px; line-height: 1.65; }
+    .narrative-summary { margin-top: 10px; color: #6e7c86; font-size: 12px; }
+    .narrative-tools {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin: 0 -10px;
+      padding: 12px 10px 10px;
+      background: rgba(244,246,248,.96);
+      border-bottom: 1px solid #d7dde1;
+      backdrop-filter: blur(7px);
+    }
+    .narrative-search-row { display: flex; align-items: center; gap: 10px; }
+    #narrative-search,
+    #narrative-index-search {
+      width: 100%;
+      min-height: 40px;
+      box-sizing: border-box;
+      padding: 9px 11px;
+      border: 1px solid #aeb9c1;
+      border-radius: 5px;
+      background: #fff;
+      color: #24343f;
+      font: inherit;
+      font-size: 14px;
+    }
+    .narrative-result-count { flex: 0 0 auto; color: #65737d; font-size: 12px; white-space: nowrap; }
+    .narrative-region-nav { display: flex; gap: 7px; margin-top: 9px; overflow-x: auto; padding-bottom: 2px; }
+    .narrative-region-nav button {
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid #b9c3ca;
+      border-radius: 4px;
+      background: #fff;
+      color: #33434e;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .narrative-region-nav button:hover { background: #e9eef1; }
+    .narrative-index {
+      margin: 20px 0 30px;
+      border: 1px solid #bcc7ce;
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(28,43,54,.06);
+    }
+    .narrative-index > summary,
+    .entity-index-group > summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    .narrative-index > summary::-webkit-details-marker,
+    .entity-index-group > summary::-webkit-details-marker { display: none; }
+    .narrative-index > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: #263844;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .narrative-index > summary > span:first-child { flex: 1 1 auto; }
+    #narrative-index-total { flex: 0 0 auto; color: #71808a; font-size: 11px; font-weight: 600; }
+    .narrative-index > summary::after { content: 'Öppna ▸'; color: #6b7881; font-size: 11px; font-weight: 600; }
+    .narrative-index[open] > summary::after { content: 'Stäng ×'; }
+    .narrative-index-content { padding: 0 16px 16px; border-top: 1px solid #e0e5e8; }
+    .narrative-index-note { margin: 12px 0 10px; color: #687680; font-size: 12px; line-height: 1.45; }
+    .narrative-index-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .entity-index-group { border: 1px solid #d7dde1; border-radius: 5px; background: #f9fafb; }
+    .entity-index-group > summary { display: flex; justify-content: space-between; gap: 8px; padding: 11px 12px; color: #31434e; font-size: 13px; font-weight: 700; }
+    .entity-index-group > summary::after { content: '▸'; color: #77848d; }
+    .entity-index-group[open] > summary::after { content: '▾'; }
+    .entity-index-list { max-height: 340px; overflow-y: auto; padding: 0 9px 9px; }
+    .entity-index-item {
+      display: flex;
+      width: 100%;
+      gap: 8px;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 7px 8px;
+      border: 0;
+      border-top: 1px solid #e4e8eb;
+      background: transparent;
+      color: #334954;
+      text-align: left;
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .entity-index-item:hover { background: #eef3f6; color: #0f568c; }
+    .entity-index-item[hidden], .entity-index-group[hidden] { display: none; }
+    .entity-index-item-count { flex: 0 0 auto; color: #7b8790; font-size: 11px; }
+    .narrative-method-item { padding: 13px 0; border-bottom: 1px solid #e3e7ea; }
+    .narrative-method-item:last-child { border-bottom: 0; padding-bottom: 2px; }
+    .narrative-method-item h3 { margin: 0; color: #2d404c; font-size: 14px; }
+    .narrative-method-item p { margin: 6px 0 0; color: #5b6973; font-size: 13px; line-height: 1.55; }
+    .narrative-region { margin-top: 42px; scroll-margin-top: 116px; }
+    .narrative-region[hidden] { display: none; }
+    .narrative-region-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; padding-bottom: 10px; border-bottom: 2px solid #2c3e50; }
+    .narrative-region-head h2 { margin: 0; color: #20313c; font-size: 25px; }
+    .narrative-region-count { color: #6b7881; font-size: 12px; white-space: nowrap; }
+    .narrative-region-intro { margin: 10px 0 2px; color: #63717a; font-size: 13px; line-height: 1.5; }
+    .narrative-entry {
+      position: relative;
+      padding: 20px 4px 20px 20px;
+      border-bottom: 1px solid #d9e0e4;
+      scroll-margin-top: 120px;
+    }
+    .narrative-entry::before { content: ''; position: absolute; top: 23px; bottom: 23px; left: 0; width: 3px; border-radius: 3px; background: #a7b5be; }
+    .narrative-entry.is-confirmed::before { background: #2f8b67; }
+    .narrative-entry.is-indication::before { background: #d18a29; }
+    .narrative-entry.is-alert::before { background: #bf4a43; }
+    .narrative-entry.is-focus { background: #fff7df; }
+    .narrative-path { margin: 0 0 6px; color: #7a8790; font-size: 11px; line-height: 1.35; }
+    .narrative-entry h3 { margin: 0; color: #243640; font-size: 17px; line-height: 1.35; }
+    .narrative-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .narrative-badge { display: inline-block; padding: 2px 6px; border-radius: 3px; background: #e7ecef; color: #586771; font-size: 10px; font-weight: 700; }
+    .narrative-badge.confirmed { background: #e0f1e9; color: #1d664a; }
+    .narrative-badge.indication { background: #fff0d8; color: #8a5512; }
+    .narrative-badge.alert { background: #fde5e3; color: #8e332e; }
+    .narrative-text { max-width: 900px; margin: 10px 0 0; color: #3f4f59; font-size: 14px; line-height: 1.68; white-space: pre-wrap; }
+    .narrative-source-note { margin: 10px 0 0; color: #78858e; font-size: 11px; font-style: italic; }
+    .narrative-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .narrative-links a { display: inline-block; padding: 4px 7px; border: 1px solid #c7d9e7; border-radius: 4px; background: #eef6fb; color: #075f9f; font-size: 11px; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+    .narrative-links a:hover { background: #dceefa; border-color: #77a9cb; }
+    .narrative-no-results { display: none; margin: 30px 0; padding: 18px; border: 1px solid #d6dde1; background: #fff; color: #56656f; font-size: 14px; }
+    .narrative-no-results.visible { display: block; }
 
     /*
       FOI-registret är ett fristående <details>-lager. Det är stängt från start,
@@ -406,7 +593,7 @@
       header { position: relative; flex: 0 0 88px; height: 88px; padding: 7px 8px; align-items: stretch; }
       .header-main { width: 100%; flex-direction: column; align-items: stretch; }
       h1 { min-height: 22px; padding-right: 142px; font-size: 15px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .view-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; margin: 7px 0 0; }
+      .view-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; width: 100%; margin: 7px 0 0; }
       .header-date { display: none; }
       .header-meta { position: absolute; top: 6px; right: 8px; }
       .view-btn { min-height: 38px; padding: 7px 5px; margin: 0; font-size: 12px; }
@@ -423,13 +610,15 @@
         left: 6px;
         right: 6px;
         display: grid;
-        grid-template-columns: 1fr 1fr auto;
+        grid-template-columns: 1fr 1fr;
         gap: 5px;
         max-width: none;
         padding: 6px;
       }
       .graph-toolbar input { grid-column: 1 / -1; width: 100%; min-width: 0; font-size: 16px; }
       .graph-toolbar select { width: 100%; min-width: 0; max-width: none; font-size: 16px; }
+      .graph-cross-toggle { min-height: 36px; padding: 0 7px; justify-content: center; }
+      .graph-cross-toggle input { width: auto; min-height: auto; }
       .graph-count { grid-column: 1 / -1; }
       .graph-caveat { display: none; }
       .graph-hint { left: 6px; right: 6px; bottom: 6px; max-width: none; text-align: center; }
@@ -454,6 +643,25 @@
       .children { margin-left: 10px; }
       .children .node { padding-left: 10px; }
       .children .node::before { width: 10px; }
+      .narrative-shell { width: calc(100% - 24px); padding: 18px 0 64px; }
+      .narrative-hero { padding-bottom: 17px; }
+      .narrative-hero h2 { font-size: 25px; }
+      .narrative-hero p { font-size: 14px; line-height: 1.55; }
+      .narrative-tools { margin: 0 -6px; padding: 9px 6px 8px; }
+      .narrative-search-row { align-items: stretch; flex-direction: column; gap: 5px; }
+      #narrative-search, #narrative-index-search { min-height: 44px; font-size: 16px; }
+      .narrative-result-count { align-self: flex-start; }
+      .narrative-region-nav button { min-height: 42px; }
+      .narrative-index { margin: 14px 0 24px; }
+      .narrative-index-groups { grid-template-columns: 1fr; }
+      .entity-index-group > summary { min-height: 44px; box-sizing: border-box; align-items: center; }
+      .entity-index-item { min-height: 44px; align-items: center; }
+      .narrative-region { margin-top: 32px; scroll-margin-top: 154px; }
+      .narrative-region-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .narrative-region-head h2 { font-size: 22px; }
+      .narrative-entry { padding: 17px 0 17px 15px; scroll-margin-top: 158px; }
+      .narrative-entry h3 { font-size: 16px; }
+      .narrative-text { font-size: 14px; line-height: 1.6; }
     }
   </style>
 </head>
@@ -466,10 +674,11 @@
         <button class="view-btn active" onclick="setView('tree')">Mindmap</button>
         <button class="view-btn" onclick="setView('graph')">Graf</button>
         <button class="view-btn" onclick="setView('map')">Karta</button>
+        <button class="view-btn" onclick="setView('narrative')">Löptext</button>
     </nav>
   </div>
   <div class="header-meta">
-    <div class="header-date" style="font-size:12px; color:#666;">Version 4 · Graf + OpenStreetMap · Uppdaterad 23 september 2026</div>
+    <div class="header-date" style="font-size:12px; color:#666;">Version 6 · läsöversikt + kollapsbart index · Uppdaterad 24 september 2026</div>
     <button id="foi-toggle" class="foi-toggle-btn" type="button" aria-expanded="false" aria-controls="foi-panel" onclick="toggleFOIPanel()">FOI-register (128) ▸</button>
   </div>
 </header>
@@ -578,15 +787,17 @@
             <option value="confirmed">Bekräftat / myndighetsåtgärd</option>
             <option value="indication">Indikation / medieuppgift</option>
             <option value="alert">Varning / risk</option>
+            <option value="foi">FOI-register 2022</option>
           </select>
           <select id="graph-cluster" aria-label="Välj huvudområde">
             <option value="all">Alla huvudområden</option>
           </select>
+          <label class="graph-cross-toggle"><input id="graph-crosslinks" type="checkbox" checked> Tvärkopplingar</label>
           <button id="graph-reset" type="button">Återställ</button>
           <span id="graph-count" class="graph-count" aria-live="polite"></span>
-          <span class="graph-caveat">Linjerna visar sidans struktur och källmässiga gruppering – inte i sig bevisade operativa samband.</span>
+          <span class="graph-caveat">Tunna grå linjer visar sidstruktur. Streckade linjer visar uttryckligen källbelagda gemensamma aktörer (orange), institutioner (lila) eller finansierings-/källspår (blått) – inte i sig ett gemensamt operativt nätverk.</span>
         </div>
-        <div class="graph-hint">Dra för att flytta · rulla eller nyp för att zooma · tryck på en nod för detaljer</div>
+        <div class="graph-hint">Dra för att flytta · rulla eller nyp för att zooma · tryck på en nod · streckat = källbelagd tvärkoppling, inte operativt bevis</div>
         <aside id="graph-detail" class="graph-detail" aria-live="polite" aria-label="Vald nod">
           <div class="graph-detail-head">
             <h2 id="graph-detail-title"></h2>
@@ -596,6 +807,49 @@
           <p id="graph-detail-info" class="graph-detail-info"></p>
           <div id="graph-detail-links" class="graph-detail-links"></div>
         </aside>
+      </div>
+    </div>
+
+    <div id="view-narrative" class="view-section">
+      <div id="narrative-container">
+        <main class="narrative-shell">
+          <section class="narrative-hero">
+            <p class="narrative-kicker">Sammanhängande läsversion</p>
+            <h2>Ryska intressen, fastigheter och nätverk</h2>
+            <p>Här återges innehållet från kunskapsträdet, kartlagret och FOI-registret som löpande, sökbar text. Uppgifterna är ordnade geografiskt och behåller sidans skillnad mellan bekräftade omständigheter, myndighetsåtgärder, medieuppgifter, indikationer och riskbedömningar. En omnämnd koppling ska inte läsas som bevis för brott, underrättelseverksamhet eller gemensam operativ samordning.</p>
+            <div id="narrative-summary" class="narrative-summary"></div>
+          </section>
+
+          <div class="narrative-tools">
+            <div class="narrative-search-row">
+              <input id="narrative-search" type="search" placeholder="Sök i löptexten…" aria-label="Sök i läsöversikten">
+              <span id="narrative-result-count" class="narrative-result-count" aria-live="polite"></span>
+            </div>
+            <nav class="narrative-region-nav" aria-label="Hoppa till region">
+              <button type="button" data-narrative-region="sweden">Sverige</button>
+              <button type="button" data-narrative-region="nordic">Norden</button>
+              <button type="button" data-narrative-region="europe">Europa</button>
+              <button type="button" data-narrative-region="world">Övriga världen</button>
+            </nav>
+          </div>
+
+          <details id="narrative-method" class="narrative-index">
+            <summary><span>Källstatus och läsanvisning</span></summary>
+            <div id="narrative-method-content" class="narrative-index-content"></div>
+          </details>
+
+          <details id="narrative-index" class="narrative-index">
+            <summary><span>Index: platser, personer, bolag och organisationer</span><span id="narrative-index-total"></span></summary>
+            <div class="narrative-index-content">
+              <p class="narrative-index-note">Indexet är kollapsbart. Klicka på ett uppslagsord för att visa och hoppa till de textposter där det förekommer. Använd indexsökningen för att snabbt avgränsa listorna.</p>
+              <input id="narrative-index-search" type="search" placeholder="Sök i indexet…" aria-label="Sök i indexet">
+              <div id="narrative-index-groups" class="narrative-index-groups"></div>
+            </div>
+          </details>
+
+          <div id="narrative-no-results" class="narrative-no-results">Inga textposter matchar sökningen.</div>
+          <div id="narrative-regions"></div>
+        </main>
       </div>
     </div>
 
@@ -7274,6 +7528,209 @@ const treeData = {
     }
   ]
 };
+
+// Version 5: nya källbelagda fall och analytiska tvärkopplingar.
+// Tilläggen görs efter grundträdet för att bevara den tidigare versionens struktur intakt.
+(function extendTreeDataV5() {
+  function findTreeNode(title, node = treeData) {
+    if (node.title === title) return node;
+    for (const child of node.children || []) {
+      const found = findTreeNode(title, child);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  function appendTreeChild(parentTitle, child) {
+    const parent = findTreeNode(parentTitle);
+    if (!parent) return;
+    if (!Array.isArray(parent.children)) parent.children = [];
+    parent.children.push(child);
+  }
+
+  appendTreeChild("Sverige", {
+    "title": "AKTUELL KARTLÄGGNING 2026: 247 ryskägda fastigheter – sannolikt mörkertal",
+    "info": "SVT redovisade den 21 september 2026 att FOI identifierat 247 fastigheter med ryska ägare. Forskarna fick manuellt kontrollera omkring 10 000 namn på utlandsbosatta ägare, medan utländska ägare bosatta i Sverige inte syntes i det granskade registret. Siffran är därför en kartläggning med metodbegränsningar, inte ett komplett register och inte ett påstående om att varje ägare eller fastighet innebär en säkerhetsrisk. SVT noterade samtidigt att Sverige ännu saknade en generell möjlighet att stoppa privata fastighetsköp enbart av säkerhetsskäl.",
+    "highlight": true,
+    "links": [
+      {"text": "SVT: omfattning, mörkertal och regelglapp (21 sep 2026)", "url": "https://www.svt.se/nyheter/inrikes/ryssland-kan-anvanda-svenska-hus-som-spionbaser-staten-kan-inte-stoppa-kopen"}
+    ]
+  });
+
+  appendTreeChild("Sverige", {
+    "title": "BEKRÄFTAD SÄPO-ÅTGÄRD 2026: stoppad SVR-operation i Stockholm",
+    "info": "Säkerhetspolisen uppgav att en långvarig operation från den ryska utrikesunderrättelsetjänsten SVR stoppats. Två ryska underrättelseofficerare hade enligt Säpo värvat en person vid ett annat lands ambassad; målet var information från svenskt centralt politiskt beslutsfattande samt påverkan och misskreditering av Sverige, EU och Nato. SVT lokaliserade två mötesplatser från Säpos spaningsbilder. Platserna är mötespunkter – inte ryskägda objekt – och inget i rapporteringen lägger ansvar på kyrkan, puben eller deras ägare.",
+    "highlight": true,
+    "alert": true,
+    "links": [
+      {"text": "SVT: Säpo stoppade operationen (10 aug 2026)", "url": "https://www.svt.se/nyheter/inrikes/rysk-underrattelseofficer-i-hemligt-mote-med-agent-pa-pub-i-sverige"},
+      {"text": "SVT: platserna i Stockholm (14 aug 2026)", "url": "https://www.svt.se/nyheter/inrikes/hit-leder-sparen-efter-ryska-spionmotet-bestallde-ol"}
+    ],
+    "children": [
+      {"title": "Sofia kyrka, Södermalm – lokaliserad spaningsbild", "info": "SVT identifierade fasaden utanför Sofia kyrka på en av Säpos offentliggjorda bilder. Kyrkan är inte utpekad som part i operationen."},
+      {"title": "Pub i Sundbyberg – återkommande mötesplats enligt SVT", "info": "En andra spaningsbild lokaliserades till en pub i Sundbyberg. Ägaren uppgav att männen varit där flera gånger. Verksamheten är inte utpekad som part i operationen."}
+    ]
+  });
+
+  appendTreeChild("Västerås (Hässlö)", {
+    "title": "PÅGÅENDE 2025–2026: Västerås ansöker om expropriation",
+    "info": "Västerås stad begärde 2025 att få tvångsöverta kyrkfastigheten vid flygplatsen. I maj 2026 uppgav regeringen att ärendet fortfarande bereddes och att det slutliga beslutet låg hos regeringen. Kommunen hänvisar till läget nära en flygplats av betydelse för totalförsvaret. Församlingens präst Pavel Makarenko har avvisat anklagelser om militär eller politisk verksamhet. Källstatus: bekräftad ansökan och pågående beredning – inget slutligt expropriationsbeslut.",
+    "highlight": true,
+    "links": [
+      {"text": "SVT: regeringen bereder ärendet (23 maj 2026)", "url": "https://www.svt.se/nyheter/lokalt/vastmanland/ej-klar-avsvarig-minister-om-rysk-ortodoxa-kyrkan-i-vasteras-en-kanslig-fraga"},
+      {"text": "SVT: kommunens beslut och invändningar", "url": "https://www.svt.se/nyheter/lokalt/vastmanland/vasteras-majoritet-stodjer-m-forslag-ta-over-rysk-ortodoxa-kyrkan"}
+    ]
+  });
+
+  appendTreeChild("Finland (Oligarker & Förbud)", {
+    "title": "MEDIEGRANSKNING 2025: Rantalinna i Ruokolahti – bolagsköp utanför tillståndsregeln",
+    "info": "Yle MOT rapporterade att den kanadensisk-azerbajdzjanske affärsmannen Seymur Aliyev tog kontroll över bolag som äger det historiska Rantalinna och närliggande objekt. Eftersom transaktionen gällde aktier i fastighetsägande bolag behövdes inget tillstånd från försvarsministeriet. Yle bedömde att ett bulvanupplägg var möjligt; Aliyev avböjde intervju genom advokat. Detta är en journalistisk riskindikator, inte fastställt bulvanskap eller brott.",
+    "highlight": true,
+    "alert": true,
+    "links": [
+      {"text": "Yle MOT: Rantalinna, ägarbytet och lagluckan (26 nov 2025)", "url": "https://yle.fi/a/74-20195815"}
+    ],
+    "children": [
+      {"title": "Seymur Aliyev", "info": "Yle beskrev långvariga affärsband till Ryssland och uppdrag för ryska klienter. Han ledde tidigare byggbolag i Sankt Petersburg och Moskva enligt ryska register."},
+      {"title": "Ramis Deberdejev – tidigare ägare", "info": "Petersburgbaserad affärsman med verksamhet inom hamn och bank. Han och familjemedlemmar nekades 2023 tillstånd att köpa fler objekt runt Rantalinna; försvarsministeriet hänvisade bland annat till Primorsk-hamnprojektet."},
+      {"title": "Panama Papers: Consult International Limited", "info": "Aliyev var 2012 direktör i ett Seychellerna-bolag och angav Rantalinnas adress. Den verkliga förmånstagaren framgick inte av läckan. Adresskopplingen visar ett historiskt bolagsspår men bevisar inte att bolaget ägde eller finansierade Rantalinna."}
+    ]
+  });
+
+  appendTreeChild("Finland (Oligarker & Förbud)", {
+    "title": "PÅGÅENDE MYNDIGHETSÅTGÄRD 2026: Kesäkylä i Miehikkälä",
+    "info": "Det tidigare lägercentret Kesäkylä, cirka 20 kilometer från den ryska gränsen, såldes av utsökningsmyndigheten vintern 2025 för 40 000 euro till ett finländskt bolag som enligt Yles registergranskning ägs av tre ryska medborgare. Försvarsministeriet beslutade i april 2026 att affären ska gå tillbaka. Beslutet kunde överklagas och hade vid Yles rapportering inte vunnit laga kraft.",
+    "highlight": true,
+    "alert": true,
+    "links": [
+      {"text": "Yle: ministeriet kräver att affären hävs (2026)", "url": "https://yle.fi/a/74-20219438"},
+      {"text": "Yle: köpet och prövningsluckan (2025)", "url": "https://yle.fi/a/74-20179420"}
+    ]
+  });
+
+  appendTreeChild("Finland (Oligarker & Förbud)", {
+    "title": "PÅGÅENDE FÖRSÄLJNING 2025–2026: Zsar Outlet Village vid Vaalimaa",
+    "info": "Konkursboet efter gränsnära Zsar förhandlade ännu i juli 2026 med en köpare efter att en offert accepterats 2025. Den uppgivna köparkandidaten är Datatriumnord, ett finländskt bolag bakom vilket finns den rysk-tyske affärsmannen Viktor Ignatjev. Yle fann en indirekt förbindelse via Ignatjevs affärspartner till den sanktionslistade oligarken Gennadij Timtjenko. Affären var inte slutförd vid den senaste källan; den indirekta kontakten är inte bevis för att Timtjenko kontrollerar köparen.",
+    "highlight": true,
+    "alert": true,
+    "links": [
+      {"text": "Yle: försäljningen ännu olöst (17 jul 2026)", "url": "https://yle.fi/a/74-20245734"},
+      {"text": "Yle: köparkandidatens indirekta Timtjenko-koppling", "url": "https://yle.fi/a/74-20200552"}
+    ],
+    "children": [
+      {"title": "Viktor Ignatjev / Datatriumnord", "info": "Rysk och tysk medborgare enligt rapporteringen. EU-/EES-medborgarskapet innebär att Finlands generella köpstopp för ryska medborgare inte automatiskt träffar honom."},
+      {"title": "Gennadij Timtjenko – indirekt affärslänk", "info": "Yle kopplade Ignatjevs affärspartner Vladimir Pintšuk till Timtjenko. Kopplingen är indirekt och ska inte beskrivas som ägande eller styrning av Zsar."}
+    ]
+  });
+
+  appendTreeChild("Finland (Oligarker & Förbud)", {
+    "title": "BEKRÄFTADE AVSLAG 2024–2025: Imatra, Kouvola/Myllykoski, Mikkeli, Lieksa och Sastamala",
+    "info": "I september 2024 fattade Finlands försvarsministerium sex negativa tillståndsbeslut för objekt i Imatra, Kouvola, Mikkeli och Lieksa. Köpare eller verkliga huvudmän omfattade enligt ministeriet ryska, ukrainska och schweiziska medborgare; fallen ska därför inte beskrivas som enbart ryska köp. Myndigheten uppgav att risker för nationell säkerhet, försvarets organisering eller territoriell övervakning inte kunde uteslutas. Yle redovisade senare stoppade affärer i Sastamala och Myllykoski i Kouvola under 2025. Besluten visar myndighetsprövning, inte bevisad fientlig avsikt hos varje köpare.",
+    "highlight": true,
+    "links": [
+      {"text": "Yle: sex negativa tillståndsbeslut (6 sep 2024)", "url": "https://yle.fi/a/74-20109905"},
+      {"text": "Yle: Sastamala och Myllykoski i senare sammanställning", "url": "https://yle.fi/a/74-20206259"}
+    ]
+  });
+
+  appendTreeChild("Baltikum & Europa (Säkerhet)", {
+    "title": "MEDIEGRANSKNING 2025: sex italienska bostäder knutna till fem chefer i ryska statsbolag",
+    "info": "The Insider och projektet Agents of War redovisade italienska fastighetsuppgifter för fem chefer eller deras familjer. Uppgifterna är en mediegranskning baserad på fastighetsregister; sammanställningen har inte självständigt verifierat varje lagfart. Själva ägandet är inte i sig beskrivet som brottsligt.",
+    "highlight": true,
+    "links": [
+      {"text": "The Insider: granskningen och fastighetsregistren (10 mar 2025)", "url": "https://theins.ru/en/inv/279498"}
+    ],
+    "children": [
+      {"title": "Andrej Akimov / Gazprombank – lägenhet i Verona", "info": "168 kvadratmeter i centrala Verona, köpt 2011 enligt granskningen. Akimov har länge lett den statskontrollerade Gazprombank."},
+      {"title": "Anatolij Tjerners familj / Gazprom Neft – villa i Andora", "info": "Hustrun Larisa och dottern Julia uppges äga en villa om 955 kvadratmeter med drygt ett hektar mark och ekonomibyggnader i Ligurien."},
+      {"title": "Erkin och Denis Norov / VTB – Milano och Rom", "info": "Sonen Denis uppges äga en lägenhet om 152 kvadratmeter i Milano samt ha fått en lägenhet om 65 kvadratmeter i Rom i gåva av Olga Shelkova, som i granskningen beskrivs som tidigare rådgivare till en förste vice VTB-chef."},
+      {"title": "Andrej Sharonov / Sovcomflot–En+ – Montesilvano", "info": "En lägenhet om 177 kvadratmeter och garage uppges ha ärvts av Sharonov och hans barn. Granskningen redovisar även hans styrelseuppdrag i bland annat VTB, Rosseti och En+, som är kopplat till Oleg Deripaska."},
+      {"title": "Daniil Krainskij / Rosseti – lägenhet i Florens", "info": "Rossettis biträdande vd för juridik uppges sedan 2013 äga en lägenhet om 77 kvadratmeter i centrala Florens."}
+    ]
+  });
+
+  appendTreeChild("Baltikum & Europa (Säkerhet)", {
+    "title": "FRANKRIKE: Putin-nära fastigheter och pågående penningtvättsutredningar",
+    "info": "Tre separata källspår visar olika rättsliga statusar: en sanktionsfryst villa, två beslag i pågående penningtvättsutredningar och äldre offentlig dokumentation av ägarkedjor. Beslag eller frysning är inte en fällande dom.",
+    "highlight": true,
+    "children": [
+      {
+        "title": "Alta Mira, Biarritz – Kirill Shamalov / Gennadij Timtjenko",
+        "info": "Reuters dokumenterade att Kirill Shamalov 2012 tog över bolaget som ägde villan från Gennadij Timtjenko. Franska myndigheter förde 2022 upp fastigheten i finansministeriets register över sanktionsfrysta tillgångar.",
+        "links": [
+          {"text": "Reuters: ägarkedjan", "url": "https://www.reuters.com/investigates/special-report/russia-capitalism-daughters/"},
+          {"text": "RFE/RL: fransk frysning 2022", "url": "https://www.rferl.org/a/france-impounds-villa-shamalov/31825336.html"}
+        ]
+      },
+      {
+        "title": "Villa Souzanna, Anglet – Artur Ocheretnyj / Ljudmila Putina",
+        "info": "Villan köptes 2013 för 5,4 miljoner euro av ett fastighetsbolag kontrollerat av Artur Ocheretnyj, make till Vladimir Putins tidigare hustru Ljudmila. Fastigheten beslagtogs i december 2023 inom en förundersökning om misstänkt grov penningtvätt. Åklagarsidan granskade ursprunget till cirka nio miljoner euro för köp och renovering. Ingen fällande dom redovisas.",
+        "alert": true,
+        "links": [{"text": "Le Monde: beslag och utredningsstatus", "url": "https://www.lemonde.fr/en/les-decodeurs/article/2024/04/17/french-judicial-authorities-seize-property-belonging-to-putin-associates_6668750_8.html"}]
+      },
+      {
+        "title": "Paris 16:e – Ekaterina Solotsinskaja / Peskovfamiljen",
+        "info": "En lägenhet köpt 2016 för 1,7 miljoner euro av ett bolag som då huvudsakligen ägdes av Dmitrij Peskovs tidigare hustru beslagtogs i december 2023 inom en utredning om misstänkt grov penningtvätt. Le Monde redovisade ett VTB-lån på 470 000 euro och Sberbank-medverkan. Tidningen betonade att utredningen inte då hade knutits till Peskov själv.",
+        "alert": true,
+        "links": [{"text": "Le Monde: lägenheten, VTB och Sberbank", "url": "https://www.lemonde.fr/en/les-decodeurs/article/2024/04/17/french-judicial-authorities-seize-property-belonging-to-putin-associates_6668750_8.html"}]
+      }
+    ]
+  });
+
+  appendTreeChild("Baltikum & Europa (Säkerhet)", {
+    "title": "MEDIE-/UNDERRÄTTELSEUPPGIFT 2026: misstänkta 'trojanska häst'-fastigheter i Västeuropa",
+    "info": "Brittiska medier återgav uppgifter från icke namngivna europeiska underrättelsekällor om omkring ett dussin misstänkta fastighetsköp nära militära eller civila nyckelobjekt, där rysk underrättelsetjänst påstås ha hjälpt till. Inga fullständiga objekt- eller ägarlistor publicerades. Uppgiften används därför endast som en övergripande hypotes och får inte kopplas till en enskild fastighet i denna sida utan separat bevisning.",
+    "alert": true,
+    "links": [
+      {"text": "LBC: återgivning av underrättelseuppgifterna", "url": "https://www.lbc.co.uk/article/russia-trojan-horse-europe-sabotage-nato-5HjdTS4_2/"},
+      {"text": "Omni: svensk sammanfattning", "url": "https://omni.se/kallor-ryska-fastigheter-fungerar-som-trojanska-hastar-i-vasteuropa/a/k0E34j"}
+    ]
+  });
+
+  appendTreeChild("Danmark (Spioncentraler)", {
+    "title": "MEDIEGRANSKNING 2026: Inter Energia i Nordhavn – KGB-arkiv, Rosneft och frysta tillgångar",
+    "info": "Danwatch rapporterade att holdingbolaget Inter Energia, med c/o-adress i Köpenhamns Nordhavn och nästan ingen dansk verksamhet, i över 20 år ägdes av den lettiske affärsmannen Juris Savickis. Dokument i Lettlands nationalarkiv beskriver honom som tidigare hög KGB-funktionär med ansvar för dokument och falska identiteter åt agenter i väst. Inter Energia äger en tredjedel av sanktionsbelagda Itera Latvija tillsammans med statliga Rosneft. Savickis sålde i augusti 2026 bolaget till affärspartnern och tidigare lettiske premiärministern Aigars Kalvitis. Danwatch skrev uttryckligen att man saknar dokumentation för agentrekrytering från kontoret. Adressen är en bolagsadress – inte belagt ryskt fastighetsägande.",
+    "highlight": true,
+    "alert": true,
+    "links": [
+      {"text": "Danwatch: arkiv- och bolagsgranskningen (18 sep 2026)", "url": "https://danwatch.dk/en/top-spy-behind-mysterious-company-in-copenhagen/"}
+    ],
+    "children": [
+      {"title": "Juris Savickis", "info": "Tidigare ägare. Danwatch stödjer KGB-bakgrunden på lettiska nationalarkiv och redovisar senare affärskontakter med Gazprom och Sberbank."},
+      {"title": "Itera Latvija / Rosneft", "info": "Inter Energia äger en tredjedel tillsammans med Rosneft. Danwatch uppgav att mer än 300 miljoner danska kronor, nio bilar och en yacht var frysta i Lettland."},
+      {"title": "Aigars Kalvitis", "info": "Tidigare lettisk premiärminister och Savickis affärspartner, uppgiven köpare av Inter Energia den 12 augusti 2026."}
+    ]
+  });
+
+  treeData.children.push({
+    "title": "11) TVÄRKOPPLINGAR – verifierade broar mellan befintliga fall",
+    "highlight": true,
+    "info": "Detta lager visar återkommande personer, banker, statsbolag och organisationer i separata källbelagda fall. En gemensam aktör är en relevant analysbro, men bevisar inte att alla objekt ingår i en samordnad operation. De streckade linjerna i grafvyn motsvarar endast de uttryckligen angivna broarna nedan.",
+    "children": [
+      {"title": "Gennadij Timtjenko: Hartwall Arena ↔ Zsar-spåret ↔ Alta Mira", "info": "Hartwall Arena hade dokumenterat Timtjenko-/Rotenbergägande; Zsar-kandidaten har enligt Yle en indirekt affärslänk till Timtjenko; Reuters dokumenterade att Timtjenko överlät Biarritzbolaget till Kirill Shamalov. Relationernas styrka skiljer sig och redovisas i respektive nod."},
+      {"title": "VTB/Sberbank: FOI-bolag ↔ Norovfamiljens Italienobjekt ↔ Parisbeslaget", "info": "FOI:s 2022-register innehåller svenska bolag med den exakta uppgiften VTB Bank. The Insider knyter Erkin Norov till VTB, medan Le Monde redovisar VTB-lån och Sberbankmedverkan i Parisaffären. Detta är en institutionsbro, inte bevis för gemensam transaktion."},
+      {"title": "Rosatom: Muskökontrakt ↔ Västeråskyrkans finansiering ↔ Atomflot", "info": "Sidans källor placerar Rosatom i tre olika roller: bolagskoppling i Musköägarens kontrakt, finansiering av kyrkobygget i Västerås och moderorganisation till Atomflot i sjöfartsspåret. Samma institution återkommer, men fallen har olika juridisk och säkerhetsmässig status."},
+      {"title": "Rotenbergnätverket: Hangö ↔ Hartwall Arena ↔ Rivierafastigheterna", "info": "Boris Rotenberg återkommer i Hangö och arenaägandet; Le Monde kopplar Ruslan Goryukhins bakgrund till Arkadij Rotenbergs SGM. Detta är dokumenterade affärs-/personbroar, inte ett påstående om gemensamt fastighetsupplägg."},
+      {"title": "Moskvapatriarkatet: Västerås ↔ Karlovy Vary ↔ norska strategiska lägen", "info": "Kyrkliga objekt i tre länder hör till eller kopplas till Moskvapatriarkatets strukturer. Varje plats har separat lokal källning; organisatorisk tillhörighet betyder inte att varje församling eller besökare deltar i underrättelseverksamhet."},
+      {"title": "Ryska statliga energi- och finansbolag: Italien ↔ Danmark ↔ svenska FOI-kluster", "info": "Gazprombank, Gazprom Neft, VTB, Rosseti, Sovcomflot, Rosneft och En+ återkommer genom chefers fastigheter, bolagsägande eller styrelseuppdrag. Grafen visar institutionerna som analysbroar och håller samtidigt fastighetsägande, bolagsroll och säkerhetsmisstanke isär."},
+      {
+        "title": "FOI 2022: exakta ägar-/aktörsnamn som egna grafkluster",
+        "info": "De 128 bolagsraderna har grupperats efter exakt text i FOI-underlaget. Klustren gör återkommande namn synliga, men de är en historisk ögonblicksbild och får inte läsas som aktuellt ägande, sanktion eller misstanke om brott.",
+        "children": [
+          {"title": "Rais Gayfullin – 6 bolagsrader", "info": "Exakt upprepat namn i FOI-underlaget från 2022."},
+          {"title": "Tatiana Sundeby – 6 bolagsrader", "info": "Exakt upprepat namn i FOI-underlaget från 2022."},
+          {"title": "STRABAG (Deripaska) – 6 bolagsrader", "info": "Exakt upprepad kopplingstext i FOI-underlaget från 2022."},
+          {"title": "Grigory Shiyan – 4 bolagsrader", "info": "Exakt upprepat namn i FOI-underlaget från 2022."},
+          {"title": "Oleg Deripaska – 4 bolagsrader", "info": "Exakt upprepat namn i FOI-underlaget från 2022."},
+          {"title": "Natalia Törnqvist – 4 bolagsrader", "info": "Exakt upprepat namn i FOI-underlaget från 2022."},
+          {"title": "En+/Sual (Deripaska) – 3 bolagsrader", "info": "Exakt upprepad kopplingstext i FOI-underlaget från 2022."},
+          {"title": "VTB Bank – 2 bolagsrader", "info": "Exakt upprepad institution i FOI-underlaget från 2022."}
+        ]
+      }
+    ]
+  });
+})();
+
 // 2. DATA: FOI-REGISTER (KOMPLETT 1-128)
 // ==========================================
 const foiList = [
@@ -8940,6 +9397,111 @@ const warningProperties = [
   }
 ];
 
+// Version 5: nya kartpunkter. Alla punkter är kommun-/områdespunkter om inte annat anges.
+strategicProperties.push(
+  {
+    name: "Rantalinna, Ruokolahti",
+    coords: [61.2833, 28.8333],
+    info: "Historiskt hotell- och fastighetskomplex. Yle MOT redovisade 2025 ett ägarbyte genom köp av fastighetsägande bolag; kommunenivå, inte exakt adress. Möjligt bulvanskap är en mediebedömning och inte fastställt."
+  },
+  {
+    name: "Verona: Akimov/Gazprombank",
+    coords: [45.4384, 10.9916],
+    info: "The Insider uppgav 2025 att Gazprombankchefen Andrej Akimov äger en lägenhet i centrala Verona. Stadspunkt och mediegranskning."
+  },
+  {
+    name: "Andora: Tjerners familj/Gazprom Neft",
+    coords: [43.9550, 8.1410],
+    info: "The Insider uppgav att Anatolij Tjerners hustru och dotter äger en större villa med mark i Andora. Kommunpunkt och mediegranskning."
+  },
+  {
+    name: "Milano: Denis Norov/VTB-familjen",
+    coords: [45.4642, 9.1900],
+    info: "Lägenhet som enligt The Insider ägs av sonen till VTB-styrelseledamoten Erkin Norov. Stadspunkt och mediegranskning."
+  },
+  {
+    name: "Rom: Denis Norov/VTB-spåret",
+    coords: [41.9028, 12.4964],
+    info: "Lägenhet som enligt The Insider gavs till Denis Norov av en person som uppges ha varit rådgivare till en VTB-chef. Stadspunkt och mediegranskning."
+  },
+  {
+    name: "Montesilvano: Sharonov/Sovcomflot–En+",
+    coords: [42.5140, 14.1490],
+    info: "The Insider uppgav att Andrej Sharonov och hans barn ärvt en lägenhet och ett garage. Kommunpunkt; ägandet är inte i sig uppgivet som olagligt."
+  },
+  {
+    name: "Florens: Krainskij/Rosseti",
+    coords: [43.7696, 11.2558],
+    info: "The Insider uppgav att Rossettis biträdande vd Daniil Krainskij äger en lägenhet i Florens. Stadspunkt och mediegranskning."
+  }
+);
+
+blockedProperties.push(
+  {
+    name: "Finland: Imatra – negativt tillståndsbeslut 2024",
+    coords: [61.1719, 28.7524],
+    info: "Ett av sex objekt som Finlands försvarsministerium stoppade i september 2024 av nationella säkerhetsskäl. Kommunpunkt; de samlade fallen omfattade flera nationaliteter."
+  },
+  {
+    name: "Finland: Kouvola/Myllykoski – stoppade affärer",
+    coords: [60.7714, 26.7858],
+    info: "Kouvola ingick i besluten 2024; Yle redovisade även ett separat stopp i Myllykoski 2025. Kommunpunkt och inte bevis för fientlig avsikt."
+  },
+  {
+    name: "Finland: Lieksa – negativa tillståndsbeslut 2024",
+    coords: [63.3170, 30.0250],
+    info: "Tre av de sex stoppade objekten i september 2024 låg i Lieksa enligt Yle. Kommunpunkt; de samlade köparuppgifterna omfattade flera nationaliteter."
+  },
+  {
+    name: "Finland: Sastamala – stoppad affär 2025",
+    coords: [61.3400, 22.9100],
+    info: "Yle redovisade 2026 att försvarsministeriet hade stoppat en fastighetsaffär i Sastamala under 2025. Kommunpunkt."
+  },
+  {
+    name: "Alta Mira, Biarritz",
+    coords: [43.4832, -1.5586],
+    info: "Kirill Shamalovs villa, tidigare ägd genom bolag av Gennadij Timtjenko, fördes 2022 upp i franska finansministeriets register över sanktionsfrysta tillgångar. Stadspunkt."
+  },
+  {
+    name: "Villa Souzanna, Anglet",
+    coords: [43.4814, -1.5147],
+    info: "Beslagtagen i december 2023 inom en pågående fransk förundersökning om misstänkt grov penningtvätt. Beslaget är inte en fällande dom. Kommunpunkt."
+  },
+  {
+    name: "Paris 16:e: Solotsinskaja/Peskovfamiljen",
+    coords: [48.8637, 2.2769],
+    info: "Lägenhet beslagtagen i december 2023 inom pågående utredning om misstänkt grov penningtvätt. Le Monde redovisade VTB- och Sberbankspår. Områdespunkt."
+  }
+);
+
+warningProperties.push(
+  {
+    name: "Kesäkylä, Miehikkälä",
+    coords: [60.6710, 27.7030],
+    info: "Försvarsministeriet krävde 2026 att köpet av det gränsnära lägercentret skulle hävas. Beslutet kunde överklagas och var inte slutligt vid Yles rapportering. Kommunpunkt."
+  },
+  {
+    name: "Zsar Outlet Village, Vaalimaa",
+    coords: [60.6000, 27.8000],
+    info: "Pågående försäljning. Uppgiven köparkandidat Viktor Ignatjev har enligt Yle en indirekt affärslänk till Gennadij Timtjenko. Affären var inte slutförd i juli 2026. Områdespunkt."
+  },
+  {
+    name: "Inter Energia, Nordhavn",
+    coords: [55.7060, 12.5960],
+    info: "Bolagsadress, inte belagt fastighetsägande. Danwatch kopplade den tidigare ägaren Juris Savickis till KGB-arkiv och bolaget till Itera Latvija/Rosneft; ingen dokumentation för agentrekrytering från adressen."
+  },
+  {
+    name: "Sofia kyrka: mötesplats i stoppad SVR-operation",
+    coords: [59.3135, 18.0880],
+    info: "SVT lokaliserade en av Säpos spaningsbilder hit. Kyrkan eller dess verksamhet är inte utpekad som part i operationen. Områdespunkt."
+  },
+  {
+    name: "Sundbyberg: pubmöten i stoppad SVR-operation",
+    coords: [59.3611, 17.9722],
+    info: "SVT lokaliserade en annan spaningsbild till en pub i Sundbyberg. Puben eller dess ägare är inte utpekad som part i operationen. Kommunpunkt."
+  }
+);
+
 // --- VY-HANTERING ---
 function setView(viewName) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -8953,6 +9515,9 @@ function setView(viewName) {
     }
     if (viewName === 'graph') {
         requestAnimationFrame(initGraph);
+    }
+    if (viewName === 'narrative') {
+        requestAnimationFrame(initNarrative);
     }
 }
 
@@ -8976,6 +9541,7 @@ const graphState = {
     search: '',
     filter: 'all',
     cluster: 'all',
+    crossLinks: true,
     pointers: new Map(),
     drag: null,
     pinch: null,
@@ -9007,16 +9573,775 @@ function graphClassify(title, info, alert) {
     };
 }
 
+// --- LÄSÖVERSIKT: ALLT TRÄD- OCH FOI-INNEHÅLL SOM SÖKBAR LÖPTEXT ---
+const narrativeRegionDefs = [
+    {
+        key: 'sweden',
+        title: 'Sverige',
+        intro: 'Svenska fastigheter, bolag, personer, institutioner och säkerhetsrelaterade fall. Här ingår också samtliga 128 rader ur FOI:s register från 2022, tydligt märkta som en historisk ögonblicksbild.'
+    },
+    {
+        key: 'nordic',
+        title: 'Norden',
+        intro: 'Fall i Finland, Norge, Danmark, Island, Färöarna och Åland. Sverige redovisas separat ovan.'
+    },
+    {
+        key: 'europe',
+        title: 'Europa',
+        intro: 'Europeiska fall, inklusive Ryssland, Storbritannien, EU-länder och övriga europeiska stater. Uppgifter med olika källstatus hålls isär i varje post.'
+    },
+    {
+        key: 'world',
+        title: 'Övriga världen',
+        intro: 'Fall och jämförelsematerial från Nord- och Sydamerika, Asien, Afrika, Mellanöstern och Oceanien samt verkligt globala spår.'
+    }
+];
+
+const narrativeState = {
+    initialized: false,
+    entries: [],
+    methodRoot: null,
+    regions: {},
+    activeIds: null,
+    indexTerms: [],
+    focusTimer: null
+};
+
+const narrativeFoiLinks = [
+    {
+        text: 'FOI: ryska ekonomiska intressen i Sverige',
+        url: 'https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html'
+    },
+    {
+        text: 'FOI-rapporten (PDF)',
+        url: 'https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf'
+    }
+];
+
+function narrativeNormalize(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('sv')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function narrativeStripStatus(title) {
+    return String(title || '')
+        .replace(/^\d+\)\s*/, '')
+        .replace(/^[A-ZÅÄÖ0-9][A-ZÅÄÖ0-9 /+()\-–—]{2,72}:\s*/, '')
+        .trim();
+}
+
+function narrativeDetectRegion(title, info) {
+    const titleText = narrativeNormalize(title);
+    const infoText = narrativeNormalize(info);
+    const text = titleText || infoText;
+
+    const sweden = /(sverige|svensk|stockholm|goteborg|malmo|uppsala|vasteras|orebro|linkoping|helsingborg|jonkoping|norrkoping|lund\b|umea|gavle|boras|sodertalje|eskilstuna|halmstad|vaxjo|karlstad|sundsvall|ostersund|trollhattan|lulea|norrtalje|kristinehamn|musk[oö]|billdal|solbacken|hasslo|sundbyberg|lidingo|kungalv|ljungby|nacka|bandhagen|norsborg|solna|frolunda|tyreso|vaxholm|gotland|skane|dalarna|varmland)/i;
+    const nordic = /(norden|nordisk|finland|finsk|helsingfors|hango|alands?|vaalimaa|zsar|norge|norsk|oslo|troms[oö]|svalbard|kirkenes|danmark|dansk|kopenhamn|nordhavn|faroarna|faroisk|island|islandsk|reykjavik)/i;
+    const world = /(ovriga varlden|internationell|global jamforelse|usa\b|united states|washington|new york|florida|kalifornien|canada|kanada|mexiko|brasilien|argentina|venezuela|kuba\b|karibien|australien|canberra|nya zeeland|kina\b|kines|hongkong|japan|indien|pakistan|thailand|phuket|singapore|sydkorea|nordkorea|indonesien|malaysia|afrika|angola|luanda|egypten|alexandria|sydafrika|syrien|tartus|iran\b|irak\b|israel|saudiarabien|forenade arabemiraten|dubai|qatar|afghanistan)/i;
+    const europe = /(europa|europeisk|ryssland|rysk|moskva|sankt petersburg|s:t petersburg|murmansk|kaliningrad|sochi|sotji|ukraina|kyiv|kiev|belarus|minsk|moldavien|georgien|armenien|azerbajdzjan|storbritannien|brittisk|london|frankrike|fransk|paris|biarritz|rivieran|tyskland|tysk|berlin|italien|italiensk|rom\b|milano|montesilvano|spanien|spansk|portugal|polen|polsk|warszawa|tjeck|prag|karlovy vary|slovak|ungern|budapest|osterrike|wien|schweiz|nederland|belgien|luxemburg|irland|baltikum|estland|lettland|litauen|cypern|malta|grekland|turkiet|serbien|kroatien|slovenien|bulgarien|rumanien|albanien|montenegro|bosnien|kosovo|nato\b|eu\b)/i;
+
+    if (sweden.test(text)) return 'sweden';
+    if (nordic.test(text)) return 'nordic';
+    if (world.test(text)) return 'world';
+    if (europe.test(text)) return 'europe';
+    return null;
+}
+
+function narrativeCleanLinks(links) {
+    const seen = new Set();
+    return (Array.isArray(links) ? links : []).filter(link => {
+        if (!link || !/^https?:\/\//i.test(String(link.url || ''))) return false;
+        const key = String(link.url);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    }).map(link => ({
+        text: String(link.text || 'Källa'),
+        url: String(link.url)
+    }));
+}
+
+function buildNarrativeData() {
+    const entries = [];
+    let sequence = 0;
+    const methodRoot = (treeData.children || []).find(item => /kallstatus/i.test(narrativeNormalize(item.title)));
+
+    function walk(item, path, inheritedRegion, inheritedLinks, depth) {
+        if (!item) return;
+        const title = String(item.title || 'Namnlös post');
+        const children = Array.isArray(item.children) ? item.children : [];
+        const directLinks = narrativeCleanLinks(item.links);
+        const links = directLinks.length ? directLinks : narrativeCleanLinks(inheritedLinks);
+        const inheritedSource = !directLinks.length && links.length > 0;
+        const explicitRegion = narrativeDetectRegion(title, '');
+        const region = explicitRegion || inheritedRegion || narrativeDetectRegion('', item.info || '') || 'europe';
+        const info = String(item.info || (children.length
+            ? 'Detta avsnitt samlar de underliggande posterna om ' + narrativeStripStatus(title) + '.'
+            : 'Posten ingår i kunskapsträdet men har ingen separat förklarande text.'));
+        const flags = graphClassify(title, info, item.alert);
+        const id = 'narrative-entry-' + (++sequence);
+        const breadcrumb = path.concat(title);
+        const entry = {
+            id,
+            title,
+            info,
+            region,
+            links,
+            inheritedSource,
+            breadcrumb,
+            depth,
+            flags,
+            highlight: Boolean(item.highlight),
+            sourceType: 'tree',
+            mapCategory: '',
+            foi: false,
+            foiActor: '',
+            foiLocation: '',
+            foiSni: '',
+            el: null,
+            searchText: ''
+        };
+        entry.searchText = narrativeNormalize([
+            title,
+            info,
+            breadcrumb.join(' '),
+            links.map(link => link.text + ' ' + link.url).join(' ')
+        ].join(' '));
+        entries.push(entry);
+
+        const nextLinks = directLinks.length ? directLinks : inheritedLinks;
+        children.forEach(child => walk(child, breadcrumb, region, nextLinks, depth + 1));
+    }
+
+    (treeData.children || []).forEach(item => {
+        if (item === methodRoot) return;
+        walk(item, [treeData.title], null, [], 1);
+    });
+
+    const mapGroups = [
+        {
+            items: strategicProperties,
+            category: 'Köpt eller strategiskt objekt',
+            key: 'strategic'
+        },
+        {
+            items: blockedProperties,
+            category: 'Stoppat eller övertaget objekt',
+            key: 'blocked'
+        },
+        {
+            items: warningProperties,
+            category: 'Varning eller riskindikator',
+            key: 'warning'
+        }
+    ];
+
+    mapGroups.forEach(group => {
+        (group.items || []).forEach(point => {
+            const title = String(point.name || 'Namnlös kartpost');
+            const info = String(point.info || 'Kartpost utan separat förklarande text.');
+            const coords = Array.isArray(point.coords) ? point.coords : [];
+            const lat = Number(coords[0]);
+            const lon = Number(coords[1]);
+            const osmLink = Number.isFinite(lat) && Number.isFinite(lon) ? [{
+                text: 'Visa kartpunkten i OpenStreetMap',
+                url: 'https://www.openstreetmap.org/?mlat=' + encodeURIComponent(lat) +
+                    '&mlon=' + encodeURIComponent(lon) + '#map=11/' +
+                    encodeURIComponent(lat) + '/' + encodeURIComponent(lon)
+            }] : [];
+            const normalizedName = narrativeNormalize(title);
+            const relatedTreeEntry = entries.find(entry =>
+                entry.sourceType === 'tree' &&
+                entry.links.length &&
+                normalizedName.length > 5 &&
+                entry.searchText.includes(normalizedName)
+            );
+            const links = narrativeCleanLinks(
+                (relatedTreeEntry ? relatedTreeEntry.links : []).concat(osmLink)
+            );
+            const flags = graphClassify(title, info, group.key === 'warning');
+            if (group.key === 'strategic' || group.key === 'blocked') flags.property = true;
+            if (group.key === 'blocked') flags.confirmed = true;
+            if (group.key === 'warning') flags.indication = true;
+            const region = narrativeDetectRegion(title, info) || 'europe';
+            const id = 'narrative-entry-' + (++sequence);
+            const entry = {
+                id,
+                title,
+                info,
+                region,
+                links,
+                inheritedSource: relatedTreeEntry
+                    ? 'Källknapparna är hämtade från motsvarande sakpost i kunskapsträdet. OpenStreetMap-länken visar endast kartpunkten.'
+                    : 'OpenStreetMap-länken visar endast kartpunkten och är inte en beviskälla.',
+                breadcrumb: [treeData.title, 'Kartlager', group.category, title],
+                depth: 3,
+                flags,
+                highlight: false,
+                sourceType: 'map',
+                mapCategory: group.category,
+                foi: false,
+                foiActor: '',
+                foiLocation: '',
+                foiSni: '',
+                el: null,
+                searchText: ''
+            };
+            entry.searchText = narrativeNormalize([
+                title,
+                info,
+                group.category,
+                coords.join(' '),
+                links.map(link => link.text + ' ' + link.url).join(' ')
+            ].join(' '));
+            entries.push(entry);
+        });
+    });
+
+    foiList.forEach(company => {
+        const title = String(company.name || 'Namnlöst FOI-bolag');
+        const info = 'I FOI:s register från 2022 återges ' + title + ', med ort ' +
+            String(company.loc || 'ej angiven') + ' och SNI-kod ' + String(company.sni || 'ej angiven') +
+            '. Fältet ”Info/koppling” anger: ' + String(company.info || 'ej angiven') +
+            '. Registerposten är en historisk ögonblicksbild och ska läsas enligt FOI:s definitioner och metod.';
+        const flags = graphClassify(title, info, false);
+        if (String(company.sni || '').toUpperCase() === 'L') flags.property = true;
+        const id = 'narrative-entry-' + (++sequence);
+        const entry = {
+            id,
+            title,
+            info,
+            region: 'sweden',
+            links: narrativeFoiLinks,
+            inheritedSource: false,
+            breadcrumb: [treeData.title, 'FOI-register 2022', String(company.info || 'Ej angiven aktör'), title],
+            depth: 3,
+            flags,
+            highlight: false,
+            sourceType: 'foi',
+            mapCategory: '',
+            foi: true,
+            foiActor: String(company.info || ''),
+            foiLocation: String(company.loc || ''),
+            foiSni: String(company.sni || ''),
+            el: null,
+            searchText: ''
+        };
+        entry.searchText = narrativeNormalize([
+            title,
+            info,
+            company.loc,
+            company.sni,
+            company.info,
+            narrativeFoiLinks.map(link => link.text + ' ' + link.url).join(' ')
+        ].join(' '));
+        entries.push(entry);
+    });
+
+    narrativeState.entries = entries;
+    narrativeState.methodRoot = methodRoot || null;
+}
+
+function narrativeAppendLinks(container, links, inheritedSource) {
+    if (!links || !links.length) return;
+    if (inheritedSource) {
+        const note = document.createElement('p');
+        note.className = 'narrative-source-note';
+        note.textContent = typeof inheritedSource === 'string'
+            ? inheritedSource
+            : 'Källorna nedan hör till närmaste överordnade avsnitt i kunskapsträdet.';
+        container.appendChild(note);
+    }
+    const linksEl = document.createElement('div');
+    linksEl.className = 'narrative-links';
+    links.forEach(link => {
+        const anchor = document.createElement('a');
+        anchor.href = link.url;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        anchor.textContent = link.text;
+        linksEl.appendChild(anchor);
+    });
+    container.appendChild(linksEl);
+}
+
+function renderNarrativeMethod() {
+    const content = document.getElementById('narrative-method-content');
+    const wrapper = document.getElementById('narrative-method');
+    if (!content || !wrapper) return;
+    content.textContent = '';
+    const methodRoot = narrativeState.methodRoot;
+    if (!methodRoot) {
+        wrapper.hidden = true;
+        return;
+    }
+
+    const intro = document.createElement('p');
+    intro.className = 'narrative-index-note';
+    intro.textContent = 'Läs dessa definitioner innan posterna värderas. De beskriver hur bekräftade uppgifter, pågående processer, medieuppgifter och riskindikatorer skiljs åt.';
+    content.appendChild(intro);
+
+    (methodRoot.children || []).forEach(item => {
+        const block = document.createElement('section');
+        block.className = 'narrative-method-item';
+        const heading = document.createElement('h3');
+        heading.textContent = item.title || 'Källstatus';
+        block.appendChild(heading);
+        if (item.info) {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = item.info;
+            block.appendChild(paragraph);
+        }
+        narrativeAppendLinks(block, narrativeCleanLinks(item.links), false);
+        content.appendChild(block);
+    });
+}
+
+function narrativeAddBadge(container, text, extraClass) {
+    const badge = document.createElement('span');
+    badge.className = 'narrative-badge' + (extraClass ? ' ' + extraClass : '');
+    badge.textContent = text;
+    container.appendChild(badge);
+}
+
+function renderNarrativeEntry(entry) {
+    const article = document.createElement('article');
+    article.id = entry.id;
+    article.className = 'narrative-entry';
+    if (entry.flags.confirmed) article.classList.add('is-confirmed');
+    if (entry.flags.indication) article.classList.add('is-indication');
+    if (entry.flags.alert) article.classList.add('is-alert');
+    article.dataset.search = entry.searchText;
+
+    const path = document.createElement('p');
+    path.className = 'narrative-path';
+    path.textContent = entry.breadcrumb.slice(1, -1).join(' › ');
+    article.appendChild(path);
+
+    const heading = document.createElement('h3');
+    heading.textContent = entry.title;
+    article.appendChild(heading);
+
+    const badges = document.createElement('div');
+    badges.className = 'narrative-badges';
+    if (entry.foi) narrativeAddBadge(badges, 'FOI-register 2022', '');
+    if (entry.sourceType === 'map') narrativeAddBadge(badges, 'Kartlager · ' + entry.mapCategory, '');
+    if (entry.flags.property) narrativeAddBadge(badges, 'Fastighet / plats', '');
+    if (entry.flags.confirmed) narrativeAddBadge(badges, 'Bekräftat / åtgärd', 'confirmed');
+    if (entry.flags.indication) narrativeAddBadge(badges, 'Indikation / uppgift', 'indication');
+    if (entry.flags.alert) narrativeAddBadge(badges, 'Varning / risk', 'alert');
+    if (entry.highlight && !entry.flags.alert) narrativeAddBadge(badges, 'Utvald post', '');
+    if (badges.children.length) article.appendChild(badges);
+
+    const paragraph = document.createElement('p');
+    paragraph.className = 'narrative-text';
+    paragraph.textContent = entry.info;
+    article.appendChild(paragraph);
+
+    narrativeAppendLinks(article, entry.links, entry.inheritedSource);
+    entry.el = article;
+    return article;
+}
+
+function renderNarrativeRegions() {
+    const host = document.getElementById('narrative-regions');
+    host.textContent = '';
+    narrativeState.regions = {};
+
+    narrativeRegionDefs.forEach(def => {
+        const section = document.createElement('section');
+        section.id = 'narrative-region-' + def.key;
+        section.className = 'narrative-region';
+        section.dataset.region = def.key;
+
+        const head = document.createElement('div');
+        head.className = 'narrative-region-head';
+        const heading = document.createElement('h2');
+        heading.textContent = def.title;
+        const count = document.createElement('span');
+        count.className = 'narrative-region-count';
+        head.appendChild(heading);
+        head.appendChild(count);
+        section.appendChild(head);
+
+        const intro = document.createElement('p');
+        intro.className = 'narrative-region-intro';
+        intro.textContent = def.intro;
+        section.appendChild(intro);
+
+        const regionEntries = narrativeState.entries.filter(entry => entry.region === def.key);
+        regionEntries.forEach(entry => section.appendChild(renderNarrativeEntry(entry)));
+        host.appendChild(section);
+        narrativeState.regions[def.key] = {
+            section,
+            count,
+            total: regionEntries.length
+        };
+    });
+}
+
+const narrativeCompanyPattern = /(\bAB\b|aktiebolag|\bOy\b|\bOyj\b|\bAS\b|A\/S|\bLtd\b|limited|\bLLC\b|\bInc\b|group|holding|bank|fond|foundation|technologies|construction|management|capital|invest|gazprom|rosneft|rosatom|rusal|en\+|sual|sovcomflot|rosseti|norebo|strabag|pravfond|gemcorp|itera|inter energia|naftogaz|atomflot|company|bolag|foretag)/i;
+const narrativeOrganisationPattern = /(sapo|sakerhetspolis|foi\b|svr\b|gru\b|fsb\b|kgb\b|nato\b|europol|rim\b|nrm\b|russian imperial movement|nordiska motstandsrorelsen|ministerium|regering|ambassad|kyrka|patriarkat|organisation|myndighet|polis|departement|treasury|domstol|kommission|parlament|forsvarsmakt|underrattelse|rossotrudnichestvo)/i;
+const narrativePlacePattern = /(sverige|stockholm|goteborg|malmo|vasteras|uppsala|orebro|norden|finland|helsingfors|hango|vaalimaa|norge|oslo|tromso|svalbard|danmark|kopenhamn|nordhavn|island|faroarna|europa|ryssland|moskva|petersburg|murmansk|kaliningrad|sochi|ukraina|belarus|london|paris|biarritz|berlin|rom\b|milano|warszawa|prag|karlovy vary|wien|cypern|malta|baltikum|rivieran|usa\b|kanada|australien|kina\b|hongkong|thailand|phuket|syrien|tartus|egypten|angola|afrika|asien|amerika)/i;
+const narrativePersonCandidatePattern = /[A-ZÅÄÖÉÜÇČŠŽĀĒĪŪĢĶĻŅ][a-zåäöéüçčšžāēīūģķļņ'’.\-]{1,}(?:\s+[A-ZÅÄÖÉÜÇČŠŽĀĒĪŪĢĶĻŅ][a-zåäöéüçčšžāēīūģķļņ'’.\-]{1,}){1,3}/g;
+const narrativeSingleNameTokenPattern = /[A-ZÅÄÖÉÜÇČŠŽĀĒĪŪĢĶĻŅ][a-zåäöéüçčšžāēīūģķļņ'’.\-]{1,}/g;
+const narrativePersonStopWords = new Set([
+    'villa', 'hotell', 'hotel', 'house', 'arena', 'outlet', 'village', 'fjellandsby',
+    'kyrka', 'kirke', 'church', 'stugan', 'stuga', 'gard', 'slott', 'palace',
+    'fastighet', 'hamn', 'flygbas', 'residens', 'compound', 'golf', 'club',
+    'tower', 'wharf', 'street', 'highway', 'point', 'cafe', 'shipping', 'ports',
+    'international', 'communications', 'telegraph', 'foundation', 'fund',
+    'movement', 'motstandsrorelsen', 'fredsstiftelsen', 'university', 'universitet',
+    'dialogue', 'autonomy', 'railways', 'bank', 'group', 'holding', 'company',
+    'limited', 'ltd', 'aktiebolag', 'bolag', 'grupp', 'ledningen', 'nordic', 'sweden', 'russian', 'nordiska',
+    'svenska', 'norska', 'ryska', 'brittiska', 'internationell', 'global',
+    'sankt', 'petersburg', 'new', 'york', 'glen', 'cove', 'camp', 'nord',
+    'bear', 'polar', 'sea', 'food', 'airiston', 'helmi', 'pergamon', 'nevsky',
+    'ruslands', 'hus', 'rattlig', 'ram', 'kontext', 'avtal', 'reaktion',
+    'beslut', 'metod', 'plattform', 'verksamhet', 'jamforelse', 'hotbilden',
+    'infiltration', 'malvakt', 'budskap', 'motiv', 'narvarande', 'fasaden',
+    'natverket', 'eliten', 'kopplingen', 'mellanhanden', 'motparten',
+    'interna', 'rapporten', 'hemliga', 'motet', 'efter', 'fore', 'fallet',
+    'papers', 'hook', 'center', 'automotive', 'marine', 'bulk', 'road', 'court',
+    'energia', 'itera', 'latvija', 'suppleanten', 'fostran', 'slutanvandare',
+    'strategisk', 'press', 'forfalskning', 'sabotage', 'protester',
+    'naringspenningtvatt', 'lanade', 'identiteter', 'operativ', 'anvandning',
+    'central', 'styrning', 'modus', 'operandi', 'finansiella', 'spar',
+    'viktiga', 'handelser', 'restaurang', 'centralen', 'sthlm', 'gamla', 'stan',
+    'utpekade', 'militar', 'systematisk', 'panama', 'kazanin', 'explorer',
+    'russ-kit', 'hainan', 'xin', 'yang',
+    'hisings', 'karra', 'nacka', 'strand', 'diplomatisk', 'tackmantel',
+    'karlovy', 'vary', 'skatteverkets', 'granskning', 'sanktionerade', 'aktorer',
+    'le', 'monde', 'aughinish', 'alumina', 'deras', 'natverk', 'sekundar',
+    'jurisdiktion', 'ayia', 'napa', 'lloyds', 'list', 'grace', 'ferrum',
+    'utlandska', 'agenter', 'medicinsk', 'overvakning', 'nordisk', 'sakerhet',
+    'politisk', 'respons', 'juicy', 'fields', 'falska', 'bakgrunden', 'tidig',
+    'italienobjekt', 'radio', 'liberty', 'svoboda', 'space', 'unites',
+    'costa', 'smeralda', 'gazprom', 'neft', 'alta', 'mira', 'inter',
+    'seafood',
+    'malofeevs', 'inre', 'krets', 'baltiska', 'proxies', 'operation', 'troika',
+    'oligarch', 'civil', 'underrattelse', 'okand', 'tjanst', 'nordion', 'energi',
+    'primara', 'hubben', 'deloitte', 'cyprus', 'affarsnatverk', 'gyllene', 'pass',
+    'butterfly', 'list-kriterier', 'ledra', 'dynamic', 'pride', 'exxon', 'valdez',
+    'caspian', 'pipeline', 'consortium', 'kombinat', 'elektrokhimpribor',
+    'digitala', 'gulag', 'svarta', 'marknaden', 'stoner',
+    'maryland', 'tartus', 'bardufoss', 'minsk', 'tyskland', 'finland',
+    'danmark', 'norge', 'ryssland', 'sverige', 'paris', 'london', 'berlin',
+    'prag', 'rom', 'milano', 'moskva', 'stockholm', 'helsingfors'
+]);
+const narrativeHonorifics = new Set([
+    'lord', 'sir', 'overste', 'general', 'major', 'kapten', 'prins', 'prinsessan',
+    'dottern', 'sonen', 'frun', 'hustrun', 'maken', 'makan', 'agare', 'bulvan',
+    'oligarken', 'huvudman', 'ledare', 'varden', 'mellanhanden'
+]);
+const narrativeFoiNoiseTokens = new Set([
+    'tirona', 'ltd', 'hydrys', 'inv.', 'inv', 'recore', 'min.', 'min',
+    'bank', 'strabag', 'sulzer', 'sual', 'zublin', 'en'
+]);
+const narrativePersonEvidencePattern = /(person|agare|agde|ager|agarkedja|grundare|grundade|ledare|ledde|chef|vd\b|direktor|generaldirektor|styrelse|ordforande|suppleant|oligark|affarsman|entreprenor|investerare|minister|premiarminister|president|borgmastare|general|overste|major|agent|spion|diplomat|prast|professor|radgivare|analytiker|representant|brottsboss|son\b|dotter|hustru|make\b|maka\b|familj|partner|medlem|greps|gripen|domd|atal|sanktion|terrorstamplad|kopplad|anklagad|utpekad|fodd|kopare|saljare|driver|kontrollerar|bakgrund|profil|nyckelkontakt|anstalld|ansvarig|finansiar)/i;
+
+function narrativeExtractTreePersonLabels(entry) {
+    let title = narrativeStripStatus(entry.title)
+        .replace(/\b(dottern|sonen|frun|hustrun|maken|makan|målvakten|huvudman|ägare|bulvan|oligarken|värden|mellanhanden)\s*:\s*/gi, '');
+    const matches = title.match(narrativePersonCandidatePattern) || [];
+    const labels = [];
+    const hasPersonEvidence = narrativePersonEvidencePattern.test(
+        narrativeNormalize(entry.title + ' ' + entry.info)
+    );
+
+    matches.forEach(match => {
+        const start = title.indexOf(match);
+        const before = start >= 0 ? title.slice(0, start).trim() : '';
+        const after = start >= 0 ? title.slice(start + match.length).trim() : '';
+        const explicitNamePosition =
+            (!before && !after) ||
+            (!before && /^[\/&()–—-]/.test(after)) ||
+            (/[\/&(:–—-]$/.test(before) && (!after || /^[\/&),:–—-]/.test(after)));
+        if (!hasPersonEvidence && !explicitNamePosition) return;
+        const words = match.replace(/[.]+$/g, '').split(/\s+/);
+        while (words.length && narrativeHonorifics.has(narrativeNormalize(words[0]))) words.shift();
+        while (words.length && narrativeHonorifics.has(narrativeNormalize(words[words.length - 1]))) words.pop();
+        if (words.length < 2 || words.length > 4) return;
+        const normalizedWords = words.map(word => narrativeNormalize(word));
+        if (normalizedWords.some(word => narrativePersonStopWords.has(word))) return;
+        const label = words.join(' ');
+        if (!labels.some(existing => narrativeNormalize(existing) === narrativeNormalize(label))) labels.push(label);
+    });
+
+    const familyMatches = title.match(/[A-ZÅÄÖÉÜÇČŠŽ][a-zåäöéüçčšž'’\-]+familj(?:en|ens)?/g) || [];
+    familyMatches.forEach(label => {
+        if (!labels.some(existing => narrativeNormalize(existing) === narrativeNormalize(label))) labels.push(label);
+    });
+    return labels;
+}
+
+function narrativeExtractFoiPersonLabels(actor) {
+    const tokens = String(actor || '').match(narrativeSingleNameTokenPattern) || [];
+    const cleaned = tokens.filter(token => !narrativeFoiNoiseTokens.has(narrativeNormalize(token)));
+    if (cleaned.length < 2) return [];
+    return [cleaned.slice(-2).join(' ')];
+}
+
+function narrativeTermMaps() {
+    return {
+        places: new Map(),
+        people: new Map(),
+        companies: new Map(),
+        organisations: new Map()
+    };
+}
+
+function narrativeAddTerm(map, label, entry, query) {
+    const cleanLabel = String(label || '').replace(/\s+/g, ' ').trim();
+    if (!cleanLabel) return;
+    const key = narrativeNormalize(cleanLabel);
+    if (!key) return;
+    if (!map.has(key)) {
+        map.set(key, {
+            label: cleanLabel,
+            query: String(query || cleanLabel),
+            ids: new Set()
+        });
+    }
+    map.get(key).ids.add(entry.id);
+}
+
+function buildNarrativeIndexTerms() {
+    const maps = narrativeTermMaps();
+
+    narrativeState.entries.forEach(entry => {
+        const label = narrativeStripStatus(entry.title);
+        const normalizedTitle = narrativeNormalize(entry.title);
+        const normalizedInfo = narrativeNormalize(entry.info);
+        const combined = normalizedTitle + ' ' + normalizedInfo;
+
+        if (entry.foi) {
+            narrativeAddTerm(maps.companies, entry.title, entry, entry.title);
+            narrativeAddTerm(maps.places, entry.foiLocation, entry, entry.foiLocation);
+            const actor = entry.foiActor;
+            if (narrativeCompanyPattern.test(narrativeNormalize(actor))) {
+                narrativeAddTerm(maps.companies, actor, entry, actor);
+            }
+            if (narrativeOrganisationPattern.test(narrativeNormalize(actor))) {
+                narrativeAddTerm(maps.organisations, actor, entry, actor);
+            }
+            narrativeExtractFoiPersonLabels(actor).forEach(person => {
+                narrativeAddTerm(maps.people, person, entry, person);
+            });
+            return;
+        }
+
+        if (entry.sourceType === 'map' || entry.flags.property || narrativePlacePattern.test(normalizedTitle)) {
+            narrativeAddTerm(maps.places, label, entry, label);
+        }
+        if (narrativeCompanyPattern.test(combined)) {
+            narrativeAddTerm(maps.companies, label, entry, label);
+        }
+        if (narrativeOrganisationPattern.test(combined)) {
+            narrativeAddTerm(maps.organisations, label, entry, label);
+        }
+        narrativeExtractTreePersonLabels(entry).forEach(person => {
+            narrativeAddTerm(maps.people, person, entry, person);
+        });
+    });
+
+    return maps;
+}
+
+function renderNarrativeIndex() {
+    const host = document.getElementById('narrative-index-groups');
+    const total = document.getElementById('narrative-index-total');
+    host.textContent = '';
+    narrativeState.indexTerms = [];
+
+    const maps = buildNarrativeIndexTerms();
+    const groups = [
+        { key: 'places', label: 'Platser och fastigheter' },
+        { key: 'people', label: 'Personer och familjer' },
+        { key: 'companies', label: 'Bolag och ägarspår' },
+        { key: 'organisations', label: 'Organisationer och myndigheter' }
+    ];
+
+    groups.forEach(group => {
+        const terms = Array.from(maps[group.key].values())
+            .sort((a, b) => a.label.localeCompare(b.label, 'sv'));
+        const details = document.createElement('details');
+        details.className = 'entity-index-group';
+        details.dataset.indexGroup = group.key;
+
+        const summary = document.createElement('summary');
+        summary.textContent = group.label + ' (' + terms.length.toLocaleString('sv-SE') + ')';
+        details.appendChild(summary);
+
+        const list = document.createElement('div');
+        list.className = 'entity-index-list';
+        terms.forEach(term => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'entity-index-item';
+            button.dataset.indexSearch = narrativeNormalize(term.label + ' ' + term.query);
+
+            const label = document.createElement('span');
+            label.textContent = term.label;
+            const count = document.createElement('span');
+            count.className = 'entity-index-item-count';
+            count.textContent = term.ids.size.toLocaleString('sv-SE');
+            button.appendChild(label);
+            button.appendChild(count);
+            button.addEventListener('click', () => narrativeFocusTerm(term));
+            list.appendChild(button);
+            term.button = button;
+            term.group = details;
+            narrativeState.indexTerms.push(term);
+        });
+        details.appendChild(list);
+        host.appendChild(details);
+    });
+
+    total.textContent = narrativeState.indexTerms.length.toLocaleString('sv-SE') + ' uppslagsord';
+}
+
+function narrativeApplySearch() {
+    const input = document.getElementById('narrative-search');
+    const query = narrativeNormalize(input.value);
+    const tokens = query.split(' ').filter(Boolean);
+    const visibleByRegion = {};
+    narrativeRegionDefs.forEach(def => { visibleByRegion[def.key] = 0; });
+    let visible = 0;
+
+    narrativeState.entries.forEach(entry => {
+        const matchesText = !tokens.length || tokens.every(token => entry.searchText.includes(token));
+        const matchesIds = !narrativeState.activeIds || narrativeState.activeIds.has(entry.id);
+        const show = matchesText && matchesIds;
+        entry.el.hidden = !show;
+        if (show) {
+            visible++;
+            visibleByRegion[entry.region] = (visibleByRegion[entry.region] || 0) + 1;
+        }
+    });
+
+    narrativeRegionDefs.forEach(def => {
+        const region = narrativeState.regions[def.key];
+        const regionVisible = visibleByRegion[def.key] || 0;
+        region.section.hidden = regionVisible === 0;
+        region.count.textContent = query || narrativeState.activeIds
+            ? regionVisible.toLocaleString('sv-SE') + ' av ' + region.total.toLocaleString('sv-SE') + ' poster'
+            : region.total.toLocaleString('sv-SE') + ' poster';
+    });
+
+    document.getElementById('narrative-result-count').textContent =
+        visible.toLocaleString('sv-SE') + ' av ' + narrativeState.entries.length.toLocaleString('sv-SE') + ' poster';
+    document.getElementById('narrative-no-results').classList.toggle('visible', visible === 0);
+}
+
+function narrativeFocusTerm(term) {
+    const input = document.getElementById('narrative-search');
+    input.value = term.query;
+    narrativeState.activeIds = new Set(term.ids);
+    narrativeApplySearch();
+
+    const index = document.getElementById('narrative-index');
+    index.open = false;
+    const first = Array.from(term.ids)
+        .map(id => document.getElementById(id))
+        .find(el => el && !el.hidden);
+    if (!first) return;
+
+    window.clearTimeout(narrativeState.focusTimer);
+    narrativeState.entries.forEach(entry => entry.el.classList.remove('is-focus'));
+    first.classList.add('is-focus');
+    requestAnimationFrame(() => first.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    narrativeState.focusTimer = window.setTimeout(() => first.classList.remove('is-focus'), 2600);
+}
+
+function narrativeFilterIndex() {
+    const query = narrativeNormalize(document.getElementById('narrative-index-search').value);
+    const tokens = query.split(' ').filter(Boolean);
+    document.querySelectorAll('.entity-index-group').forEach(group => {
+        let shown = 0;
+        group.querySelectorAll('.entity-index-item').forEach(button => {
+            const match = !tokens.length || tokens.every(token => button.dataset.indexSearch.includes(token));
+            button.hidden = !match;
+            if (match) shown++;
+        });
+        group.hidden = shown === 0;
+        if (tokens.length && shown) group.open = true;
+    });
+}
+
+function bindNarrativeControls() {
+    const search = document.getElementById('narrative-search');
+    search.addEventListener('input', () => {
+        narrativeState.activeIds = null;
+        narrativeApplySearch();
+    });
+
+    document.getElementById('narrative-index-search').addEventListener('input', narrativeFilterIndex);
+
+    document.querySelectorAll('[data-narrative-region]').forEach(button => {
+        button.addEventListener('click', () => {
+            search.value = '';
+            narrativeState.activeIds = null;
+            narrativeApplySearch();
+            const target = document.getElementById('narrative-region-' + button.dataset.narrativeRegion);
+            if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        });
+    });
+}
+
+function initNarrative() {
+    if (narrativeState.initialized) return;
+    buildNarrativeData();
+    renderNarrativeMethod();
+    renderNarrativeRegions();
+    renderNarrativeIndex();
+    bindNarrativeControls();
+
+    const treeCount = narrativeState.entries.filter(entry => entry.sourceType === 'tree').length;
+    const mapCount = narrativeState.entries.filter(entry => entry.sourceType === 'map').length;
+    const foiCount = narrativeState.entries.filter(entry => entry.foi).length;
+    document.getElementById('narrative-summary').textContent =
+        narrativeState.entries.length.toLocaleString('sv-SE') + ' textposter: ' +
+        treeCount.toLocaleString('sv-SE') + ' från kunskapsträdet och ' +
+        mapCount.toLocaleString('sv-SE') + ' från kartlagret samt ' +
+        foiCount.toLocaleString('sv-SE') + ' från FOI-registret. Klicka på källknapparna för originalmaterialet.';
+
+    narrativeState.initialized = true;
+    narrativeApplySearch();
+}
+
+const graphCrossLinkSpecs = [
+    { from: "Hartwall Arena (Helsingfors)", to: "PÅGÅENDE FÖRSÄLJNING 2025–2026: Zsar Outlet Village vid Vaalimaa", type: "actor", label: "Gennadij Timtjenko – direkt ägarhistorik respektive indirekt affärslänk" },
+    { from: "PÅGÅENDE FÖRSÄLJNING 2025–2026: Zsar Outlet Village vid Vaalimaa", to: "Alta Mira, Biarritz – Kirill Shamalov / Gennadij Timtjenko", type: "actor", label: "Gennadij Timtjenko – indirekt affärslänk respektive tidigare ägare" },
+    { from: "Hangö (Boris Rotenberg)", to: "Hartwall Arena (Helsingfors)", type: "actor", label: "Rotenbergfamiljen" },
+    { from: "Hangö (Boris Rotenberg)", to: "PÅGÅENDE UTREDNING: åtta Rivierafastigheter beslagtagna i Frankrike", type: "actor", label: "Rotenberg/SGM-spår enligt Le Monde" },
+    { from: "FOI-aktör: VTB Bank", to: "Erkin och Denis Norov / VTB – Milano och Rom", type: "institution", label: "VTB Bank – FOI:s svenska bolagsspår och italienskt familjespår" },
+    { from: "FOI-aktör: VTB Bank", to: "Paris 16:e – Ekaterina Solotsinskaja / Peskovfamiljen", type: "institution", label: "VTB Bank – bolagsuppgift respektive dokumenterat fastighetslån" },
+    { from: "MEDIEGRANSKNING 2026: Inter Energia i Nordhavn – KGB-arkiv, Rosneft och frysta tillgångar", to: "Paris 16:e – Ekaterina Solotsinskaja / Peskovfamiljen", type: "institution", label: "Sberbank återkommer i olika roller; ingen gemensam transaktion belagd" },
+    { from: "FOI-aktör: En+/Sual (Deripaska)", to: "Andrej Sharonov / Sovcomflot–En+ – Montesilvano", type: "institution", label: "En+ – FOI:s bolagsuppgift och Sharonovs styrelseuppdrag" },
+    { from: "FOI-aktör: Oleg Deripaska", to: "Andrej Sharonov / Sovcomflot–En+ – Montesilvano", type: "actor", label: "Deripaska/En+-sfären enligt respektive källa" },
+    { from: "Kopplingar: Rosatom", to: "Koppling Västerås Kyrka", type: "institution", label: "Rosatom – kontraktskoppling respektive finansiering" },
+    { from: "Koppling Västerås Kyrka", to: "2024: Porttransservice som generalagent för FSUE Atomflot (Rosatom)", type: "institution", label: "Rosatom/Atomflot" },
+    { from: "Västerås (Hässlö)", to: "BIS-UPPGIFT 2025: Karlovy Vary – kyrka, prästgård och Villa Sofia", type: "institution", label: "Moskvapatriarkatets kyrkliga struktur; separata lokala fall" },
+    { from: "Västerås (Hässlö)", to: "Strategiska Lägen: Norge", type: "institution", label: "Moskvapatriarkatets nordiska organisation; ingen gemensam operation belagd" }
+];
+
 function buildGraphData() {
     const nodes = [];
     const edges = [];
 
-    function walk(item, parentId, depth, clusterIndex, breadcrumb) {
+    function walk(item, parentId, depth, clusterIndex, breadcrumb, foiMode = false) {
         const id = nodes.length;
         const title = item.title || 'Namnlös nod';
         const info = item.info || '';
         const nodeCluster = depth === 0 ? -1 : clusterIndex;
         const flags = graphClassify(title, info, item.alert);
+        const isFoi = foiMode || Boolean(item.foi);
+        flags.foi = isFoi;
         const node = {
             id,
             parentId,
@@ -9027,6 +10352,7 @@ function buildGraphData() {
             links: Array.isArray(item.links) ? item.links : [],
             alert: Boolean(item.alert),
             highlight: Boolean(item.highlight),
+            foi: isFoi,
             breadcrumb: [...breadcrumb, title],
             text: `${title} ${info}`.toLocaleLowerCase('sv'),
             flags,
@@ -9037,16 +10363,45 @@ function buildGraphData() {
             matchRank: -1
         };
         nodes.push(node);
-        if (parentId !== null) edges.push({ source: parentId, target: id });
+        if (parentId !== null) edges.push({ source: parentId, target: id, type: 'hierarchy', label: 'Sidstruktur' });
 
         const children = Array.isArray(item.children) ? item.children : [];
         children.forEach((child, childIndex) => {
             const nextCluster = depth === 0 ? childIndex : clusterIndex;
-            walk(child, id, depth + 1, nextCluster, node.breadcrumb);
+            walk(child, id, depth + 1, nextCluster, node.breadcrumb, isFoi);
         });
     }
 
     walk(treeData, null, 0, -1, []);
+
+    const foiGroups = new Map();
+    foiList.forEach(company => {
+        const actor = company.info || 'Ej angiven aktör';
+        if (!foiGroups.has(actor)) foiGroups.set(actor, []);
+        foiGroups.get(actor).push(company);
+    });
+    const sortedFoiGroups = [...foiGroups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'sv'));
+    const foiBranch = {
+        title: 'FOI-register 2022 – ägar-/aktörskluster',
+        info: 'Grafisk gruppering av sidans 128 FOI-rader efter exakt text i kolumnen Info/Koppling. Materialet är en historisk ögonblicksbild från FOI:s kartläggning och visar inte automatiskt dagens ägande, sanktioner, säkerhetshot eller brott.',
+        foi: true,
+        highlight: true,
+        links: [
+            { text: 'FOI: ryska ekonomiska intressen i Sverige', url: 'https://www.foi.se/nyheter-och-press/nyheter/2022-12-06-ryska-ekonomiska-intressen-i-sverige-kartlagda.html' },
+            { text: 'FOI-rapporten (PDF)', url: 'https://www.foi.se/download/18.7c39ae1c180e070f335281/1654870093271/FOI-2022-481_7.pdf' }
+        ],
+        children: sortedFoiGroups.map(([actor, companies]) => ({
+            title: `FOI-aktör: ${actor}`,
+            info: `${companies.length} bolag i sidans FOI-register. Exakt gruppering från 2022-underlaget; aktuell status kan ha förändrats.`,
+            foi: true,
+            children: companies.map(company => ({
+                title: company.name,
+                info: `${company.loc} · SNI ${company.sni} · angiven koppling i FOI-registret: ${company.info}.`,
+                foi: true
+            }))
+        }))
+    };
+    walk(foiBranch, 0, 1, treeData.children.length, [treeData.title], true);
 
     const topNodes = nodes.filter(node => node.depth === 1);
     const goldenAngle = Math.PI * (3 - Math.sqrt(5));
@@ -9075,12 +10430,21 @@ function buildGraphData() {
         });
     });
 
+    graphCrossLinkSpecs.forEach(spec => {
+        const source = nodes.find(node => node.title === spec.from);
+        const target = nodes.find(node => node.title === spec.to);
+        if (source && target) {
+            edges.push({ source: source.id, target: target.id, type: spec.type, label: spec.label });
+        }
+    });
+
     graphState.nodes = nodes;
     graphState.edges = edges;
 }
 
 function graphNodeRadius(node) {
     let radius = node.depth === 0 ? 10 : node.depth === 1 ? 7 : node.depth === 2 ? 4.6 : 3;
+    if (node.foi && node.depth > 2) radius = 2.5;
     if (node.highlight) radius += 1;
     if (node.alert) radius += .7;
     return radius;
@@ -9127,9 +10491,12 @@ function applyGraphFilters(refit = false) {
 
     const count = graphState.visibleNodes.length;
     const matches = query ? graphState.visibleNodes.filter(node => node.searchMatch).length : 0;
+    const crossCount = graphState.crossLinks
+        ? graphState.edges.filter(edge => edge.type !== 'hierarchy' && graphState.visibleSet.has(edge.source) && graphState.visibleSet.has(edge.target)).length
+        : 0;
     document.getElementById('graph-count').textContent = query
-        ? `${count} noder · ${matches} träff${matches === 1 ? '' : 'ar'}`
-        : `${count} noder`;
+        ? `${count} noder · ${matches} träff${matches === 1 ? '' : 'ar'} · ${crossCount} tvärkopplingar`
+        : `${count} noder · ${crossCount} tvärkopplingar`;
 
     if (refit) fitGraphToView();
     drawGraph();
@@ -9175,7 +10542,7 @@ function fitGraphToView() {
         maxY = Math.max(maxY, node.y);
     });
 
-    const toolbarAllowance = window.innerWidth <= 768 ? 135 : 90;
+    const toolbarAllowance = window.innerWidth <= 768 ? 180 : 100;
     const usableWidth = Math.max(100, graphState.width - 80);
     const usableHeight = Math.max(100, graphState.height - toolbarAllowance - 50);
     const graphWidth = Math.max(1, maxX - minX);
@@ -9242,6 +10609,7 @@ function drawGraph() {
     if (graphState.selected) {
         activeIds.add(graphState.selected.id);
         graphState.edges.forEach(edge => {
+            if (edge.type !== 'hierarchy' && !graphState.crossLinks) return;
             if (edge.source === graphState.selected.id) activeIds.add(edge.target);
             if (edge.target === graphState.selected.id) activeIds.add(edge.source);
         });
@@ -9249,6 +10617,7 @@ function drawGraph() {
 
     ctx.lineCap = 'round';
     graphState.edges.forEach(edge => {
+        if (edge.type !== 'hierarchy' && !graphState.crossLinks) return;
         if (!graphState.visibleSet.has(edge.source) || !graphState.visibleSet.has(edge.target)) return;
         const source = graphState.nodes[edge.source];
         const target = graphState.nodes[edge.target];
@@ -9260,13 +10629,23 @@ function drawGraph() {
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
+        const isCrossLink = edge.type !== 'hierarchy';
+        const crossColor = edge.type === 'actor'
+            ? 'rgba(240,163,74,.72)'
+            : edge.type === 'institution'
+                ? 'rgba(192,140,255,.68)'
+                : 'rgba(96,185,236,.68)';
+        ctx.setLineDash(isCrossLink ? [5, 5] : []);
         ctx.strokeStyle = active
-            ? 'rgba(245,249,252,.78)'
-            : searchEdge
-                ? 'rgba(151,192,218,.38)'
-                : 'rgba(137,158,174,.16)';
-        ctx.lineWidth = active ? 1.6 : .75;
+            ? (isCrossLink ? crossColor : 'rgba(245,249,252,.78)')
+            : isCrossLink
+                ? crossColor
+                : searchEdge
+                    ? 'rgba(151,192,218,.38)'
+                    : 'rgba(137,158,174,.16)';
+        ctx.lineWidth = isCrossLink ? (active ? 2.2 : 1.25) : (active ? 1.6 : .75);
         ctx.stroke();
+        ctx.setLineDash([]);
     });
 
     graphState.visibleNodes.forEach(node => {
@@ -9355,6 +10734,7 @@ function focusGraphNode(node) {
 
 function graphNodeStatus(node) {
     const labels = [];
+    if (node.foi) labels.push('FOI 2022-snapshot');
     if (node.flags.confirmed) labels.push('bekräftat/myndighetsåtgärd');
     if (node.flags.indication) labels.push('indikation eller medieuppgift');
     if (node.flags.property) labels.push('fastighetsrelaterat');
@@ -9373,7 +10753,8 @@ function selectGraphNode(node) {
     title.textContent = node.title;
     const clusterNode = graphState.nodes.find(item => item.depth === 1 && item.cluster === node.cluster);
     const clusterTitle = node.depth === 0 ? 'Översikt' : clusterNode ? clusterNode.title : 'Övrigt';
-    meta.textContent = `${clusterTitle} · ${graphNodeStatus(node)} · nivå ${node.depth}`;
+    const crossEdges = graphState.edges.filter(edge => edge.type !== 'hierarchy' && (edge.source === node.id || edge.target === node.id));
+    meta.textContent = `${clusterTitle} · ${graphNodeStatus(node)} · nivå ${node.depth}${crossEdges.length ? ` · ${crossEdges.length} tvärkoppling${crossEdges.length === 1 ? '' : 'ar'}` : ''}`;
     info.textContent = node.info || 'Ingen separat beskrivning finns för denna nod.';
     links.replaceChildren();
 
@@ -9385,6 +10766,27 @@ function selectGraphNode(node) {
         anchor.textContent = link.text || link.url;
         links.appendChild(anchor);
     });
+
+    if (crossEdges.length) {
+        const connectionList = document.createElement('div');
+        connectionList.className = 'graph-connection-list';
+        const heading = document.createElement('strong');
+        heading.textContent = 'Källbelagda tvärkopplingar';
+        connectionList.appendChild(heading);
+        crossEdges.forEach(edge => {
+            const otherId = edge.source === node.id ? edge.target : edge.source;
+            const other = graphState.nodes[otherId];
+            if (!other) return;
+            const row = document.createElement('div');
+            row.className = 'graph-connection-item';
+            const key = document.createElement('span');
+            key.className = `graph-connection-key ${edge.type}`;
+            row.appendChild(key);
+            row.appendChild(document.createTextNode(`${other.title}: ${edge.label}`));
+            connectionList.appendChild(row);
+        });
+        links.appendChild(connectionList);
+    }
 
     panel.classList.add('open');
     drawGraph();
@@ -9413,6 +10815,7 @@ function bindGraphInteractions() {
     const search = document.getElementById('graph-search');
     const filter = document.getElementById('graph-filter');
     const cluster = document.getElementById('graph-cluster');
+    const crossLinks = document.getElementById('graph-crosslinks');
 
     search.addEventListener('input', () => {
         graphState.search = search.value;
@@ -9437,13 +10840,19 @@ function bindGraphInteractions() {
         graphState.cluster = cluster.value;
         applyGraphFilters(true);
     });
+    crossLinks.addEventListener('change', () => {
+        graphState.crossLinks = crossLinks.checked;
+        applyGraphFilters(false);
+    });
     document.getElementById('graph-reset').addEventListener('click', () => {
         search.value = '';
         filter.value = 'all';
         cluster.value = 'all';
+        crossLinks.checked = true;
         graphState.search = '';
         graphState.filter = 'all';
         graphState.cluster = 'all';
+        graphState.crossLinks = true;
         graphState.hovered = null;
         closeGraphDetail();
         applyGraphFilters(true);

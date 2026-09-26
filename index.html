@@ -431,6 +431,9 @@
     .tree-controls { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); padding: 5px; border-radius: 4px; border: 1px solid #ddd; z-index: 100; display: flex; gap: 5px; }
     .ctrl-btn { padding: 4px 10px; font-size: 11px; cursor: pointer; background: #fff; border: 1px solid #bbb; border-radius: 3px; color: #333; font-weight: bold; }
     .ctrl-btn:hover { background: #eee; }
+    .tree-search { min-height: 34px; min-width: 180px; padding: 5px 9px; border: 1px solid #bbb; border-radius: 4px; font: inherit; font-size: 13px; }
+    .tree-search-status { font-size: 12px; color: #52616d; align-self: center; }
+    .node.search-hidden { display: none !important; }
 
     /* --- MAP LEGEND --- */
     .map-legend {
@@ -638,11 +641,23 @@
       .map-status { left: 6px; right: 6px; bottom: 6px; max-width: none; }
       #searchFOI { font-size: 16px; }
       .tree { margin-left: 0; }
-      #tree-container { padding: 52px 18px 30px; }
-      .content { min-width: 150px; max-width: min(280px, calc(100vw - 80px)); }
-      .children { margin-left: 10px; }
-      .children .node { padding-left: 10px; }
-      .children .node::before { width: 10px; }
+      #view-tree { overflow-y: auto; overscroll-behavior: contain; }
+      .tree-controls { position: sticky; top: 0; left: 0; flex-wrap: wrap; width: 100%; box-sizing: border-box; padding: 9px; gap: 7px; border-radius: 0; border-left: 0; border-right: 0; background: #f4f6f8; }
+      .tree-search { order: -1; width: 100%; min-height: 44px; font-size: 16px; }
+      .tree-search-status { width: 100%; }
+      .ctrl-btn { min-height: 42px; flex: 1; font-size: 13px; }
+      #tree-container { height: auto; min-height: 100%; overflow: visible; padding: 10px 12px 42px; cursor: auto; }
+      .tree, .node, .children { display: block; width: 100%; box-sizing: border-box; }
+      .node { margin: 0 0 7px; }
+      .content, .node.root > .content { width: 100%; min-width: 0; max-width: none; box-sizing: border-box; padding: 12px; }
+      .content::after, .children .node::before { display: none; }
+      .children { margin: 7px 0 10px; padding: 0 0 0 12px; border-left: 2px solid #cbd5df; }
+      .children .node { padding-left: 0; }
+      .title { font-size: 15px; line-height: 1.35; gap: 12px; }
+      .toggle-icon { flex: 0 0 28px; width: 28px; height: 28px; line-height: 26px; border-radius: 5px; background: #e8eef3; color: #263b4d; }
+      .node.root .toggle-icon { background: #52687b; color: #fff; }
+      .info { font-size: 13px; line-height: 1.5; }
+      .link { font-size: 12px; padding: 7px 9px; }
       .narrative-shell { width: calc(100% - 24px); padding: 18px 0 64px; }
       .narrative-hero { padding-bottom: 17px; }
       .narrative-hero h2 { font-size: 25px; }
@@ -688,8 +703,10 @@
     
     <div id="view-tree" class="view-section active">
         <div class="tree-controls">
+            <input id="tree-search" class="tree-search" type="search" placeholder="Sök i mindmapen…" aria-label="Sök i mindmapen">
             <button class="ctrl-btn" onclick="expandAll()">[+] Fäll ut allt</button>
             <button class="ctrl-btn" onclick="collapseAll()">[-] Fäll ihop allt</button>
+            <span id="tree-search-status" class="tree-search-status" role="status" aria-live="polite"></span>
         </div>
         <div id="tree-container">
             <div id="tree-root" class="tree"></div>
@@ -11108,6 +11125,38 @@ function collapseAll() {
     }
 }
 
+// Sök i kort och undergrenar. Visa även föräldrar så att träffens sammanhang bevaras.
+const treeSearch = document.getElementById('tree-search');
+const treeSearchStatus = document.getElementById('tree-search-status');
+function filterTree() {
+    const query = treeSearch.value.trim().toLocaleLowerCase('sv');
+    if (!query) {
+        treeRoot.querySelectorAll('.node').forEach(el => el.classList.remove('search-hidden'));
+        treeSearchStatus.textContent = '';
+        if (window.matchMedia('(max-width: 768px)').matches) collapseAll();
+        return;
+    }
+    let matches = 0;
+    function visit(element) {
+        const ownText = element.querySelector(':scope > .content')?.textContent.toLocaleLowerCase('sv') || '';
+        const children = [...element.querySelectorAll(':scope > .children > .node')];
+        const childMatch = children.map(child => visit(child)).some(Boolean);
+        const match = ownText.includes(query);
+        if (match) matches++;
+        const visible = match || childMatch;
+        element.classList.toggle('search-hidden', !visible);
+        if (visible && children.length) {
+            const group = element.querySelector(':scope > .children');
+            group.classList.remove('hidden');
+            element.querySelector(':scope > .content .toggle-icon').textContent = '−';
+        }
+        return visible;
+    }
+    visit(treeRoot.querySelector('.node'));
+    treeSearchStatus.textContent = `${matches} träff${matches === 1 ? '' : 'ar'}`;
+}
+treeSearch.addEventListener('input', filterTree);
+
 // --- RITA FOI TABELLEN ---
 const foiBody = document.getElementById('foi-body');
 const foiCount = document.getElementById('foi-count');
@@ -11437,6 +11486,7 @@ function toggleLegend() {
 
 // Starta allt
 renderTree(treeData, treeRoot);
+if (window.matchMedia('(max-width: 768px)').matches) collapseAll();
 renderFOI(foiList);
 
 </script>
